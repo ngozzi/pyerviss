@@ -1,0 +1,21 @@
+{
+  "last_update": null,
+  "ecdc_commit": null,
+  "records_count": {
+    "ILIARIRates": 0,
+    "SARIRates": 0
+  },
+  "date_range": {
+    "ILIARIRates": {
+      "start": null,
+      "end": null
+    },
+    "SARIRates": {
+      "start": null,
+      "end": null
+    }
+  },
+  "data_sources": [
+    "Awaiting initial data seed"
+  ]
+}
