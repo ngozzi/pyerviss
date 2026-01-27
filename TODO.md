@@ -6,9 +6,11 @@ Python package providing an API for ERVISS (European Respiratory Virus Surveilla
 
 | Aspect | Decision |
 |--------|----------|
-| **Distribution** | Pip package with remote data fetching (data downloaded from GitHub on first use, cached locally) |
+| **Distribution** | Lightweight pip package (no data files included) |
 | **Minimum Python** | 3.10+ |
-| **Data Source** | [EU-ECDC/Respiratory_viruses_weekly_data](https://github.com/EU-ECDC/Respiratory_viruses_weekly_data) |
+| **Data Source** | This repository (mirrored from ECDC via GitHub Actions) |
+| **Data Update** | Automated weekly sync from [EU-ECDC/Respiratory_viruses_weekly_data](https://github.com/EU-ECDC/Respiratory_viruses_weekly_data) |
+| **Data Fetching** | API fetches from this repo's GitHub (not ECDC directly) |
 
 ## Data Context
 
@@ -37,7 +39,31 @@ All files share the same column structure:
 - Available from **2023-11-24** onwards
 - Updated weekly on Fridays
 - Naming format: `YYYY-MM-DD_[DataType].csv`
-- Location: `data/snapshots/` in ECDC repo
+- Location: `data/snapshots/` in this repo (synced from ECDC)
+
+### Data Mirror Strategy
+
+**Why we mirror data:**
+- ECDC has removed historical data that we want to preserve
+- Ensures API stability and data persistence
+- Maintains complete historical archive beyond what ECDC provides
+
+**Cumulative merge strategy:**
+1. **Initial seed**: Historical data (pre-2023) provided manually
+2. **Weekly sync**: Fetch latest from ECDC and merge intelligently
+3. **Merge logic**:
+   - Keep ALL historical records (never delete data)
+   - UPDATE existing records if ECDC has newer values (based on yearweek+country+indicator+age)
+   - ADD new records from ECDC
+4. **Result**: Continuously growing dataset that preserves history
+
+**Sync mechanism:**
+- GitHub Actions workflow runs weekly (Fridays after ECDC update)
+- Fetches latest data from ECDC repo
+- Merges with existing data (preserving historical records)
+- Saves merged result as both current files AND dated snapshot
+- Updates metadata.json with record counts and date ranges
+- Commits changes only if data actually changed
 
 ---
 
@@ -46,7 +72,18 @@ All files share the same column structure:
 ```
 pyerviss/
 ├── .github/workflows/
-│   └── ci.yml                 # Tests, linting, type checking
+│   ├── ci.yml                 # Tests, linting, type checking
+│   └── sync-ecdc-data.yml     # Weekly data sync from ECDC
+├── data/                      # Data mirror (NOT in pip package)
+│   ├── ILIARIRates.csv        # Cumulative dataset (all historical + ECDC updates)
+│   ├── SARIRates.csv          # Cumulative dataset (all historical + ECDC updates)
+│   ├── snapshots/             # Weekly cumulative snapshots
+│   │   ├── 2026-01-26_ILIARIRates.csv  # Initial seed (your historical data)
+│   │   ├── 2026-01-26_SARIRates.csv    # Initial seed (your historical data)
+│   │   ├── 2026-01-31_ILIARIRates.csv  # After first sync (merged)
+│   │   ├── 2026-01-31_SARIRates.csv    # After first sync (merged)
+│   │   └── ...
+│   └── metadata.json          # Last update, record counts, date ranges
 ├── src/pyerviss/
 │   ├── __init__.py            # Public exports
 │   ├── api.py                 # get_ili(), get_ari(), get_sari()
@@ -72,10 +109,14 @@ pyerviss/
 │       └── sample_sari.csv
 ├── pyproject.toml
 ├── README.md
+├── .gitignore                 # Excludes local cache, but includes data/
 └── TODO.md                    # This file
 ```
 
-**Local cache location**: `~/.cache/pyerviss/` (via platformdirs)
+**Notes:**
+- `data/` folder **is tracked in git** (contains mirrored ECDC data)
+- Pip package **does not include** `data/` folder
+- Local cache location: `~/.cache/pyerviss/` (via platformdirs) for user-side data caching
 
 ---
 
@@ -85,6 +126,7 @@ pyerviss/
 
 - [ ] **Create `pyproject.toml`**
   - Build system: hatchling
+  - **IMPORTANT**: Exclude `data/` folder from package distribution
   - Dependencies: `pandas>=2.0.0`, `requests>=2.28.0`, `platformdirs>=3.0.0`
   - Dev deps: pytest, ruff, mypy, responses (for mocking HTTP)
   - Minimum Python: 3.10
@@ -93,7 +135,57 @@ pyerviss/
   - `src/pyerviss/__init__.py` with version and public API exports
   - `src/pyerviss/exceptions.py` for custom errors
 
-- [ ] **Remove `raw-data/` folder** (no longer needed, data fetched remotely)
+- [ ] **Create `data/` folder structure and seed with historical data**
+  - `data/ILIARIRates.csv` (your complete historical dataset)
+  - `data/SARIRates.csv` (your complete historical dataset)
+  - `data/snapshots/` directory
+  - `data/snapshots/YYYY-MM-DD_ILIARIRates.csv` (copy of initial historical data)
+  - `data/snapshots/YYYY-MM-DD_SARIRates.csv` (copy of initial historical data)
+  - `data/metadata.json` with schema:
+    ```json
+    {
+      "last_update": "YYYY-MM-DD",
+      "ecdc_commit": "sha_or_null",
+      "records_count": {
+        "ILIARIRates": 125000,
+        "SARIRates": 45000
+      },
+      "date_range": {
+        "ILIARIRates": {"start": "2015-W01", "end": "2026-W03"},
+        "SARIRates": {"start": "2017-W20", "end": "2026-W03"}
+      },
+      "data_sources": [
+        "Historical data seeded YYYY-MM-DD",
+        "Weekly ECDC sync (cumulative merge)"
+      ]
+    }
+    ```
+
+- [ ] **Create `.gitignore`**
+  - Include standard Python ignores
+  - **DO NOT ignore `data/`** - it must be tracked
+  - Ignore local cache: `__pycache__/`, `.pytest_cache/`, etc.
+
+- [ ] **Create `.github/workflows/sync-ecdc-data.yml`**
+  - Schedule: Weekly on Fridays (cron: `0 14 * * 5` - 2 PM UTC)
+  - Manual trigger: `workflow_dispatch`
+  - Steps:
+    1. Fetch latest data from ECDC repo (ILIARIRates.csv, SARIRates.csv)
+    2. Load current cumulative data from this repo
+    3. **Merge strategy** (using pandas):
+       ```python
+       # Merge key: countryname + yearweek + indicator + age
+       merged = pd.concat([our_data, ecdc_data]).drop_duplicates(
+           subset=['countryname', 'yearweek', 'indicator', 'age'],
+           keep='last'  # ECDC values overwrite if duplicate
+       ).sort_values(['yearweek', 'countryname', 'indicator', 'age'])
+       ```
+    4. Compare merged data with current data
+    5. If changed:
+       - Save merged data as `data/ILIARIRates.csv` and `data/SARIRates.csv`
+       - Create snapshot: `data/snapshots/YYYY-MM-DD_[DataType].csv`
+       - Update `metadata.json` (counts, date ranges, last update)
+       - Commit and push changes with message: "Data sync: YYYY-MM-DD"
 
 ### Phase 2: Core Utilities
 
@@ -125,19 +217,31 @@ pyerviss/
 
 - [ ] **`src/pyerviss/data_loader.py`**
   ```python
-  ECDC_RAW_URL = "https://raw.githubusercontent.com/EU-ECDC/Respiratory_viruses_weekly_data/main/data/"
+  # Fetch from THIS repository, not ECDC
+  REPO_RAW_URL = "https://raw.githubusercontent.com/YOUR_USERNAME/pyerviss/main/data/"
+
+  # Alternative: use github.com API to get latest commit data
+  REPO_API_URL = "https://api.github.com/repos/YOUR_USERNAME/pyerviss/contents/data"
 
   def fetch_ili_ari_data(force_refresh: bool = False) -> pd.DataFrame
+      # Fetches from this repo's data/ILIARIRates.csv
 
   def fetch_sari_data(force_refresh: bool = False) -> pd.DataFrame
+      # Fetches from this repo's data/SARIRates.csv
 
   def fetch_snapshot(snapshot_date: date, data_type: str) -> pd.DataFrame
+      # Fetches from this repo's data/snapshots/YYYY-MM-DD_[type].csv
+      # Note: Snapshots are cumulative (include all historical data up to that date)
 
   def list_available_snapshots() -> list[date]
-      # Uses GitHub API to list snapshot files
+      # Lists snapshot files from this repo's data/snapshots/
+      # Returns dates when data was updated (not necessarily weekly if no changes)
+
+  def get_metadata() -> dict
+      # Fetches data/metadata.json to check last update time
 
   def update_data() -> None
-      # Force refresh all cached data
+      # Force refresh all cached data from this repo
   ```
 
 ### Phase 3: Indicator Pattern (Extensibility)
@@ -249,6 +353,16 @@ pyerviss/
   - Matrix: Python 3.10, 3.11, 3.12
   - Steps: lint (ruff), type check (mypy), test (pytest)
 
+- [ ] **Test data sync workflow**
+  - Manually trigger `.github/workflows/sync-ecdc-data.yml`
+  - Verify data files are updated in `data/` (should be cumulative merge)
+  - Verify no historical records were lost
+  - Verify new ECDC records were added
+  - Verify existing records were updated if ECDC had changes
+  - Verify metadata.json is updated with correct counts and date ranges
+  - Verify git commit is created only if data changed
+  - Verify snapshot is created in `data/snapshots/YYYY-MM-DD_*.csv`
+
 ---
 
 ## API Usage Examples
@@ -319,7 +433,70 @@ The indicator pattern makes it easy to add new data types. To add flu subtypes:
    def get_flu_subtype(...) -> pd.DataFrame: ...
    ```
 
-4. **Update `data_loader.py`** to fetch the new file
+4. **Update `data_loader.py`** to fetch the new file from this repo
+
+5. **Update GitHub Actions workflow** to sync the new file from ECDC
+
+---
+
+## Data Flow Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ Historical Data (Manual Seed)                               │
+│ - Pre-2023 data that ECDC removed                           │
+│ - Provided as initial ILIARIRates.csv and SARIRates.csv    │
+└────────────────┬────────────────────────────────────────────┘
+                 │
+                 │ Initial commit to pyerviss repo
+                 ▼
+┌─────────────────────────────────────────────────────────────┐
+│ pyerviss Repository (Cumulative Dataset)                    │
+│ - data/ILIARIRates.csv      (cumulative)                    │
+│ - data/SARIRates.csv        (cumulative)                    │
+│ - data/snapshots/*.csv      (dated cumulative snapshots)    │
+│ - data/metadata.json                                        │
+└────────────────┬────────────────────────────────────────────┘
+                 ▲
+                 │ Weekly cumulative merge
+                 │ .github/workflows/sync-ecdc-data.yml
+                 │
+┌────────────────┴────────────────────────────────────────────┐
+│ EU-ECDC/Respiratory_viruses_weekly_data (Source)            │
+│ - Updated every Friday                                      │
+│ - Official ECDC data (limited historical)                   │
+└─────────────────────────────────────────────────────────────┘
+
+                 ┌────────────────────────────────────────────┐
+                 │ pyerviss Repository (Cumulative Dataset)   │
+                 │ - Complete historical archive              │
+                 │ - Weekly ECDC updates merged in            │
+                 └────────────────┬───────────────────────────┘
+                                  │
+                                  │ HTTP fetch (via requests)
+                                  │ https://raw.githubusercontent.com/...
+                                  ▼
+                 ┌────────────────────────────────────────────┐
+                 │ pyerviss pip package (User's machine)      │
+                 │ - Fetches data from pyerviss repo          │
+                 │ - Caches locally in ~/.cache/pyerviss/     │
+                 │ - Provides API: get_ili(), get_ari()...    │
+                 └────────────────────────────────────────────┘
+```
+
+**Merge Strategy Details:**
+- **Never delete**: Historical records are preserved even if ECDC removes them
+- **Update on match**: If ECDC has same (yearweek, country, indicator, age), use ECDC's value
+- **Add new**: New records from ECDC are appended
+- **Result**: Growing dataset with complete history
+
+**Benefits:**
+- Data independence from ECDC changes
+- Complete historical archive beyond what ECDC provides
+- Protection against ECDC data removal
+- Faster API responses (no ECDC dependency)
+- Lightweight pip package (no bundled data)
+- Audit trail via dated snapshots
 
 ---
 
@@ -341,7 +518,7 @@ After implementation, verify with:
    ```python
    import pyerviss as pv
 
-   # First call fetches data from GitHub
+   # First call fetches data from this repo's GitHub
    df = pv.get_ili(countries="Germany", season="2024/25")
    print(df.head())
    print(f"Shape: {df.shape}")
@@ -351,6 +528,10 @@ After implementation, verify with:
    print(pv.list_seasons())
    print(pv.get_latest_week())
 
+   # Check metadata
+   from pyerviss.data_loader import get_metadata
+   print(get_metadata())  # Should show last update time
+
    # Force refresh
    pv.update_data()
    ```
@@ -359,6 +540,31 @@ After implementation, verify with:
    ```bash
    ls -la ~/.cache/pyerviss/
    ```
+
+5. **Verify data sync and merge behavior**:
+   - Check that `data/` folder has latest files
+   - Verify GitHub Actions workflow ran successfully
+   - **Verify historical data preservation**:
+     ```python
+     import pandas as pd
+
+     # Load initial and current data
+     initial = pd.read_csv('data/snapshots/2026-01-26_ILIARIRates.csv')
+     current = pd.read_csv('data/ILIARIRates.csv')
+
+     # Check that all initial records still exist
+     initial_keys = initial[['countryname', 'yearweek', 'indicator', 'age']].drop_duplicates()
+     current_keys = current[['countryname', 'yearweek', 'indicator', 'age']].drop_duplicates()
+
+     # This should be empty (no lost records)
+     lost_records = set(map(tuple, initial_keys.values)) - set(map(tuple, current_keys.values))
+     print(f"Lost records: {len(lost_records)}")  # Should be 0
+
+     # Check growth
+     print(f"Initial records: {len(initial)}")
+     print(f"Current records: {len(current)}")  # Should be >= initial
+     ```
+   - Verify metadata.json reflects correct counts and date ranges
 
 ---
 
