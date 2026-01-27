@@ -58,12 +58,14 @@ All files share the same column structure:
 4. **Result**: Continuously growing dataset that preserves history
 
 **Sync mechanism:**
-- GitHub Actions workflow runs weekly (Fridays after ECDC update)
+- GitHub Actions workflow runs **4 times per week** (ECDC update timing varies):
+  - Friday 2 PM UTC, Friday 11 PM UTC
+  - Monday 11 PM UTC, Tuesday 11 PM UTC
 - Fetches latest data from ECDC repo
 - Merges with existing data (preserving historical records)
 - Saves merged result as both current files AND dated snapshot
 - Updates metadata.json with record counts and date ranges
-- Commits changes only if data actually changed
+- **Commits only if data actually changed** (prevents empty commits from multiple runs)
 
 ---
 
@@ -167,8 +169,13 @@ pyerviss/
   - Ignore local cache: `__pycache__/`, `.pytest_cache/`, etc.
 
 - [ ] **Create `.github/workflows/sync-ecdc-data.yml`**
-  - Schedule: Weekly on Fridays (cron: `0 14 * * 5` - 2 PM UTC)
+  - **Schedule**: Multiple attempts to catch ECDC updates (they typically update Fridays, but timing varies)
+    - Friday 2 PM UTC: `0 14 * * 5`
+    - Friday 11 PM UTC: `0 23 * * 5`
+    - Monday 11 PM UTC: `0 23 * * 1`
+    - Tuesday 11 PM UTC: `0 23 * * 2`
   - Manual trigger: `workflow_dispatch`
+  - **Smart update logic**: Only commit if data actually changed (prevents empty commits)
   - Steps:
     1. Fetch latest data from ECDC repo (ILIARIRates.csv, SARIRates.csv)
     2. Load current cumulative data from this repo
@@ -180,12 +187,13 @@ pyerviss/
            keep='last'  # ECDC values overwrite if duplicate
        ).sort_values(['yearweek', 'countryname', 'indicator', 'age'])
        ```
-    4. Compare merged data with current data
-    5. If changed:
+    4. Compare merged data with current data (hash comparison or record count)
+    5. **Only if data changed**:
        - Save merged data as `data/ILIARIRates.csv` and `data/SARIRates.csv`
        - Create snapshot: `data/snapshots/YYYY-MM-DD_[DataType].csv`
        - Update `metadata.json` (counts, date ranges, last update)
-       - Commit and push changes with message: "Data sync: YYYY-MM-DD"
+       - Commit and push changes with message: "Data sync: YYYY-MM-DD - [N new records, M updated]"
+    6. **If no changes**: Exit without committing (prevents noise from multiple weekly runs)
 
 ### Phase 2: Core Utilities
 
@@ -218,10 +226,10 @@ pyerviss/
 - [ ] **`src/pyerviss/data_loader.py`**
   ```python
   # Fetch from THIS repository, not ECDC
-  REPO_RAW_URL = "https://raw.githubusercontent.com/YOUR_USERNAME/pyerviss/main/data/"
+  REPO_RAW_URL = "https://raw.githubusercontent.com/ngozzi/pyerviss/main/data/"
 
   # Alternative: use github.com API to get latest commit data
-  REPO_API_URL = "https://api.github.com/repos/YOUR_USERNAME/pyerviss/contents/data"
+  REPO_API_URL = "https://api.github.com/repos/ngozzi/pyerviss/contents/data"
 
   def fetch_ili_ari_data(force_refresh: bool = False) -> pd.DataFrame
       # Fetches from this repo's data/ILIARIRates.csv
