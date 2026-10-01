@@ -17,7 +17,7 @@ Weekly ILI, ARI and SARI rates for EU/EEA countries as pandas DataFrames, from E
 ## Installation
 
 ```bash
-pip install git+https://github.com/ngozzi/pyerviss
+pip install pyerviss
 ```
 
 Requires Python 3.10+.
@@ -47,7 +47,7 @@ Every query returns one row per country, week and age group:
 - `date` is the last day (Sunday) of the ISO week.
 - A season such as `"2024/25"` runs from 2024-W40 to 2025-W39.
 - `value` is a rate per 100,000 of `denominator`: `population`, `consultations` or
-  `admissions` (see [Units](#units)).
+  `admissions` (see [Units](https://github.com/ngozzi/pyerviss#units)).
 - Data before 2022-W25 is only available for the `"total"` age group.
 
 Finding out what is available:
@@ -98,4 +98,4 @@ see that repository for the data's terms of use. Historical ILI and ARI data via
 
 ## License
 
-The code is released under the [MIT License](LICENSE).
+The code is released under the [MIT License](https://github.com/ngozzi/pyerviss/blob/main/LICENSE).
