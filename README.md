@@ -2,10 +2,17 @@
 
 [![CI](https://github.com/ngozzi/pyerviss/actions/workflows/ci.yml/badge.svg)](https://github.com/ngozzi/pyerviss/actions/workflows/ci.yml)
 
-Python API to ERVISS, the European Respiratory Virus Surveillance Summary
+Unofficial Python API to ERVISS, the European Respiratory Virus Surveillance Summary
 
 Weekly ILI, ARI and SARI rates for EU/EEA countries as pandas DataFrames, from ECDC's
 [ERVISS](https://erviss.org) data, with ILI and ARI history back to 2014.
+
+> **Disclaimer:** pyerviss is an independent, unofficial project. It is not affiliated
+> with, endorsed by, or maintained by the European Centre for Disease Prevention and
+> Control (ECDC) or ERVISS. The data is mirrored from ECDC's public repository and
+> processed here (units are harmonized, history is added from other sources, and rows
+> ECDC later removes are kept), so it can differ from the official figures. For official
+> data, see [erviss.org](https://erviss.org).
 
 ## Installation
 

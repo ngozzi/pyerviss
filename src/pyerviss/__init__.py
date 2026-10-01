@@ -1,4 +1,7 @@
-"""PyERVISS - Python API for ERVISS (European Respiratory Virus Surveillance Summary) data."""
+"""Unofficial Python API for ERVISS (European Respiratory Virus Surveillance Summary) data.
+
+Not affiliated with or endorsed by ECDC.
+"""
 
 from .api import (
     clear_cache,
