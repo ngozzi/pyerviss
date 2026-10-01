@@ -53,8 +53,10 @@ packages = ["src/pyerviss"]
 exclude = [
     "data/",
     "tests/",
+    "scripts/",
     ".github/",
     ".gitignore",
+    "TODO.md",
 ]
 
 [tool.ruff]
