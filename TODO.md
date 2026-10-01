@@ -195,60 +195,22 @@ pyerviss/
 
 ### Phase 2: Core Utilities
 
-- [ ] **`src/pyerviss/utils.py`**
-  ```python
-  def yearweek_to_date(yearweek: str) -> date
-      # "2025-W03" → date (Monday of that week)
-
-  def date_to_yearweek(d: date) -> str
-      # date → "2025-W03"
-
-  def parse_season(season: str) -> tuple[str, str]
-      # "2024/25" → ("2024-W40", "2025-W20")
-  ```
+- [x] **`src/pyerviss/utils.py`**: ISO week and season helpers
+  - `yearweek_to_date("2024-W40")` → `date(2024, 10, 6)` (**Sunday**, week end; matches RespiCast `truth_date`)
+  - `date_to_yearweek`, `to_yearweek` (accepts "2024-W40", "2024-10-01", `date`, `datetime`)
+  - `parse_season("2024/25")` → `("2024-W40", "2025-W39")` (**full year**, W40 to W39)
+  - `season_of("2025-W01")` → `"2024/25"`
 
 - [ ] **`src/pyerviss/types.py`**
-  - Type aliases: `Country`, `AgeGroup`, `Season`
-  - Constants: `COUNTRIES_ILI_ARI`, `COUNTRIES_SARI`, `AGE_GROUPS`
+  - Replace hardcoded country lists with lists derived from the data (Phase 4)
 
-- [ ] **`src/pyerviss/cache.py`**
-  ```python
-  def get_cache_dir() -> Path
-      # Returns ~/.cache/pyerviss/ via platformdirs
+- [x] **`src/pyerviss/cache.py`**: `get_cache_dir()` (platformdirs; `PYERVISS_CACHE_DIR` override), `clear_cache()`
 
-  def is_cache_stale(file_path: Path, max_age_hours: int = 24) -> bool
-
-  def clear_cache() -> None
-  ```
-
-- [ ] **`src/pyerviss/data_loader.py`**
-  ```python
-  # Fetch from THIS repository, not ECDC
-  REPO_RAW_URL = "https://raw.githubusercontent.com/ngozzi/pyerviss/main/data/"
-
-  # Alternative: use github.com API to get latest commit data
-  REPO_API_URL = "https://api.github.com/repos/ngozzi/pyerviss/contents/data"
-
-  def fetch_ili_ari_data(force_refresh: bool = False) -> pd.DataFrame
-      # Fetches from this repo's data/ILIARIRates.csv
-
-  def fetch_sari_data(force_refresh: bool = False) -> pd.DataFrame
-      # Fetches from this repo's data/SARIRates.csv
-
-  def fetch_snapshot(snapshot_date: date, data_type: str) -> pd.DataFrame
-      # Fetches from this repo's data/snapshots/YYYY-MM-DD_[type].csv
-      # Note: Snapshots are cumulative (include all historical data up to that date)
-
-  def list_available_snapshots() -> list[date]
-      # Lists snapshot files from this repo's data/snapshots/
-      # Returns dates when data was updated (not necessarily weekly if no changes)
-
-  def get_metadata() -> dict
-      # Fetches data/metadata.json to check last update time
-
-  def update_data() -> None
-      # Force refresh all cached data from this repo
-  ```
+- [x] **`src/pyerviss/data_loader.py`**
+  - Downloads from `https://raw.githubusercontent.com/ngozzi/pyerviss/main/data/` (`PYERVISS_DATA_URL` override); **requires the repo to be public**
+  - Checks each file for updates at most once per hour via ETag (unchanged files are not re-downloaded)
+  - Offline with a cached copy: warns and uses the cache; atomic writes; parsed files kept in memory
+  - `fetch_file()`, `load_csv()`, `get_metadata()`, `update_data()`
 
 ### Phase 3: Indicator Pattern (Extensibility)
 
@@ -296,47 +258,36 @@ pyerviss/
 
 - [ ] **`src/pyerviss/api.py`**
   ```python
-  def get_ili(
-      countries: str | list[str] | None = None,
-      start_date: date | str | None = None,
-      end_date: date | str | None = None,
-      season: str | list[str] | None = None,  # Mutually exclusive with dates
-      age_groups: str | list[str] | None = None,
+  def get_data(
+      indicator: str,  # "ili", "ari", "sari"
+      countries: str | list[str] | None = None,  # names or ISO2 codes, case-insensitive
+      start: str | date | None = None,  # "2024-W40", "2024-10-01" or date; inclusive
+      end: str | date | None = None,  # inclusive
+      season: str | list[str] | None = None,  # "2024/25" = 2024-W40..2025-W39; not with start/end
+      age_groups: str | list[str] | None = None,  # default: all
   ) -> pd.DataFrame
 
+  def get_ili(...) -> pd.DataFrame  # get_data("ili", ...)
   def get_ari(...) -> pd.DataFrame
-
   def get_sari(...) -> pd.DataFrame
 
-  def list_countries(indicator: str = "ili") -> list[str]
-
+  def coverage(indicator: str) -> pd.DataFrame  # per country: first/last week, n weeks
+  def list_countries(indicator: str) -> list[str]
   def list_seasons() -> list[str]
+  def latest_week(indicator: str | None = None) -> str
 
-  def get_latest_week() -> str
-
-  # Snapshot access
-  def get_ili_snapshot(snapshot_date: date | str, **filters) -> pd.DataFrame
-  def get_ari_snapshot(snapshot_date: date | str, **filters) -> pd.DataFrame
-  def get_sari_snapshot(snapshot_date: date | str, **filters) -> pd.DataFrame
-
-  def list_snapshots() -> list[date]
-
-  # Cache management
   def update_data() -> None
   def clear_cache() -> None
   ```
+  - Output: long format, one row per country/week/age, sorted by country, date, age:
+    `country, country_code, year_week, date, age, value, denominator`
+    - `date`: Sunday ending the ISO week
+    - `denominator`: "population" or "consultations" (CY, FI, LU, MT); all values per 100,000
+  - Countries validated against the data: "did you mean" suggestions for typos, clear
+    error when a country has no data for the indicator
+  - Snapshot functions deferred with snapshots
 
-- [ ] **`src/pyerviss/__init__.py`** - Export public API
-  ```python
-  from .api import (
-      get_ili, get_ari, get_sari,
-      get_ili_snapshot, get_ari_snapshot, get_sari_snapshot,
-      list_countries, list_seasons, list_snapshots,
-      get_latest_week, update_data, clear_cache,
-  )
-
-  __version__ = "0.1.0"
-  ```
+- [ ] **`src/pyerviss/__init__.py`**: export the public API
 
 ### Phase 5: Testing
 
@@ -376,35 +327,24 @@ pyerviss/
 ```python
 import pyerviss as pv
 
-# Basic query - all ILI data for Germany
+# All ILI data for Germany
 df = pv.get_ili(countries="Germany")
 
-# Multiple countries + season filter
-df = pv.get_ili(countries=["France", "Spain", "Italy"], season="2024/25")
+# Names or ISO2 codes + season (2024-W40 to 2025-W39)
+df = pv.get_ili(countries=["FR", "Spain", "IT"], season="2024/25")
 
-# Date range + age group filter
-df = pv.get_sari(
-    start_date="2024-10-01",
-    end_date="2025-03-31",
-    age_groups="65+"
-)
+# Date range + age group
+df = pv.get_sari(start="2024-10-01", end="2025-03-31", age_groups="65+")
 
-# Multiple age groups
-df = pv.get_ili(countries="Austria", age_groups=["0-4", "5-14"])
-
-# Utility functions
-pv.list_countries("sari")   # ["Austria", "Belgium", ...]
-pv.list_countries("ili")    # More countries than SARI
-pv.list_seasons()           # ["2021/22", "2022/23", "2023/24", "2024/25"]
-pv.get_latest_week()        # "2026-W03"
-
-# Historical snapshot access
-df = pv.get_ili_snapshot("2024-06-01", countries="Austria")
-pv.list_snapshots()         # [date(2023, 11, 24), date(2023, 12, 1), ...]
+# Discovery
+pv.coverage("ili")  # first/last week and n weeks per country
+pv.list_countries("sari")
+pv.list_seasons()  # ["2014/15", ..., "2026/27"]
+pv.latest_week()  # "2026-W38"
 
 # Cache management
-pv.update_data()            # Force refresh all cached data
-pv.clear_cache()            # Remove all cached files
+pv.update_data()  # check for new data now
+pv.clear_cache()  # remove cached files
 ```
 
 ---
