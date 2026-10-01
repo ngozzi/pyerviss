@@ -355,7 +355,7 @@ pyerviss/
   - Snapshot loading
   - Cache behavior (use `responses` library to mock HTTP)
 
-- [ ] **`.github/workflows/ci.yml`**
+- [x] **`.github/workflows/ci.yml`**
   - Matrix: Python 3.10, 3.11, 3.12
   - Steps: lint (ruff), type check (mypy), test (pytest)
 
