@@ -1,0 +1,13 @@
+survtype,countryname,yearweek,indicator,age,value
+primary care syndromic,Austria,2014-W40,ILIconsultationrate,total,800
+primary care syndromic,Finland,2024-W40,ILIconsultationrate,total,8.8
+primary care syndromic,Greece,2020-W53,ILIconsultationrate,total,300
+primary care syndromic,Italy,2024-W39,ILIconsultationrate,total,350
+primary care syndromic,Italy,2024-W40,ILIconsultationrate,0-4,900
+primary care syndromic,Italy,2024-W40,ILIconsultationrate,total,363
+primary care syndromic,Italy,2024-W40,ILIconsultationrate,65+,150
+primary care syndromic,Italy,2025-W39,ILIconsultationrate,total,380
+primary care syndromic,Italy,2025-W40,ILIconsultationrate,total,390
+primary care syndromic,Malta,2024-W40,ILIconsultationrate,total,4200
+primary care syndromic,Italy,2024-W40,ARIconsultationrate,total,1100
+primary care syndromic,Sweden,2024-W40,ARIconsultationrate,total,500

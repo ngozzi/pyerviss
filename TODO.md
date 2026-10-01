@@ -201,8 +201,7 @@ pyerviss/
   - `parse_season("2024/25")` → `("2024-W40", "2025-W39")` (**full year**, W40 to W39)
   - `season_of("2025-W01")` → `"2024/25"`
 
-- [ ] **`src/pyerviss/types.py`**
-  - Replace hardcoded country lists with lists derived from the data (Phase 4)
+- [x] **`src/pyerviss/types.py`**: hardcoded country lists replaced by lists derived from the data; ISO2 codes
 
 - [x] **`src/pyerviss/cache.py`**: `get_cache_dir()` (platformdirs; `PYERVISS_CACHE_DIR` override), `clear_cache()`
 
@@ -214,49 +213,12 @@ pyerviss/
 
 ### Phase 3: Indicator Pattern (Extensibility)
 
-- [ ] **`src/pyerviss/indicators/base.py`**
-  ```python
-  class BaseIndicator(ABC):
-      @property
-      @abstractmethod
-      def name(self) -> str: ...
-
-      @property
-      @abstractmethod
-      def data_file(self) -> str: ...
-
-      @property
-      @abstractmethod
-      def indicator_column_value(self) -> str: ...
-
-      def query(
-          self,
-          countries: list[str] | None = None,
-          start_date: date | None = None,
-          end_date: date | None = None,
-          age_groups: list[str] | None = None,
-      ) -> pd.DataFrame: ...
-  ```
-
-- [ ] **Concrete indicators**
-  - `ili.py`: `ILIIndicator` (data_file="ILIARIRates.csv", indicator="ILIconsultationrate")
-  - `ari.py`: `ARIIndicator` (data_file="ILIARIRates.csv", indicator="ARIconsultationrate")
-  - `sari.py`: `SARIIndicator` (data_file="SARIRates.csv", indicator="SARIrate")
-
-- [ ] **`src/pyerviss/indicators/__init__.py`**
-  ```python
-  INDICATORS = {
-      "ili": ILIIndicator(),
-      "ari": ARIIndicator(),
-      "sari": SARIIndicator(),
-  }
-
-  def get_indicator(name: str) -> BaseIndicator: ...
-  ```
+- [x] **`src/pyerviss/indicators/`**: `Indicator` dataclass (`base.py`) and the `INDICATORS`
+  registry with `get_indicator()` (`__init__.py`); a new indicator is one registry entry
 
 ### Phase 4: Public API
 
-- [ ] **`src/pyerviss/api.py`**
+- [x] **`src/pyerviss/api.py`**
   ```python
   def get_data(
       indicator: str,  # "ili", "ari", "sari"
@@ -287,7 +249,7 @@ pyerviss/
     error when a country has no data for the indicator
   - Snapshot functions deferred with snapshots
 
-- [ ] **`src/pyerviss/__init__.py`**: export the public API
+- [x] **`src/pyerviss/__init__.py`**: export the public API
 
 ### Phase 5: Testing
 

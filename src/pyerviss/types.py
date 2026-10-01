@@ -7,67 +7,54 @@ Country = str
 AgeGroup = Literal["0-4", "5-14", "15-64", "65+", "total"]
 Season = str  # Format: "2024/25"
 YearWeek = str  # Format: "2025-W03"
-Indicator = Literal["ILIconsultationrate", "ARIconsultationrate", "SARIrate"]
+IndicatorName = Literal["ili", "ari", "sari"]
 
-# Countries available for ILI/ARI data, as of ECDC data for 2026-W38.
-# Reporting countries change over time; once data loading is implemented,
-# list_countries() should derive these from the data instead.
-COUNTRIES_ILI_ARI = [
-    "Austria",
-    "Belgium",
-    "Bulgaria",
-    "Croatia",
-    "Cyprus",
-    "Czechia",
-    "Denmark",
-    "Estonia",
-    "Finland",
-    "France",
-    "Germany",
-    "Greece",
-    "Hungary",
-    "Iceland",
-    "Ireland",
-    "Italy",
-    "Latvia",
-    "Lithuania",
-    "Luxembourg",
-    "Malta",
-    "Netherlands",
-    "Norway",
-    "Poland",
-    "Portugal",
-    "Romania",
-    "Slovakia",
-    "Slovenia",
-    "Spain",
-]
-
-# Countries available for SARI data, as of ECDC data for 2026-W38
-COUNTRIES_SARI = [
-    "Austria",
-    "Belgium",
-    "Croatia",
-    "Cyprus",
-    "Estonia",
-    "Germany",
-    "Greece",
-    "Iceland",
-    "Ireland",
-    "Latvia",
-    "Lithuania",
-    "Luxembourg",
-    "Malta",
-    "Romania",
-    "Slovakia",
-    "Spain",
-]
-
-# Age groups
+# Age groups, in display order
 AGE_GROUPS = ["0-4", "5-14", "15-64", "65+", "total"]
 
 # Data file names
 DATA_FILES = {
     "ILI_ARI": "ILIARIRates.csv",
     "SARI": "SARIRates.csv",
+}
+
+# ISO 3166-1 alpha-2 codes for the country names used by ECDC (EU/EEA)
+COUNTRY_CODES = {
+    "Austria": "AT",
+    "Belgium": "BE",
+    "Bulgaria": "BG",
+    "Croatia": "HR",
+    "Cyprus": "CY",
+    "Czechia": "CZ",
+    "Denmark": "DK",
+    "Estonia": "EE",
+    "Finland": "FI",
+    "France": "FR",
+    "Germany": "DE",
+    "Greece": "GR",
+    "Hungary": "HU",
+    "Iceland": "IS",
+    "Ireland": "IE",
+    "Italy": "IT",
+    "Latvia": "LV",
+    "Liechtenstein": "LI",
+    "Lithuania": "LT",
+    "Luxembourg": "LU",
+    "Malta": "MT",
+    "Netherlands": "NL",
+    "Norway": "NO",
+    "Poland": "PL",
+    "Portugal": "PT",
+    "Romania": "RO",
+    "Slovakia": "SK",
+    "Slovenia": "SI",
+    "Spain": "ES",
+    "Sweden": "SE",
+}
+
+# Other accepted spellings, mapped to ECDC names (EU institutions use "EL" for Greece)
+COUNTRY_ALIASES = {
+    "EL": "Greece",
+    "Czech Republic": "Czechia",
+    "The Netherlands": "Netherlands",
 }

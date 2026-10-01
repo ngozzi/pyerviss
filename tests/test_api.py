@@ -1,0 +1,258 @@
+"""Tests for the public API, on small sample files instead of downloaded data."""
+
+from datetime import date
+from pathlib import Path
+
+import pandas as pd
+import pytest
+
+import pyerviss as pv
+from pyerviss import api
+from pyerviss.exceptions import DataNotFoundError, InvalidParameterError
+
+FIXTURES = Path(__file__).parent / "fixtures"
+SAMPLES = {"ILIARIRates.csv": "sample_ili_ari.csv", "SARIRates.csv": "sample_sari.csv"}
+
+
+@pytest.fixture(autouse=True)
+def sample_data(monkeypatch):
+    def load_csv(file_name: str) -> pd.DataFrame:
+        return pd.read_csv(FIXTURES / SAMPLES[file_name], dtype={"value": "float64"})
+
+    monkeypatch.setattr(api, "load_csv", load_csv)
+
+
+def rows(df: pd.DataFrame, *columns: str) -> list[tuple]:
+    return list(df[list(columns)].itertuples(index=False, name=None))
+
+
+# --- output format ----------------------------------------------------------
+
+
+def test_output_columns_and_types():
+    df = pv.get_ili(countries="Malta")
+    assert list(df.columns) == api.COLUMNS
+    assert df.iloc[0].to_dict() == {
+        "country": "Malta",
+        "country_code": "MT",
+        "year_week": "2024-W40",
+        "date": pd.Timestamp("2024-10-06"),
+        "age": "total",
+        "value": 4200.0,
+        "denominator": "consultations",
+    }
+    assert str(df["date"].dtype) == "datetime64[ns]"
+    assert str(df["value"].dtype) == "float64"
+
+
+def test_date_is_sunday_including_53_week_years():
+    df = pv.get_ili(countries="Greece")
+    assert rows(df, "year_week", "date") == [("2020-W53", pd.Timestamp("2021-01-03"))]
+
+
+def test_sorted_by_country_date_and_age_order():
+    df = pv.get_ili(countries=["Italy", "Austria"], season="2024/25")
+    assert rows(df, "country", "year_week", "age") == [
+        ("Italy", "2024-W40", "0-4"),
+        ("Italy", "2024-W40", "65+"),
+        ("Italy", "2024-W40", "total"),
+        ("Italy", "2025-W39", "total"),
+    ]
+    assert df.index.tolist() == [0, 1, 2, 3]
+
+
+def test_denominator_per_country():
+    df = pv.get_ili(start="2024-W40", end="2024-W40")
+    by_country = dict(rows(df.drop_duplicates("country"), "country", "denominator"))
+    assert by_country == {
+        "Finland": "consultations",
+        "Italy": "population",
+        "Malta": "consultations",
+    }
+
+
+def test_sari_denominator_is_population_for_all_countries():
+    assert set(pv.get_sari()["denominator"]) == {"population"}
+
+
+def test_indicators_are_separated():
+    assert rows(pv.get_ari(countries="Italy"), "value") == [(1100.0,)]
+    assert 1100.0 not in pv.get_ili(countries="Italy")["value"].tolist()
+
+
+def test_empty_result_keeps_columns():
+    df = pv.get_ili(countries="Malta", season="2015/16")
+    assert df.empty
+    assert list(df.columns) == api.COLUMNS
+
+
+# --- countries --------------------------------------------------------------
+
+
+@pytest.mark.parametrize("countries", ["Italy", "italy", "IT", "it", " Italy ", ["IT"]])
+def test_country_by_name_or_code(countries):
+    assert set(pv.get_ili(countries=countries)["country"]) == {"Italy"}
+
+
+def test_multiple_countries_mixing_names_and_codes():
+    assert set(pv.get_ili(countries=["MT", "Italy"])["country"]) == {"Italy", "Malta"}
+
+
+def test_country_aliases():
+    assert set(pv.get_ili(countries="EL")["country"]) == {"Greece"}
+
+
+def test_unknown_country_suggests_close_match():
+    with pytest.raises(InvalidParameterError, match="did you mean 'Italy'"):
+        pv.get_ili(countries="Itly")
+    with pytest.raises(InvalidParameterError, match="did you mean 'Czechia'"):
+        pv.get_ili(countries="Czech Republik")
+
+
+def test_unknown_country_without_close_match():
+    with pytest.raises(InvalidParameterError, match=r"^Unknown country 'xyz'$"):
+        pv.get_ili(countries="xyz")
+
+
+def test_known_country_without_data_for_indicator():
+    with pytest.raises(DataNotFoundError, match="Sweden has no ILI data"):
+        pv.get_ili(countries="Sweden")
+    assert set(pv.get_ari(countries="SE")["country"]) == {"Sweden"}
+
+
+@pytest.mark.parametrize("countries", [[], 42, [None]])
+def test_invalid_countries_argument(countries):
+    with pytest.raises(InvalidParameterError, match="countries must be"):
+        pv.get_ili(countries=countries)
+
+
+# --- weeks and seasons ------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "start, end",
+    [
+        ("2024-W40", "2025-W39"),
+        ("2024-09-30", "2025-09-28"),  # Monday of W40 to Sunday of W39
+        (date(2024, 10, 6), date(2025, 9, 22)),
+    ],
+)
+def test_start_end_inclusive_in_any_format(start, end):
+    df = pv.get_ili(countries="Italy", start=start, end=end, age_groups="total")
+    assert rows(df, "year_week") == [("2024-W40",), ("2025-W39",)]
+
+
+def test_open_ended_ranges():
+    assert pv.get_ili(countries="Italy", start="2025-W40")["year_week"].tolist() == ["2025-W40"]
+    assert pv.get_ili(end="2015-W01")["year_week"].tolist() == ["2014-W40"]
+
+
+def test_start_after_end_rejected():
+    with pytest.raises(InvalidParameterError, match="after end"):
+        pv.get_ili(start="2025-W01", end="2024-W01")
+
+
+def test_season_runs_w40_to_w39():
+    df = pv.get_ili(countries="Italy", season="2024/25", age_groups="total")
+    assert rows(df, "year_week") == [("2024-W40",), ("2025-W39",)]
+
+
+def test_season_with_week_53():
+    assert pv.get_ili(season="2020/21")["year_week"].tolist() == ["2020-W53"]
+
+
+def test_multiple_seasons():
+    df = pv.get_ili(countries="Italy", season=["2023/24", "2025/26"])
+    assert rows(df, "year_week") == [("2024-W39",), ("2025-W40",)]
+
+
+def test_season_and_dates_are_exclusive():
+    with pytest.raises(InvalidParameterError, match="either season or start/end"):
+        pv.get_ili(season="2024/25", end="2025-W01")
+
+
+@pytest.mark.parametrize("kwargs", [{"season": "2024-25"}, {"start": "yesterday"}])
+def test_malformed_weeks_and_seasons(kwargs):
+    with pytest.raises(InvalidParameterError):
+        pv.get_ili(**kwargs)
+
+
+# --- age groups -------------------------------------------------------------
+
+
+def test_age_group_filter():
+    assert set(pv.get_ili(age_groups="65+")["age"]) == {"65+"}
+    assert set(pv.get_ili(age_groups=["0-4", "65+"])["age"]) == {"0-4", "65+"}
+
+
+def test_unknown_age_group():
+    with pytest.raises(InvalidParameterError, match="Unknown age group"):
+        pv.get_ili(age_groups="65-")
+
+
+# --- indicators -------------------------------------------------------------
+
+
+@pytest.mark.parametrize("name", ["ili", "ILI", "Ili"])
+def test_get_data_indicator_name_case_insensitive(name):
+    pd.testing.assert_frame_equal(pv.get_data(name), pv.get_ili())
+
+
+def test_unknown_indicator():
+    with pytest.raises(InvalidParameterError, match="available: ili, ari, sari"):
+        pv.get_data("covid")
+
+
+# --- discovery helpers ------------------------------------------------------
+
+
+def test_coverage():
+    cov = pv.coverage("ili")
+    italy = cov[cov["country"] == "Italy"].iloc[0].to_dict()
+    assert italy == {
+        "country": "Italy",
+        "country_code": "IT",
+        "first_week": "2024-W39",
+        "last_week": "2025-W40",
+        "n_weeks": 4,
+        "age_groups": ["0-4", "65+", "total"],
+        "denominator": "population",
+    }
+    assert cov["country"].tolist() == ["Austria", "Finland", "Greece", "Italy", "Malta"]
+
+
+def test_list_countries():
+    assert pv.list_countries("sari") == ["Malta", "Spain"]
+    assert pv.list_countries("ari") == ["Italy", "Sweden"]
+
+
+def test_list_seasons():
+    assert pv.list_seasons("sari") == ["2024/25", "2025/26"]
+    assert pv.list_seasons() == [
+        "2014/15",
+        "2020/21",
+        "2023/24",
+        "2024/25",
+        "2025/26",
+    ]
+
+
+def test_latest_week():
+    assert pv.latest_week("ili") == "2025-W40"
+    assert pv.latest_week() == "2026-W38"
+
+
+def test_public_exports():
+    assert set(pv.__all__) == {
+        "__version__",
+        "clear_cache",
+        "coverage",
+        "get_ari",
+        "get_data",
+        "get_ili",
+        "get_sari",
+        "latest_week",
+        "list_countries",
+        "list_seasons",
+        "update_data",
+    }
