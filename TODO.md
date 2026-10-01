@@ -18,8 +18,8 @@ Python package providing an API for ERVISS (European Respiratory Virus Surveilla
 
 | File | Contents | Countries |
 |------|----------|-----------|
-| `ILIARIRates.csv` | ILI + ARI consultation rates | 29 |
-| `SARIRates.csv` | SARI hospitalization rates | 15 |
+| `ILIARIRates.csv` | ILI + ARI consultation rates | 28 |
+| `SARIRates.csv` | SARI hospitalization rates | 16 |
 
 ### Data Structure
 
@@ -35,6 +35,9 @@ All files share the same column structure:
 | `value` | Numeric rate | 4345.3 |
 
 ### Historical Snapshots
+
+> **Deferred.** For now we only keep the latest cumulative files; snapshot support is on hold.
+
 
 - Available from **2023-11-24** onwards
 - Updated weekly on Fridays
@@ -58,12 +61,10 @@ All files share the same column structure:
 4. **Result**: Continuously growing dataset that preserves history
 
 **Sync mechanism:**
-- GitHub Actions workflow runs **4 times per week** (ECDC update timing varies):
-  - Friday 2 PM UTC, Friday 11 PM UTC
-  - Monday 11 PM UTC, Tuesday 11 PM UTC
+- GitHub Actions workflow runs **daily** (ECDC update timing varies; commits only on change)
 - Fetches latest data from ECDC repo
 - Merges with existing data (preserving historical records)
-- Saves merged result as both current files AND dated snapshot
+- Saves merged result as the current files (snapshots deferred)
 - Updates metadata.json with record counts and date ranges
 - **Commits only if data actually changed** (prevents empty commits from multiple runs)
 
@@ -126,18 +127,20 @@ pyerviss/
 
 ### Phase 1: Project Setup
 
-- [ ] **Create `pyproject.toml`**
+- [x] **Create `pyproject.toml`**
   - Build system: hatchling
   - **IMPORTANT**: Exclude `data/` folder from package distribution
   - Dependencies: `pandas>=2.0.0`, `requests>=2.28.0`, `platformdirs>=3.0.0`
   - Dev deps: pytest, ruff, mypy, responses (for mocking HTTP)
   - Minimum Python: 3.10
 
-- [ ] **Create package structure**
+- [x] **Create package structure**
   - `src/pyerviss/__init__.py` with version and public API exports
   - `src/pyerviss/exceptions.py` for custom errors
 
 - [ ] **Create `data/` folder structure and seed with historical data**
+  - [x] Seeded from current ECDC data (2022-W25 onwards) via `scripts/sync_ecdc.py`
+  - [ ] Merge pre-2022 historical data (to be provided)
   - `data/ILIARIRates.csv` (your complete historical dataset)
   - `data/SARIRates.csv` (your complete historical dataset)
   - `data/snapshots/` directory
@@ -163,17 +166,13 @@ pyerviss/
     }
     ```
 
-- [ ] **Create `.gitignore`**
+- [x] **Create `.gitignore`**
   - Include standard Python ignores
   - **DO NOT ignore `data/`** - it must be tracked
   - Ignore local cache: `__pycache__/`, `.pytest_cache/`, etc.
 
-- [ ] **Create `.github/workflows/sync-ecdc-data.yml`**
-  - **Schedule**: Multiple attempts to catch ECDC updates (they typically update Fridays, but timing varies)
-    - Friday 2 PM UTC: `0 14 * * 5`
-    - Friday 11 PM UTC: `0 23 * * 5`
-    - Monday 11 PM UTC: `0 23 * * 1`
-    - Tuesday 11 PM UTC: `0 23 * * 2`
+- [x] **Create `.github/workflows/sync-ecdc-data.yml`** (logic in `scripts/sync_ecdc.py`)
+  - **Schedule**: daily at 18:17 UTC (`17 18 * * *`); ECDC's update day and time vary
   - Manual trigger: `workflow_dispatch`
   - **Smart update logic**: Only commit if data actually changed (prevents empty commits)
   - Steps:
@@ -190,7 +189,6 @@ pyerviss/
     4. Compare merged data with current data (hash comparison or record count)
     5. **Only if data changed**:
        - Save merged data as `data/ILIARIRates.csv` and `data/SARIRates.csv`
-       - Create snapshot: `data/snapshots/YYYY-MM-DD_[DataType].csv`
        - Update `metadata.json` (counts, date ranges, last update)
        - Commit and push changes with message: "Data sync: YYYY-MM-DD - [N new records, M updated]"
     6. **If no changes**: Exit without committing (prevents noise from multiple weekly runs)

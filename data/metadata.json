@@ -1,21 +1,21 @@
 {
-  "last_update": null,
+  "last_update": "2026-10-01",
   "ecdc_commit": null,
   "records_count": {
-    "ILIARIRates": 0,
-    "SARIRates": 0
+    "ILIARIRates": 35494,
+    "SARIRates": 10867
   },
   "date_range": {
     "ILIARIRates": {
-      "start": null,
-      "end": null
+      "start": "2022-W25",
+      "end": "2026-W38"
     },
     "SARIRates": {
-      "start": null,
-      "end": null
+      "start": "2022-W25",
+      "end": "2026-W38"
     }
   },
   "data_sources": [
-    "Awaiting initial data seed"
+    "https://github.com/EU-ECDC/Respiratory_viruses_weekly_data (cumulative merge)"
   ]
 }

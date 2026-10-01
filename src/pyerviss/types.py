@@ -9,20 +9,22 @@ Season = str  # Format: "2024/25"
 YearWeek = str  # Format: "2025-W03"
 Indicator = Literal["ILIconsultationrate", "ARIconsultationrate", "SARIrate"]
 
-# Countries available for ILI/ARI data
+# Countries available for ILI/ARI data, as of ECDC data for 2026-W38.
+# Reporting countries change over time; once data loading is implemented,
+# list_countries() should derive these from the data instead.
 COUNTRIES_ILI_ARI = [
-    "Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czechia", 
-    "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", 
-    "Hungary", "Iceland", "Ireland", "Italy", "Latvia", "Lithuania", 
-    "Luxembourg", "Malta", "Netherlands", "Norway", "Poland", "Portugal", 
-    "Romania", "Slovakia", "Slovenia", "Spain", "Sweden"
+    "Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czechia",
+    "Denmark", "Estonia", "Finland", "France", "Germany", "Greece",
+    "Hungary", "Iceland", "Ireland", "Italy", "Latvia", "Lithuania",
+    "Luxembourg", "Malta", "Netherlands", "Norway", "Poland", "Portugal",
+    "Romania", "Slovakia", "Slovenia", "Spain",
 ]
 
-# Countries available for SARI data (subset of ILI/ARI)
+# Countries available for SARI data, as of ECDC data for 2026-W38
 COUNTRIES_SARI = [
-    "Austria", "Belgium", "Croatia", "Czechia", "Denmark", 
-    "Finland", "France", "Germany", "Greece", "Ireland", 
-    "Italy", "Netherlands", "Portugal", "Spain", "Sweden"
+    "Austria", "Belgium", "Croatia", "Cyprus", "Estonia", "Germany",
+    "Greece", "Iceland", "Ireland", "Latvia", "Lithuania", "Luxembourg",
+    "Malta", "Romania", "Slovakia", "Spain",
 ]
 
 # Age groups
