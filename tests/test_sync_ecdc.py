@@ -7,7 +7,19 @@ import pandas as pd
 import pytest
 import requests
 import sync_ecdc
-from sync_ecdc import KEY, ValidationError, merge, read_csv, sync, to_csv, validate
+from sync_ecdc import (
+    ECDC_SOURCE,
+    KEY,
+    ValidationError,
+    check_scale,
+    merge,
+    normalize_units,
+    read_csv,
+    sync,
+    to_csv,
+    update_metadata,
+    validate,
+)
 
 HEADER = "survtype,countryname,yearweek,indicator,age,value\n"
 ILI_ARI = {"ILIconsultationrate", "ARIconsultationrate"}
@@ -143,6 +155,104 @@ def test_merge_into_empty_local():
     assert stats.added == 1
 
 
+# --- units ------------------------------------------------------------------
+
+
+def test_normalize_units_scales_per_100_consultation_countries():
+    df = frame(
+        ili_csv(
+            "Malta,2025-W03,ILIconsultationrate,total,5.15",
+            "Luxembourg,2025-W03,ARIconsultationrate,0-4,2.9",
+            "Cyprus,2025-W03,ARIconsultationrate,total,13.1",
+            "Finland,2025-W03,ILIconsultationrate,total,8.8",
+            "Austria,2025-W03,ILIconsultationrate,total,2338",
+        )
+    )
+
+    values = normalize_units(df).set_index("countryname")["value"].to_dict()
+
+    # Exact results, no float noise (2.9 * 1000 == 2900.0000000000005)
+    assert values == {
+        "Malta": 5150,
+        "Luxembourg": 2900,
+        "Cyprus": 13100,
+        "Finland": 8.8,
+        "Austria": 2338,
+    }
+    assert "Luxembourg,2025-W03,ARIconsultationrate,0-4,2900\n" in to_csv(normalize_units(df))
+
+
+def test_normalize_units_leaves_sari_unchanged():
+    df = frame(sari_csv("Malta,2025-W03,SARIrate,total,5"), {"SARIrate"})
+    assert normalize_units(df)["value"].tolist() == [5]
+
+
+def _series(country: str, values: list[float]) -> pd.DataFrame:
+    return frame(
+        ili_csv(
+            *[
+                f"{country},2025-W{w:02d},ILIconsultationrate,total,{v}"
+                for w, v in enumerate(values, 1)
+            ]
+        )
+    )
+
+
+def test_check_scale_accepts_revisions():
+    check_scale(_series("Malta", [5000, 6000, 7000]), _series("Malta", [5100, 5900, 7700]), "t")
+
+
+def test_check_scale_rejects_unit_change():
+    local = _series("Malta", [5000, 6000, 7000])
+    with pytest.raises(ValidationError, match=r"Malta ILIconsultationrate \(x0\.001\)"):
+        check_scale(local, _series("Malta", [5, 6, 7]), "t")
+    with pytest.raises(ValidationError, match="unit change"):
+        check_scale(_series("Malta", [5, 6, 7]), local, "t")
+
+
+def test_check_scale_ignores_zeros_and_small_overlaps():
+    # Zeros are skipped; two overlapping weeks are too few to judge
+    check_scale(_series("Malta", [0, 5, 6]), _series("Malta", [3, 5000, 6000]), "t")
+
+
+def test_sync_converts_units_and_detects_upstream_unit_change(tmp_path):
+    ecdc = {
+        "ILIARIRates.csv": ili_csv(
+            *[f"Malta,2025-W{w:02d},ILIconsultationrate,total,{w}.5" for w in range(1, 5)]
+        ),
+        "SARIRates.csv": ECDC_FILES["SARIRates.csv"],
+    }
+    sync(tmp_path, FakeSession(ecdc))
+    assert (
+        "Malta,2025-W01,ILIconsultationrate,total,1500\n"
+        in (tmp_path / "ILIARIRates.csv").read_text()
+    )
+
+    # Re-running on the same per-100 data is a no-op
+    stats = sync(tmp_path, FakeSession(ecdc))
+    assert not stats["ILIARIRates.csv"].changed
+
+    # ECDC switching Malta to per 100,000 would shift values x1000 after conversion
+    switched = {
+        **ecdc,
+        "ILIARIRates.csv": ili_csv(
+            *[f"Malta,2025-W{w:02d},ILIconsultationrate,total,{w}500" for w in range(1, 5)]
+        ),
+    }
+    with pytest.raises(ValidationError, match="Malta"):
+        sync(tmp_path, FakeSession(switched))
+
+
+def test_update_metadata_keeps_extra_sources(tmp_path):
+    path = tmp_path / "metadata.json"
+    data = {"SARIRates.csv": frame(ECDC_FILES["SARIRates.csv"], {"SARIrate"})}
+    update_metadata(path, data, "abc", extra_source="https://example.org/history.csv")
+    update_metadata(path, data, "def")
+    metadata = json.loads(path.read_text())
+    assert metadata["data_sources"] == [ECDC_SOURCE, "https://example.org/history.csv"]
+    assert metadata["ecdc_commit"] == "def"
+
+
 # --- output format ----------------------------------------------------------
 
 
@@ -189,6 +299,14 @@ def test_sync_seeds_empty_data_dir(tmp_path):
     assert metadata["ecdc_commit"] == "abc123"
     assert metadata["records_count"] == {"ILIARIRates": 1, "SARIRates": 1}
     assert metadata["date_range"]["SARIRates"] == {"start": "2025-W03", "end": "2025-W03"}
+    assert metadata["units"]["ILIARIRates"]["default"] == "per 100,000 population"
+    assert set(metadata["units"]["ILIARIRates"]["exceptions"]) == {
+        "Cyprus",
+        "Finland",
+        "Luxembourg",
+        "Malta",
+    }
+    assert metadata["data_sources"] == [ECDC_SOURCE]
     # All files fetched from the resolved commit, not a moving branch
     assert all("/abc123/" in url for url in session.urls if "raw.githubusercontent" in url)
 
