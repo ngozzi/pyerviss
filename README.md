@@ -1,6 +1,8 @@
 # pyerviss
 
 [![CI](https://github.com/ngozzi/pyerviss/actions/workflows/ci.yml/badge.svg)](https://github.com/ngozzi/pyerviss/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/pyerviss)](https://pypi.org/project/pyerviss/)
+[![Docs](https://readthedocs.org/projects/pyerviss/badge/?version=latest)](https://pyerviss.readthedocs.io)
 
 Unofficial Python API to ERVISS, the European Respiratory Virus Surveillance Summary
 
@@ -13,6 +15,8 @@ Weekly ILI, ARI and SARI rates for EU/EEA countries as pandas DataFrames, from E
 > processed here (units are harmonized, history is added from other sources, and rows
 > ECDC later removes are kept), so it can differ from the official figures. For official
 > data, see [erviss.org](https://erviss.org).
+
+Documentation: **https://pyerviss.readthedocs.io**
 
 ## Installation
 
