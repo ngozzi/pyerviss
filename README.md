@@ -39,7 +39,8 @@ Every query returns one row per country, week and age group:
 
 - `date` is the last day (Sunday) of the ISO week.
 - A season such as `"2024/25"` runs from 2024-W40 to 2025-W39.
-- `value` is a rate per 100,000; `denominator` says of what (see [Units](#units)).
+- `value` is a rate per 100,000 of `denominator`: `population`, `consultations` or
+  `admissions` (see [Units](#units)).
 - Data before 2022-W25 is only available for the `"total"` age group.
 
 Finding out what is available:
@@ -66,17 +67,19 @@ ERVISS snapshots of 2024-10-11 for weeks ECDC no longer publishes.
 
 ### Units
 
-All ILI and ARI rates are per 100,000, but the denominator differs by country:
+Every `value` is a rate per 100,000 of the row's `denominator`, which differs by country:
 
-| Countries | Unit |
-|---|---|
-| All others | per 100,000 population |
-| Finland | per 100,000 consultations |
-| Cyprus, Luxembourg, Malta | per 100,000 consultations (ECDC publishes these per 100 consultations; we multiply by 1000) |
+| Indicator | Countries | `denominator` | Unit |
+|---|---|---|---|
+| ILI, ARI | most | `population` | per 100,000 population |
+| ILI, ARI | Finland | `consultations` | per 100,000 consultations |
+| ILI, ARI | Cyprus, Luxembourg, Malta | `consultations` | per 100,000 consultations (ECDC: per 100 consultations; multiplied by 1000) |
+| SARI | most | `population` | per 100,000 hospital catchment population |
+| SARI | Greece, Ireland, Latvia, Luxembourg | `admissions` | per 100,000 hospital admissions (ECDC: per 100 total hospital admissions; multiplied by 1000) |
 
-Rates for consultation-based countries are not directly comparable with population-based ones.
-SARI rates are stored as published by ECDC. The sync fails if a country's values change scale
-by orders of magnitude, which would indicate a unit change upstream.
+Rates with different denominators are not directly comparable. Slovakia's SARI data is based
+on ICU admissions only. The sync fails if a country's values change scale by orders of
+magnitude, which would indicate a unit change upstream.
 
 ## Credits
 

@@ -8,9 +8,13 @@ age group, sorted by country, date and age group:
     year_week     ISO week, e.g. "2024-W40"
     date          Last day (Sunday) of the ISO week
     age           Age group: "0-4", "5-14", "15-64", "65+" or "total"
-    value         Rate per 100,000
-    denominator   "population", or "consultations" for countries reporting per
-                  consultation (Cyprus, Finland, Luxembourg, Malta for ILI/ARI)
+    value         Rate per 100,000 of the denominator
+    denominator   What the rate is per 100,000 of:
+                  - "population" (SARI: hospital catchment population)
+                  - "consultations": ILI/ARI in Cyprus, Finland, Luxembourg, Malta
+                  - "admissions": SARI in Greece, Ireland, Latvia, Luxembourg
+                  Rates with different denominators are not directly comparable.
+                  Slovakia's SARI data counts ICU admissions only.
 """
 
 from __future__ import annotations

@@ -6,14 +6,24 @@ mirrors its data file.
 
 from __future__ import annotations
 
+from types import MappingProxyType
+
 from ..exceptions import InvalidParameterError
 from ..types import DATA_FILES
 from .base import Indicator
 
 # ECDC: "ILI and ARI consultation rates are calculated per 100 000 population, except
 # for Cyprus, Luxembourg, Malta (per 100 consultations) and Finland (per 100 000
-# consultations)." The per-100 values are stored multiplied by 1000.
-_CONSULTATION_COUNTRIES = frozenset({"Cyprus", "Finland", "Luxembourg", "Malta"})
+# consultations)." and "SARI rates are calculated per 100 000 hospital catchment
+# population, except for Greece, Ireland, Latvia and Luxembourg (per 100 total hospital
+# admissions). Data from Slovakia are based on ICU admissions."
+# Per-100 values are stored multiplied by 1000, so every value is per 100,000.
+_CONSULTATIONS = MappingProxyType(
+    dict.fromkeys(["Cyprus", "Finland", "Luxembourg", "Malta"], "consultations")
+)
+_ADMISSIONS = MappingProxyType(
+    dict.fromkeys(["Greece", "Ireland", "Latvia", "Luxembourg"], "admissions")
+)
 
 INDICATORS: dict[str, Indicator] = {
     "ili": Indicator(
@@ -21,20 +31,23 @@ INDICATORS: dict[str, Indicator] = {
         description="Influenza-like illness consultation rate (primary care)",
         data_file=DATA_FILES["ILI_ARI"],
         ecdc_indicator="ILIconsultationrate",
-        consultation_countries=_CONSULTATION_COUNTRIES,
+        denominator_exceptions=_CONSULTATIONS,
     ),
     "ari": Indicator(
         name="ari",
         description="Acute respiratory infection consultation rate (primary care)",
         data_file=DATA_FILES["ILI_ARI"],
         ecdc_indicator="ARIconsultationrate",
-        consultation_countries=_CONSULTATION_COUNTRIES,
+        denominator_exceptions=_CONSULTATIONS,
     ),
     "sari": Indicator(
         name="sari",
-        description="Severe acute respiratory infection rate (hospitals)",
+        description=(
+            "Severe acute respiratory infection rate (hospitals; Slovakia: ICU admissions)"
+        ),
         data_file=DATA_FILES["SARI"],
         ecdc_indicator="SARIrate",
+        denominator_exceptions=_ADMISSIONS,
     ),
 }
 

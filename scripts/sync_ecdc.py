@@ -7,8 +7,9 @@ merges them into the local cumulative dataset:
 - ECDC's value wins when a key exists on both sides
 - rows that exist only locally are kept (never deleted)
 
-ILI/ARI rates that ECDC publishes per 100 consultations (Cyprus, Luxembourg,
-Malta) are multiplied by 1000 so every value is on a per-100,000 scale. The sync
+Rates that ECDC publishes per 100 consultations (ILI/ARI: Cyprus, Luxembourg, Malta)
+or per 100 hospital admissions (SARI: Greece, Ireland, Latvia, Luxembourg) are
+multiplied by 1000 so every value is per 100,000 of its denominator. The sync
 fails if a country's values shift by orders of magnitude, which indicates a unit
 change upstream rather than a revision.
 
@@ -55,24 +56,47 @@ ECDC_SOURCE = f"https://github.com/{ECDC_REPO} (cumulative merge)"
 
 # ECDC: "ILI and ARI consultation rates are calculated per 100 000 population, except
 # for Cyprus, Luxembourg, Malta (per 100 consultations) and Finland (per 100 000
-# consultations)." Scaling the per-100 countries by 1000 puts all values per 100,000,
-# but for these four countries the denominator is consultations, not population.
-PER_100_CONSULTATIONS = {"Cyprus", "Luxembourg", "Malta"}
-RESCALED_INDICATORS = {"ILIconsultationrate", "ARIconsultationrate"}
+# consultations)." and "SARI rates are calculated per 100 000 hospital catchment
+# population, except for Greece, Ireland, Latvia and Luxembourg (per 100 total hospital
+# admissions). Data from Slovakia are based on ICU admissions."
+# Multiplying the per-100 countries by 1000 puts every value per 100,000 of its
+# denominator; the denominator itself still differs by country.
+_PER_100_CONSULTATIONS = {"Cyprus", "Luxembourg", "Malta"}
+_PER_100_ADMISSIONS = {"Greece", "Ireland", "Latvia", "Luxembourg"}
+PER_100_COUNTRIES = {
+    "ILIconsultationrate": _PER_100_CONSULTATIONS,
+    "ARIconsultationrate": _PER_100_CONSULTATIONS,
+    "SARIrate": _PER_100_ADMISSIONS,
+}
 RESCALE_FACTOR = 1000
 
-_SCALED_NOTE = "ECDC publishes per 100 consultations; multiplied by 1000"
+_CONSULTATIONS = (
+    "per 100,000 consultations (ECDC publishes per 100 consultations; multiplied by 1000)"
+)
+_ADMISSIONS = (
+    "per 100,000 hospital admissions "
+    "(ECDC publishes per 100 total hospital admissions; multiplied by 1000)"
+)
 UNITS = {
     "ILIARIRates": {
         "default": "per 100,000 population",
         "exceptions": {
-            "Cyprus": f"per 100,000 consultations ({_SCALED_NOTE})",
+            "Cyprus": _CONSULTATIONS,
             "Finland": "per 100,000 consultations",
-            "Luxembourg": f"per 100,000 consultations ({_SCALED_NOTE})",
-            "Malta": f"per 100,000 consultations ({_SCALED_NOTE})",
+            "Luxembourg": _CONSULTATIONS,
+            "Malta": _CONSULTATIONS,
         },
     },
-    "SARIRates": {"default": "as published by ECDC (no conversion)", "exceptions": {}},
+    "SARIRates": {
+        "default": "per 100,000 hospital catchment population",
+        "exceptions": {
+            "Greece": _ADMISSIONS,
+            "Ireland": _ADMISSIONS,
+            "Latvia": _ADMISSIONS,
+            "Luxembourg": _ADMISSIONS,
+            "Slovakia": "per 100,000 hospital catchment population (ICU admissions only)",
+        },
+    },
 }
 
 # A country's median value changing by more than this factor between the stored data
@@ -134,8 +158,10 @@ def validate(df: pd.DataFrame, expected_indicators: set[str], source: str) -> pd
 
 
 def normalize_units(df: pd.DataFrame) -> pd.DataFrame:
-    """Convert per-100-consultation ILI/ARI rates to per 100,000."""
-    mask = df["countryname"].isin(PER_100_CONSULTATIONS) & df["indicator"].isin(RESCALED_INDICATORS)
+    """Convert rates ECDC publishes per 100 (consultations/admissions) to per 100,000."""
+    mask = pd.Series(False, index=df.index)
+    for indicator, countries in PER_100_COUNTRIES.items():
+        mask |= (df["indicator"] == indicator) & df["countryname"].isin(countries)
     if not mask.any():
         return df
     df = df.copy()

@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass, field
+from types import MappingProxyType
 
 
 @dataclass(frozen=True)
@@ -14,16 +16,17 @@ class Indicator:
         description: Human-readable description.
         data_file: File in the repository's data/ folder that holds the indicator.
         ecdc_indicator: Value of the file's ``indicator`` column for this indicator.
-        consultation_countries: Countries whose rates are per 100,000 consultations
-            rather than per 100,000 population.
+        denominator_default: What rates are per 100,000 of, for most countries.
+        denominator_exceptions: Countries whose rates use a different denominator.
     """
 
     name: str
     description: str
     data_file: str
     ecdc_indicator: str
-    consultation_countries: frozenset[str] = field(default_factory=frozenset)
+    denominator_default: str = "population"
+    denominator_exceptions: Mapping[str, str] = field(default_factory=lambda: MappingProxyType({}))
 
     def denominator(self, country: str) -> str:
-        """Denominator of the rate for a country: "population" or "consultations"."""
-        return "consultations" if country in self.consultation_countries else "population"
+        """What a country's rates are per 100,000 of, e.g. "population"."""
+        return self.denominator_exceptions.get(country, self.denominator_default)
