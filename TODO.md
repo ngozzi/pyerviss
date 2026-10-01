@@ -18,8 +18,8 @@ Python package providing an API for ERVISS (European Respiratory Virus Surveilla
 
 | File | Contents | Countries |
 |------|----------|-----------|
-| `ILIARIRates.csv` | ILI + ARI consultation rates | 29 |
-| `SARIRates.csv` | SARI hospitalization rates | 15 |
+| `ILIARIRates.csv` | ILI + ARI consultation rates | 28 |
+| `SARIRates.csv` | SARI hospitalization rates | 16 |
 
 ### Data Structure
 
