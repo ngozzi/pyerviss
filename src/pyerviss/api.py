@@ -34,6 +34,35 @@ from .utils import parse_season, season_of, to_yearweek, yearweek_to_date
 
 COLUMNS = ["country", "country_code", "year_week", "date", "age", "value", "denominator"]
 
+# Shared by get_data and the per-indicator functions, so their docs can't drift apart
+_FILTER_ARGS = """
+        countries: Country name(s) or ISO2 code(s), case-insensitive, e.g. "Italy" or
+            ["FR", "Spain"]. Default: all countries.
+        start: First week to include, as "2024-W40", "2024-10-01" or a date.
+        end: Last week to include (inclusive), in the same formats.
+        season: Season(s) such as "2024/25", which runs from 2024-W40 to 2025-W39.
+            Cannot be combined with start/end.
+        age_groups: Age group(s) among "0-4", "5-14", "15-64", "65+" and "total".
+            Default: all. ILI/ARI data before 2022-W25 is only available for "total".
+"""
+_RETURNS_RAISES = """
+    Returns:
+        DataFrame with columns country, country_code, year_week, date (Sunday of the
+        week), age, value (rate per 100,000 of the denominator) and denominator
+        ("population", "consultations" or "admissions"). Empty if nothing matches.
+
+    Raises:
+        InvalidParameterError: Unknown indicator, country or age group, a malformed
+            week or season, or season combined with start/end.
+        DataNotFoundError: A requested country has no data for this indicator.
+"""
+
+
+def _query_doc(summary: str, indicator_arg: bool = False) -> str:
+    indicator = '\n        indicator: "ili", "ari" or "sari".' if indicator_arg else ""
+    return f"{summary}\n\n    Args:{indicator}{_FILTER_ARGS}{_RETURNS_RAISES}"
+
+
 WeekLike = str | date
 OneOrMany = str | Iterable[str] | None
 
@@ -46,28 +75,6 @@ def get_data(
     season: OneOrMany = None,
     age_groups: OneOrMany = None,
 ) -> pd.DataFrame:
-    """Get rates for an indicator, optionally filtered.
-
-    Args:
-        indicator: "ili", "ari" or "sari".
-        countries: Country name(s) or ISO2 code(s), case-insensitive, e.g. "Italy",
-            ["FR", "Spain"]. Default: all countries.
-        start: First week to include, as "2024-W40", "2024-10-01" or a date.
-        end: Last week to include (inclusive), in the same formats.
-        season: Season(s) such as "2024/25", which runs from 2024-W40 to 2025-W39.
-            Cannot be combined with start/end.
-        age_groups: Age group(s) among "0-4", "5-14", "15-64", "65+", "total".
-            Default: all. Data before 2022-W25 is only available for "total".
-
-    Returns:
-        DataFrame with columns country, country_code, year_week, date, age, value,
-        denominator. Empty if nothing matches the filters.
-
-    Raises:
-        InvalidParameterError: Unknown indicator, country, age group, or malformed
-            week/season, or season combined with start/end.
-        DataNotFoundError: A requested country has no data for this indicator.
-    """
     ind = get_indicator(indicator)
     if season is not None and (start is not None or end is not None):
         raise InvalidParameterError("Use either season or start/end, not both")
@@ -87,6 +94,9 @@ def get_data(
     return _to_output(df, ind)
 
 
+get_data.__doc__ = _query_doc("Get rates for an indicator, optionally filtered.", True)
+
+
 def get_ili(
     countries: OneOrMany = None,
     start: WeekLike | None = None,
@@ -94,8 +104,12 @@ def get_ili(
     season: OneOrMany = None,
     age_groups: OneOrMany = None,
 ) -> pd.DataFrame:
-    """Influenza-like illness (ILI) consultation rates. See ``get_data`` for details."""
     return get_data("ili", countries, start, end, season, age_groups)
+
+
+get_ili.__doc__ = _query_doc(
+    "Weekly influenza-like illness (ILI) consultation rates (primary care)."
+)
 
 
 def get_ari(
@@ -105,8 +119,12 @@ def get_ari(
     season: OneOrMany = None,
     age_groups: OneOrMany = None,
 ) -> pd.DataFrame:
-    """Acute respiratory infection (ARI) consultation rates. See ``get_data``."""
     return get_data("ari", countries, start, end, season, age_groups)
+
+
+get_ari.__doc__ = _query_doc(
+    "Weekly acute respiratory infection (ARI) consultation rates (primary care)."
+)
 
 
 def get_sari(
@@ -116,8 +134,12 @@ def get_sari(
     season: OneOrMany = None,
     age_groups: OneOrMany = None,
 ) -> pd.DataFrame:
-    """Severe acute respiratory infection (SARI) rates. See ``get_data`` for details."""
     return get_data("sari", countries, start, end, season, age_groups)
+
+
+get_sari.__doc__ = _query_doc(
+    "Weekly severe acute respiratory infection (SARI) rates (hospitals; Slovakia: ICU)."
+)
 
 
 def coverage(indicator: str) -> pd.DataFrame:

@@ -22,17 +22,18 @@ behavior. This file tracks what is done and what is next.
 ## Next
 
 ### Documentation on Read the Docs
-- [ ] Choose the tool: MkDocs (Material + mkdocstrings) or Sphinx (+ autodoc/napoleon);
-      docstrings are Google style, which both support
-- [ ] Pages: installation and quickstart; querying (countries, weeks, seasons, age groups);
+- [x] Tool: Sphinx + MyST (Markdown pages) + Furo theme; API reference from the
+      Google-style docstrings (autodoc + napoleon)
+- [x] Pages: installation and quickstart; querying (countries, weeks, seasons, age groups);
       output format; **units and denominators** (per-country table, Slovakia ICU note,
       comparability caveat); data sources, sync and history (ECDC, RespiCast import,
       retained rows); caching and offline use; API reference generated from docstrings;
       disclaimer
-- [ ] `.readthedocs.yaml` and a `docs` optional dependency group
-- [ ] Build the docs in CI (fail on warnings) so they can't silently break
-- [ ] Import the project on readthedocs.org; add the docs link to the README and a
-      `Documentation` URL in `pyproject.toml`
+- [x] `.readthedocs.yaml` and a `docs` optional dependency group
+- [x] Build the docs in CI (fail on warnings) so they can't silently break
+- [x] Docs link and badges in the README; `Documentation` URL in `pyproject.toml`
+- [ ] Import the project on readthedocs.org (needs the maintainer's account)
+- [ ] Release 0.1.1 so the PyPI page shows the Documentation link
 
 ### Maintenance
 - [ ] Confirm the daily sync works on GitHub: it has not run yet (first scheduled run
