@@ -1,0 +1,5 @@
+survtype,countryname,yearweek,indicator,age,value
+SARI syndromic,Spain,2024-W40,SARIrate,65+,12.5
+SARI syndromic,Spain,2024-W40,SARIrate,total,4.1
+SARI syndromic,Spain,2025-W10,SARIrate,total,6
+SARI syndromic,Malta,2026-W38,SARIrate,total,3
