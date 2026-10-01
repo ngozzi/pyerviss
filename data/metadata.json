@@ -2,12 +2,12 @@
   "last_update": "2026-10-01",
   "ecdc_commit": null,
   "records_count": {
-    "ILIARIRates": 35494,
+    "ILIARIRates": 48887,
     "SARIRates": 10867
   },
   "date_range": {
     "ILIARIRates": {
-      "start": "2022-W25",
+      "start": "2014-W40",
       "end": "2026-W38"
     },
     "SARIRates": {
@@ -31,6 +31,7 @@
     }
   },
   "data_sources": [
-    "https://github.com/EU-ECDC/Respiratory_viruses_weekly_data (cumulative merge)"
+    "https://github.com/EU-ECDC/Respiratory_viruses_weekly_data (cumulative merge)",
+    "https://github.com/european-modelling-hubs/RespiCast-SyndromicIndicators (one-off import of 2024-10-11 ERVISS snapshots: ILI and ARI, total age, from 2014-W40)"
   ]
 }
