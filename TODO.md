@@ -140,7 +140,7 @@ pyerviss/
 
 - [ ] **Create `data/` folder structure and seed with historical data**
   - [x] Seeded from current ECDC data (2022-W25 onwards) via `scripts/sync_ecdc.py`
-  - [ ] Merge pre-2022 historical data (to be provided)
+  - [x] Merged ILI/ARI total-age history from 2014-W40 (RespiCast 2024-10-11 snapshots) via `scripts/import_respicast.py`
   - `data/ILIARIRates.csv` (your complete historical dataset)
   - `data/SARIRates.csv` (your complete historical dataset)
   - `data/snapshots/` directory
