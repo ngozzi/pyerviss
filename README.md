@@ -9,6 +9,9 @@ Python API to ERVISS, the European Respiratory Virus Surveillance Summary
 `data/` mirrors ILI, ARI and SARI rates from ECDC's
 [Respiratory_viruses_weekly_data](https://github.com/EU-ECDC/Respiratory_viruses_weekly_data),
 synced daily and merged cumulatively (rows ECDC removes are kept).
+ILI and ARI (total age group) also go back to 2014-W40, imported once from the
+[RespiCast](https://github.com/european-modelling-hubs/RespiCast-SyndromicIndicators)
+ERVISS snapshots of 2024-10-11 for weeks ECDC no longer publishes.
 
 ### Units
 
