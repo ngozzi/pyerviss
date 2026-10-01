@@ -182,9 +182,18 @@ def test_normalize_units_scales_per_100_consultation_countries():
     assert "Luxembourg,2025-W03,ARIconsultationrate,0-4,2900\n" in to_csv(normalize_units(df))
 
 
-def test_normalize_units_leaves_sari_unchanged():
-    df = frame(sari_csv("Malta,2025-W03,SARIrate,total,5"), {"SARIrate"})
-    assert normalize_units(df)["value"].tolist() == [5]
+def test_normalize_units_scales_per_100_admission_sari_countries():
+    df = frame(
+        sari_csv(
+            "Ireland,2025-W03,SARIrate,total,3.5",
+            "Luxembourg,2025-W03,SARIrate,65+,1.3",
+            "Malta,2025-W03,SARIrate,total,8.1",  # per catchment population: unchanged
+            "Slovakia,2025-W03,SARIrate,total,0.1",  # ICU-based, same unit: unchanged
+        ),
+        {"SARIrate"},
+    )
+    values = normalize_units(df).set_index("countryname")["value"].to_dict()
+    assert values == {"Ireland": 3500, "Luxembourg": 1300, "Malta": 8.1, "Slovakia": 0.1}
 
 
 def _series(country: str, values: list[float]) -> pd.DataFrame:

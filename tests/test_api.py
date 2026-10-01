@@ -71,8 +71,13 @@ def test_denominator_per_country():
     }
 
 
-def test_sari_denominator_is_population_for_all_countries():
-    assert set(pv.get_sari()["denominator"]) == {"population"}
+def test_sari_denominator_per_country():
+    df = pv.get_sari(age_groups="total").drop_duplicates("country")
+    assert dict(rows(df, "country", "denominator")) == {
+        "Ireland": "admissions",
+        "Malta": "population",
+        "Spain": "population",
+    }
 
 
 def test_indicators_are_separated():
@@ -222,7 +227,7 @@ def test_coverage():
 
 
 def test_list_countries():
-    assert pv.list_countries("sari") == ["Malta", "Spain"]
+    assert pv.list_countries("sari") == ["Ireland", "Malta", "Spain"]
     assert pv.list_countries("ari") == ["Italy", "Sweden"]
 
 

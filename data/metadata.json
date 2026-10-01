@@ -26,8 +26,14 @@
       }
     },
     "SARIRates": {
-      "default": "as published by ECDC (no conversion)",
-      "exceptions": {}
+      "default": "per 100,000 hospital catchment population",
+      "exceptions": {
+        "Greece": "per 100,000 hospital admissions (ECDC publishes per 100 total hospital admissions; multiplied by 1000)",
+        "Ireland": "per 100,000 hospital admissions (ECDC publishes per 100 total hospital admissions; multiplied by 1000)",
+        "Latvia": "per 100,000 hospital admissions (ECDC publishes per 100 total hospital admissions; multiplied by 1000)",
+        "Luxembourg": "per 100,000 hospital admissions (ECDC publishes per 100 total hospital admissions; multiplied by 1000)",
+        "Slovakia": "per 100,000 hospital catchment population (ICU admissions only)"
+      }
     }
   },
   "data_sources": [
