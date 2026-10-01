@@ -7,6 +7,11 @@ merges them into the local cumulative dataset:
 - ECDC's value wins when a key exists on both sides
 - rows that exist only locally are kept (never deleted)
 
+ILI/ARI rates that ECDC publishes per 100 consultations (Cyprus, Luxembourg,
+Malta) are multiplied by 1000 so every value is on a per-100,000 scale. The sync
+fails if a country's values shift by orders of magnitude, which indicates a unit
+change upstream rather than a revision.
+
 Files and metadata are only rewritten when the merged data differs from what is
 already on disk, so repeated runs produce no changes.
 
@@ -45,6 +50,35 @@ SORT_ORDER = ["indicator", "countryname", "yearweek", "age"]
 YEARWEEK_PATTERN = r"^\d{4}-W(0[1-9]|[1-4]\d|5[0-3])$"
 
 TIMEOUT_SECONDS = 60
+
+ECDC_SOURCE = f"https://github.com/{ECDC_REPO} (cumulative merge)"
+
+# ECDC: "ILI and ARI consultation rates are calculated per 100 000 population, except
+# for Cyprus, Luxembourg, Malta (per 100 consultations) and Finland (per 100 000
+# consultations)." Scaling the per-100 countries by 1000 puts all values per 100,000,
+# but for these four countries the denominator is consultations, not population.
+PER_100_CONSULTATIONS = {"Cyprus", "Luxembourg", "Malta"}
+RESCALED_INDICATORS = {"ILIconsultationrate", "ARIconsultationrate"}
+RESCALE_FACTOR = 1000
+
+_SCALED_NOTE = "ECDC publishes per 100 consultations; multiplied by 1000"
+UNITS = {
+    "ILIARIRates": {
+        "default": "per 100,000 population",
+        "exceptions": {
+            "Cyprus": f"per 100,000 consultations ({_SCALED_NOTE})",
+            "Finland": "per 100,000 consultations",
+            "Luxembourg": f"per 100,000 consultations ({_SCALED_NOTE})",
+            "Malta": f"per 100,000 consultations ({_SCALED_NOTE})",
+        },
+    },
+    "SARIRates": {"default": "as published by ECDC (no conversion)", "exceptions": {}},
+}
+
+# A country's median value changing by more than this factor between the stored data
+# and ECDC's (on the same weeks) is treated as a unit change, not a revision.
+MAX_SCALE_SHIFT = 100
+MIN_OVERLAP_FOR_SCALE_CHECK = 3
 
 
 class ValidationError(Exception):
@@ -97,6 +131,40 @@ def validate(df: pd.DataFrame, expected_indicators: set[str], source: str) -> pd
         raise ValidationError(f"{source}: {int(duplicates.sum())} duplicate keys, e.g. {examples}")
 
     return df
+
+
+def normalize_units(df: pd.DataFrame) -> pd.DataFrame:
+    """Convert per-100-consultation ILI/ARI rates to per 100,000."""
+    mask = df["countryname"].isin(PER_100_CONSULTATIONS) & df["indicator"].isin(RESCALED_INDICATORS)
+    if not mask.any():
+        return df
+    df = df.copy()
+    # Round away float noise from the multiplication (e.g. 2.9 * 1000 = 2900.0000000000005)
+    df.loc[mask, "value"] = (df.loc[mask, "value"] * RESCALE_FACTOR).round(9)
+    return df
+
+
+def check_scale(local: pd.DataFrame, incoming: pd.DataFrame, source: str) -> None:
+    """Fail if any country/indicator's values jumped by orders of magnitude.
+
+    Compares overlapping, non-zero rows. Revisions move values by percentages; a unit
+    change (e.g. per 100 -> per 100,000) moves every value by the same large factor.
+    """
+    joined = local.merge(incoming, on=KEY, suffixes=("_local", "_incoming"))
+    joined = joined[(joined["value_local"] > 0) & (joined["value_incoming"] > 0)]
+    ratios = (joined["value_incoming"] / joined["value_local"]).groupby(
+        [joined["countryname"], joined["indicator"]]
+    )
+    medians = ratios.median()[ratios.size() >= MIN_OVERLAP_FOR_SCALE_CHECK]
+    shifted = medians[(medians > MAX_SCALE_SHIFT) | (medians < 1 / MAX_SCALE_SHIFT)]
+    if not shifted.empty:
+        details = ", ".join(
+            f"{row.countryname} {row.indicator} (x{row.ratio:g})"
+            for row in shifted.rename("ratio").reset_index().itertuples()
+        )
+        raise ValidationError(
+            f"{source}: values changed scale, possibly a unit change upstream: {details}"
+        )
 
 
 def merge(local: pd.DataFrame, incoming: pd.DataFrame) -> tuple[pd.DataFrame, MergeStats]:
@@ -171,13 +239,26 @@ def date_range(df: pd.DataFrame) -> dict[str, str]:
     return {"start": str(df["yearweek"].min()), "end": str(df["yearweek"].max())}
 
 
-def update_metadata(path: Path, datasets: dict[str, pd.DataFrame], ecdc_commit: str | None) -> None:
+def update_metadata(
+    path: Path,
+    datasets: dict[str, pd.DataFrame],
+    ecdc_commit: str | None,
+    extra_source: str | None = None,
+) -> None:
+    """Rewrite metadata for the given datasets, keeping previously recorded sources."""
+    previous = json.loads(path.read_text()) if path.exists() else {}
+    sources = [
+        s for s in previous.get("data_sources", []) if s.startswith("http") and s != ECDC_SOURCE
+    ]
+    if extra_source and extra_source not in sources:
+        sources.append(extra_source)
     metadata = {
         "last_update": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
         "ecdc_commit": ecdc_commit,
         "records_count": {Path(name).stem: len(df) for name, df in datasets.items()},
         "date_range": {Path(name).stem: date_range(df) for name, df in datasets.items()},
-        "data_sources": [f"https://github.com/{ECDC_REPO} (cumulative merge)"],
+        "units": UNITS,
+        "data_sources": [ECDC_SOURCE, *sources],
     }
     path.write_text(json.dumps(metadata, indent=2) + "\n")
 
@@ -194,11 +275,13 @@ def sync(data_dir: Path, session: requests.Session) -> dict[str, MergeStats]:
         incoming = validate(
             fetch_ecdc_file(session, file_name, ref), indicators, f"ECDC {file_name}"
         )
+        incoming = normalize_units(incoming)
         local_path = data_dir / file_name
         if local_path.exists():
             local = validate(read_csv(local_path), indicators, f"local {file_name}")
         else:
             local = incoming.iloc[0:0]
+        check_scale(local, incoming, f"ECDC {file_name}")
         merged[file_name], stats[file_name] = merge(local, incoming)
 
     outputs = {name: to_csv(df) for name, df in merged.items()}
