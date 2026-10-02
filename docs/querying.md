@@ -30,18 +30,19 @@ pv.get_sari(countries="Spain", start="2025-01-01", end="2025-01-31")
 ```
 
 ```text
-  country country_code year_week       date    age  value denominator
-0   Spain           ES  2025-W01 2025-01-05    0-4   57.2  population
-1   Spain           ES  2025-W01 2025-01-05   5-14    3.8  population
-2   Spain           ES  2025-W01 2025-01-05  15-64    6.3  population
-3   Spain           ES  2025-W01 2025-01-05    65+   81.3  population
-4   Spain           ES  2025-W01 2025-01-05  total   22.9  population
-5   Spain           ES  2025-W02 2025-01-12    0-4   42.8  population
+  indicator country country_code year_week       date    age  value denominator
+0      sari   Spain           ES  2025-W01 2025-01-05    0-4   57.2  population
+1      sari   Spain           ES  2025-W01 2025-01-05   5-14    3.8  population
+2      sari   Spain           ES  2025-W01 2025-01-05  15-64    6.3  population
+3      sari   Spain           ES  2025-W01 2025-01-05    65+   81.3  population
+4      sari   Spain           ES  2025-W01 2025-01-05  total   22.9  population
+5      sari   Spain           ES  2025-W02 2025-01-12    0-4   42.8  population
 ...
 ```
 
 | Column | Description |
 |---|---|
+| `indicator` | `"ili"`, `"ari"` or `"sari"` |
 | `country` | Country name as used by ECDC, e.g. `"Czechia"` |
 | `country_code` | ISO 3166-1 alpha-2 code, e.g. `"CZ"` (Greece is `"GR"`) |
 | `year_week` | ISO 8601 week, e.g. `"2025-W01"` |
@@ -51,6 +52,14 @@ pv.get_sari(countries="Spain", start="2025-01-01", end="2025-01-31")
 | `denominator` | `"population"`, `"consultations"` or `"admissions"`; see {doc}`units` |
 
 A query that matches nothing returns an empty DataFrame with the same columns.
+
+Because every row carries its `indicator`, results can be combined safely:
+
+```python
+import pandas as pd
+
+both = pd.concat([pv.get_ili(countries="Italy"), pv.get_ari(countries="Italy")])
+```
 
 For one column per country, pivot the result:
 

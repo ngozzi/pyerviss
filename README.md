@@ -43,10 +43,10 @@ df = pv.get_ari()
 
 Every query returns one row per country, week and age group:
 
-| country | country_code | year_week | date | age | value | denominator |
-|---|---|---|---|---|---|---|
-| Italy | IT | 2024-W42 | 2024-10-20 | total | 592.8 | population |
-| Malta | MT | 2024-W42 | 2024-10-20 | total | 5800.0 | consultations |
+| indicator | country | country_code | year_week | date | age | value | denominator |
+|---|---|---|---|---|---|---|---|
+| ili | Italy | IT | 2024-W42 | 2024-10-20 | total | 592.8 | population |
+| ili | Malta | MT | 2024-W42 | 2024-10-20 | total | 5800.0 | consultations |
 
 - `date` is the last day (Sunday) of the ISO week.
 - A season such as `"2024/25"` runs from 2024-W40 to 2025-W39.
