@@ -33,6 +33,7 @@ def test_output_columns_and_types():
     df = pv.get_ili(countries="Malta")
     assert list(df.columns) == api.COLUMNS
     assert df.iloc[0].to_dict() == {
+        "indicator": "ili",
         "country": "Malta",
         "country_code": "MT",
         "year_week": "2024-W40",
@@ -78,6 +79,19 @@ def test_sari_denominator_per_country():
         "Malta": "population",
         "Spain": "population",
     }
+
+
+@pytest.mark.parametrize("name", ["ili", "ari", "sari"])
+def test_indicator_column(name):
+    df = pv.get_data(name)
+    assert not df.empty
+    assert set(df["indicator"]) == {name}
+
+
+def test_combined_results_stay_distinguishable():
+    both = pd.concat([pv.get_ili(countries="Italy"), pv.get_ari(countries="Italy")])
+    totals = both[(both["year_week"] == "2024-W40") & (both["age"] == "total")]
+    assert dict(rows(totals, "indicator", "value")) == {"ili": 363.0, "ari": 1100.0}
 
 
 def test_indicators_are_separated():

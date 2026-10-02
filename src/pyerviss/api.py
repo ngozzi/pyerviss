@@ -3,6 +3,7 @@
 All query functions return a long-format DataFrame with one row per country, week and
 age group, sorted by country, date and age group:
 
+    indicator     "ili", "ari" or "sari"
     country       Country name as used by ECDC, e.g. "Czechia"
     country_code  ISO 3166-1 alpha-2 code, e.g. "CZ"
     year_week     ISO week, e.g. "2024-W40"
@@ -32,7 +33,16 @@ from .indicators import INDICATORS, Indicator, get_indicator
 from .types import AGE_GROUPS, COUNTRY_ALIASES, COUNTRY_CODES
 from .utils import parse_season, season_of, to_yearweek, yearweek_to_date
 
-COLUMNS = ["country", "country_code", "year_week", "date", "age", "value", "denominator"]
+COLUMNS = [
+    "indicator",
+    "country",
+    "country_code",
+    "year_week",
+    "date",
+    "age",
+    "value",
+    "denominator",
+]
 
 # Shared by get_data and the per-indicator functions, so their docs can't drift apart
 _FILTER_ARGS = """
@@ -47,9 +57,10 @@ _FILTER_ARGS = """
 """
 _RETURNS_RAISES = """
     Returns:
-        DataFrame with columns country, country_code, year_week, date (Sunday of the
-        week), age, value (rate per 100,000 of the denominator) and denominator
-        ("population", "consultations" or "admissions"). Empty if nothing matches.
+        DataFrame with columns indicator ("ili", "ari" or "sari"), country,
+        country_code, year_week, date (Sunday of the week), age, value (rate per
+        100,000 of the denominator) and denominator ("population", "consultations" or
+        "admissions"). Empty if nothing matches.
 
     Raises:
         InvalidParameterError: Unknown indicator, country or age group, a malformed
@@ -269,6 +280,7 @@ def _to_output(df: pd.DataFrame, ind: Indicator) -> pd.DataFrame:
     week_dates = {week: pd.Timestamp(yearweek_to_date(week)) for week in weeks}
     out = pd.DataFrame(
         {
+            "indicator": ind.name,
             "country": df["countryname"],
             "country_code": df["countryname"].map(COUNTRY_CODES),
             "year_week": df["yearweek"],

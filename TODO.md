@@ -72,7 +72,8 @@ Recorded here so they aren't re-litigated.
   ARI 2014–2015 (all zeros) dropped as missing data.
 - **Weeks and seasons:** `date` is the Sunday ending the ISO week (RespiCast `truth_date`);
   a season "2024/25" runs 2024-W40 to 2025-W39.
-- **Output:** long format, snake_case columns `country, country_code, year_week, date,
-  age, value, denominator`; ISO2 country codes.
+- **Output:** long format, snake_case columns `indicator, country, country_code,
+  year_week, date, age, value, denominator`; ISO2 country codes. `indicator` makes
+  combined results (`pd.concat`) safe.
 - **Releases:** bump `version` in `pyproject.toml`, merge, publish a GitHub release tagged
   `vX.Y.Z`. Versions can never be re-uploaded to PyPI.

@@ -31,9 +31,9 @@ df = pv.get_ili(countries=["Italy", "MT"], season="2024/25", age_groups="total")
 ```
 
 ```text
-  country country_code year_week       date    age  value    denominator
-0   Italy           IT  2024-W42 2024-10-20  total  592.8     population
-1   Italy           IT  2024-W43 2024-10-27  total  583.4     population
+  indicator country country_code year_week       date    age  value denominator
+0       ili   Italy           IT  2024-W42 2024-10-20  total  592.8  population
+1       ili   Italy           IT  2024-W43 2024-10-27  total  583.4  population
 ...
 ```
 
