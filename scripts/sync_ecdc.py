@@ -1,9 +1,11 @@
-"""Sync ILI, ARI and SARI rates from ECDC into this repository's data/ folder.
+"""Sync ERVISS data from ECDC into this repository's data/ folder.
 
-Fetches the latest ERVISS files from EU-ECDC/Respiratory_viruses_weekly_data and
-merges them into the local cumulative dataset:
+Fetches the latest ERVISS files from EU-ECDC/Respiratory_viruses_weekly_data (ILI, ARI
+and SARI rates; primary care and SARI virology) and merges them into the local
+cumulative dataset:
 
-- rows are keyed by (countryname, yearweek, indicator, age)
+- rows are keyed by every column except survtype and value (for rates: countryname,
+  yearweek, indicator, age; virology adds pathogen, pathogentype, pathogensubtype)
 - ECDC's value wins when a key exists on both sides
 - rows that exist only locally are kept (never deleted)
 
@@ -39,15 +41,70 @@ ECDC_BRANCH = "main"
 ECDC_RAW_URL = "https://raw.githubusercontent.com/{repo}/{ref}/data/{file}"
 ECDC_COMMIT_URL = "https://api.github.com/repos/{repo}/commits/{ref}"
 
-# File name -> indicators it is expected to contain
+
+@dataclass(frozen=True)
+class FileSpec:
+    """Layout of one ECDC data file.
+
+    Attributes:
+        columns: Expected columns, in order; the last one is "value".
+        key: Columns identifying a row (everything except survtype and value).
+        indicators: Values the "indicator" column may take.
+    """
+
+    columns: tuple[str, ...]
+    key: tuple[str, ...]
+    indicators: frozenset[str]
+
+    @property
+    def sort_order(self) -> list[str]:
+        # Indicator first, then the rest of the key in column order
+        return ["indicator", *[c for c in self.key if c != "indicator"]]
+
+    @property
+    def series(self) -> list[str]:
+        """Columns identifying a weekly series (the key without the week)."""
+        return [c for c in self.key if c != "yearweek"]
+
+
+_RATE_COLUMNS = ("survtype", "countryname", "yearweek", "indicator", "age", "value")
+_RATE_KEY = ("countryname", "yearweek", "indicator", "age")
+_VIROLOGY_COLUMNS = (
+    "survtype",
+    "countryname",
+    "yearweek",
+    "pathogen",
+    "pathogentype",
+    "pathogensubtype",
+    "indicator",
+    "age",
+    "value",
+)
+_VIROLOGY_KEY = (
+    "countryname",
+    "yearweek",
+    "pathogen",
+    "pathogentype",
+    "pathogensubtype",
+    "indicator",
+    "age",
+)
+_VIROLOGY_INDICATORS = frozenset({"tests", "detections", "positivity"})
+
 FILES = {
-    "ILIARIRates.csv": {"ILIconsultationrate", "ARIconsultationrate"},
-    "SARIRates.csv": {"SARIrate"},
+    "ILIARIRates.csv": FileSpec(
+        _RATE_COLUMNS, _RATE_KEY, frozenset({"ILIconsultationrate", "ARIconsultationrate"})
+    ),
+    "SARIRates.csv": FileSpec(_RATE_COLUMNS, _RATE_KEY, frozenset({"SARIrate"})),
+    # Primary care sentinel and SARI (hospital) virology: tests, detections, positivity
+    "sentinelTestsDetectionsPositivity.csv": FileSpec(
+        _VIROLOGY_COLUMNS, _VIROLOGY_KEY, _VIROLOGY_INDICATORS
+    ),
+    "SARITestsDetectionsPositivity.csv": FileSpec(
+        _VIROLOGY_COLUMNS, _VIROLOGY_KEY, _VIROLOGY_INDICATORS
+    ),
 }
 
-COLUMNS = ["survtype", "countryname", "yearweek", "indicator", "age", "value"]
-KEY = ["countryname", "yearweek", "indicator", "age"]
-SORT_ORDER = ["indicator", "countryname", "yearweek", "age"]
 YEARWEEK_PATTERN = r"^\d{4}-W(0[1-9]|[1-4]\d|5[0-3])$"
 
 TIMEOUT_SECONDS = 60
@@ -97,6 +154,12 @@ UNITS = {
             "Slovakia": "per 100,000 hospital catchment population (ICU admissions only)",
         },
     },
+    "sentinelTestsDetectionsPositivity": {
+        "positivity": "%",
+        "tests": "count",
+        "detections": "count",
+    },
+    "SARITestsDetectionsPositivity": {"positivity": "%", "tests": "count", "detections": "count"},
 }
 
 # A country's median value changing by more than this factor between the stored data
@@ -121,15 +184,16 @@ class MergeStats:
         return self.added > 0 or self.updated > 0
 
 
-def validate(df: pd.DataFrame, expected_indicators: set[str], source: str) -> pd.DataFrame:
+def validate(df: pd.DataFrame, spec: FileSpec, source: str) -> pd.DataFrame:
     """Check structure and return a normalized copy (string keys, float values)."""
-    if list(df.columns) != COLUMNS:
-        raise ValidationError(f"{source}: expected columns {COLUMNS}, got {list(df.columns)}")
+    columns = list(spec.columns)
+    if list(df.columns) != columns:
+        raise ValidationError(f"{source}: expected columns {columns}, got {list(df.columns)}")
     if df.empty:
         raise ValidationError(f"{source}: no rows")
 
     df = df.copy()
-    for col in COLUMNS[:-1]:
+    for col in columns[:-1]:
         if df[col].isna().any():
             raise ValidationError(f"{source}: missing values in column '{col}'")
         df[col] = df[col].astype(str).str.strip()
@@ -139,7 +203,7 @@ def validate(df: pd.DataFrame, expected_indicators: set[str], source: str) -> pd
         examples = df.loc[bad_weeks, "yearweek"].unique()[:5].tolist()
         raise ValidationError(f"{source}: malformed yearweek values {examples}")
 
-    unexpected = set(df["indicator"].unique()) - expected_indicators
+    unexpected = set(df["indicator"].unique()) - spec.indicators
     if unexpected:
         raise ValidationError(f"{source}: unexpected indicators {sorted(unexpected)}")
 
@@ -149,9 +213,10 @@ def validate(df: pd.DataFrame, expected_indicators: set[str], source: str) -> pd
         raise ValidationError(f"{source}: missing or non-numeric values {examples}")
     df["value"] = values.astype(float)
 
-    duplicates = df.duplicated(KEY)
+    key = list(spec.key)
+    duplicates = df.duplicated(key)
     if duplicates.any():
-        examples = df.loc[duplicates, KEY].head(3).to_dict("records")
+        examples = df.loc[duplicates, key].head(3).to_dict("records")
         raise ValidationError(f"{source}: {int(duplicates.sum())} duplicate keys, e.g. {examples}")
 
     return df
@@ -170,33 +235,38 @@ def normalize_units(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def check_scale(local: pd.DataFrame, incoming: pd.DataFrame, source: str) -> None:
-    """Fail if any country/indicator's values jumped by orders of magnitude.
+def check_scale(local: pd.DataFrame, incoming: pd.DataFrame, spec: FileSpec, source: str) -> None:
+    """Fail if any series' values jumped by orders of magnitude.
 
-    Compares overlapping, non-zero rows. Revisions move values by percentages; a unit
-    change (e.g. per 100 -> per 100,000) moves every value by the same large factor.
+    Compares overlapping, non-zero rows of each series (e.g. one country, indicator and
+    age group). Revisions move values by percentages; a unit change (e.g. per 100 ->
+    per 100,000) moves every value by the same large factor.
     """
-    joined = local.merge(incoming, on=KEY, suffixes=("_local", "_incoming"))
+    joined = local.merge(incoming, on=list(spec.key), suffixes=("_local", "_incoming"))
     joined = joined[(joined["value_local"] > 0) & (joined["value_incoming"] > 0)]
     ratios = (joined["value_incoming"] / joined["value_local"]).groupby(
-        [joined["countryname"], joined["indicator"]]
+        [joined[c] for c in spec.series]
     )
     medians = ratios.median()[ratios.size() >= MIN_OVERLAP_FOR_SCALE_CHECK]
     shifted = medians[(medians > MAX_SCALE_SHIFT) | (medians < 1 / MAX_SCALE_SHIFT)]
     if not shifted.empty:
+        frame = shifted.rename("ratio").reset_index()
         details = ", ".join(
-            f"{row.countryname} {row.indicator} (x{row.ratio:g})"
-            for row in shifted.rename("ratio").reset_index().itertuples()
+            " ".join(str(row[c]) for c in spec.series) + f" (x{row['ratio']:g})"
+            for _, row in frame.iterrows()
         )
         raise ValidationError(
             f"{source}: values changed scale, possibly a unit change upstream: {details}"
         )
 
 
-def merge(local: pd.DataFrame, incoming: pd.DataFrame) -> tuple[pd.DataFrame, MergeStats]:
+def merge(
+    local: pd.DataFrame, incoming: pd.DataFrame, spec: FileSpec
+) -> tuple[pd.DataFrame, MergeStats]:
     """Merge incoming rows into local rows. Incoming values win; local-only rows are kept."""
+    key = list(spec.key)
     joined = local.merge(
-        incoming, on=KEY, how="outer", suffixes=("_local", "_incoming"), indicator=True
+        incoming, on=key, how="outer", suffixes=("_local", "_incoming"), indicator=True
     )
     in_both = joined["_merge"] == "both"
     stats = MergeStats(
@@ -214,12 +284,12 @@ def merge(local: pd.DataFrame, incoming: pd.DataFrame) -> tuple[pd.DataFrame, Me
     )
     stats.unchanged = int(in_both.sum()) - stats.updated
 
-    merged = pd.concat([local, incoming], ignore_index=True).drop_duplicates(KEY, keep="last")
-    return sort_rows(merged), stats
+    merged = pd.concat([local, incoming], ignore_index=True).drop_duplicates(key, keep="last")
+    return sort_rows(merged, spec), stats
 
 
-def sort_rows(df: pd.DataFrame) -> pd.DataFrame:
-    sorted_df: pd.DataFrame = df[COLUMNS].sort_values(SORT_ORDER, ignore_index=True)
+def sort_rows(df: pd.DataFrame, spec: FileSpec) -> pd.DataFrame:
+    sorted_df: pd.DataFrame = df[list(spec.columns)].sort_values(spec.sort_order, ignore_index=True)
     return sorted_df
 
 
@@ -228,8 +298,8 @@ def format_value(value: float) -> str:
     return str(np.format_float_positional(value, trim="-"))
 
 
-def to_csv(df: pd.DataFrame) -> str:
-    out = sort_rows(df).copy()
+def to_csv(df: pd.DataFrame, spec: FileSpec) -> str:
+    out = sort_rows(df, spec).copy()
     out["value"] = out["value"].map(format_value)
     return str(out.to_csv(index=False, lineterminator="\n"))
 
@@ -297,20 +367,18 @@ def sync(data_dir: Path, session: requests.Session) -> dict[str, MergeStats]:
     # Fetch and validate everything before writing anything
     merged: dict[str, pd.DataFrame] = {}
     stats: dict[str, MergeStats] = {}
-    for file_name, indicators in FILES.items():
-        incoming = validate(
-            fetch_ecdc_file(session, file_name, ref), indicators, f"ECDC {file_name}"
-        )
+    for file_name, spec in FILES.items():
+        incoming = validate(fetch_ecdc_file(session, file_name, ref), spec, f"ECDC {file_name}")
         incoming = normalize_units(incoming)
         local_path = data_dir / file_name
         if local_path.exists():
-            local = validate(read_csv(local_path), indicators, f"local {file_name}")
+            local = validate(read_csv(local_path), spec, f"local {file_name}")
         else:
             local = incoming.iloc[0:0]
-        check_scale(local, incoming, f"ECDC {file_name}")
-        merged[file_name], stats[file_name] = merge(local, incoming)
+        check_scale(local, incoming, spec, f"ECDC {file_name}")
+        merged[file_name], stats[file_name] = merge(local, incoming, spec)
 
-    outputs = {name: to_csv(df) for name, df in merged.items()}
+    outputs = {name: to_csv(df, FILES[name]) for name, df in merged.items()}
     on_disk = {
         name: (data_dir / name).read_text() if (data_dir / name).exists() else None
         for name in FILES

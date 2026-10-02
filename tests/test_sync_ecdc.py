@@ -9,7 +9,7 @@ import requests
 import sync_ecdc
 from sync_ecdc import (
     ECDC_SOURCE,
-    KEY,
+    FILES,
     ValidationError,
     check_scale,
     merge,
@@ -22,7 +22,13 @@ from sync_ecdc import (
 )
 
 HEADER = "survtype,countryname,yearweek,indicator,age,value\n"
-ILI_ARI = {"ILIconsultationrate", "ARIconsultationrate"}
+VIROLOGY_HEADER = (
+    "survtype,countryname,yearweek,pathogen,pathogentype,pathogensubtype,indicator,age,value\n"
+)
+ILI = FILES["ILIARIRates.csv"]
+SARI = FILES["SARIRates.csv"]
+SENTINEL = FILES["sentinelTestsDetectionsPositivity.csv"]
+KEY = list(ILI.key)
 
 
 def ili_csv(*rows: str) -> str:
@@ -33,8 +39,12 @@ def sari_csv(*rows: str) -> str:
     return HEADER + "".join(f"SARI syndromic,{row}\n" for row in rows)
 
 
-def frame(text: str, indicators: set[str] = ILI_ARI) -> pd.DataFrame:
-    return validate(read_csv(io.StringIO(text)), indicators, "test")
+def virology_csv(survtype: str, *rows: str) -> str:
+    return VIROLOGY_HEADER + "".join(f"{survtype},{row}\n" for row in rows)
+
+
+def frame(text: str, spec=ILI) -> pd.DataFrame:
+    return validate(read_csv(io.StringIO(text)), spec, "test")
 
 
 class FakeResponse:
@@ -119,7 +129,7 @@ def test_merge_updates_adds_and_keeps_local_only_rows():
         )
     )
 
-    merged, stats = merge(local, incoming)
+    merged, stats = merge(local, incoming, ILI)
 
     values = merged.set_index("yearweek")["value"].to_dict()
     assert values == {"2015-W01": 10, "2025-W03": 21.5, "2025-W04": 30, "2025-W05": 40}
@@ -133,7 +143,7 @@ def test_merge_never_drops_rows():
     )
     incoming = frame(ili_csv("Austria,2025-W01,ARIconsultationrate,0-4,1"))
 
-    merged, _ = merge(local, incoming)
+    merged, _ = merge(local, incoming, ILI)
 
     local_keys = set(map(tuple, local[KEY].values))
     merged_keys = set(map(tuple, merged[KEY].values))
@@ -143,14 +153,14 @@ def test_merge_never_drops_rows():
 
 def test_merge_identical_data_reports_no_change():
     data = frame(ili_csv("Austria,2025-W03,ILIconsultationrate,total,20"))
-    _, stats = merge(data, data.copy())
+    _, stats = merge(data, data.copy(), ILI)
     assert not stats.changed
     assert stats.unchanged == 1
 
 
 def test_merge_into_empty_local():
     incoming = frame(ili_csv("Austria,2025-W03,ILIconsultationrate,total,20"))
-    merged, stats = merge(incoming.iloc[0:0], incoming)
+    merged, stats = merge(incoming.iloc[0:0], incoming, ILI)
     assert len(merged) == 1
     assert stats.added == 1
 
@@ -179,7 +189,7 @@ def test_normalize_units_scales_per_100_consultation_countries():
         "Finland": 8.8,
         "Austria": 2338,
     }
-    assert "Luxembourg,2025-W03,ARIconsultationrate,0-4,2900\n" in to_csv(normalize_units(df))
+    assert "Luxembourg,2025-W03,ARIconsultationrate,0-4,2900\n" in to_csv(normalize_units(df), ILI)
 
 
 def test_normalize_units_scales_per_100_admission_sari_countries():
@@ -190,7 +200,7 @@ def test_normalize_units_scales_per_100_admission_sari_countries():
             "Malta,2025-W03,SARIrate,total,8.1",  # per catchment population: unchanged
             "Slovakia,2025-W03,SARIrate,total,0.1",  # ICU-based, same unit: unchanged
         ),
-        {"SARIrate"},
+        SARI,
     )
     values = normalize_units(df).set_index("countryname")["value"].to_dict()
     assert values == {"Ireland": 3500, "Luxembourg": 1300, "Malta": 8.1, "Slovakia": 0.1}
@@ -208,28 +218,30 @@ def _series(country: str, values: list[float]) -> pd.DataFrame:
 
 
 def test_check_scale_accepts_revisions():
-    check_scale(_series("Malta", [5000, 6000, 7000]), _series("Malta", [5100, 5900, 7700]), "t")
+    check_scale(
+        _series("Malta", [5000, 6000, 7000]), _series("Malta", [5100, 5900, 7700]), ILI, "t"
+    )
 
 
 def test_check_scale_rejects_unit_change():
     local = _series("Malta", [5000, 6000, 7000])
-    with pytest.raises(ValidationError, match=r"Malta ILIconsultationrate \(x0\.001\)"):
-        check_scale(local, _series("Malta", [5, 6, 7]), "t")
+    with pytest.raises(ValidationError, match=r"Malta ILIconsultationrate total \(x0\.001\)"):
+        check_scale(local, _series("Malta", [5, 6, 7]), ILI, "t")
     with pytest.raises(ValidationError, match="unit change"):
-        check_scale(_series("Malta", [5, 6, 7]), local, "t")
+        check_scale(_series("Malta", [5, 6, 7]), local, ILI, "t")
 
 
 def test_check_scale_ignores_zeros_and_small_overlaps():
     # Zeros are skipped; two overlapping weeks are too few to judge
-    check_scale(_series("Malta", [0, 5, 6]), _series("Malta", [3, 5000, 6000]), "t")
+    check_scale(_series("Malta", [0, 5, 6]), _series("Malta", [3, 5000, 6000]), ILI, "t")
 
 
 def test_sync_converts_units_and_detects_upstream_unit_change(tmp_path):
     ecdc = {
+        **ECDC_FILES,
         "ILIARIRates.csv": ili_csv(
             *[f"Malta,2025-W{w:02d},ILIconsultationrate,total,{w}.5" for w in range(1, 5)]
         ),
-        "SARIRates.csv": ECDC_FILES["SARIRates.csv"],
     }
     sync(tmp_path, FakeSession(ecdc))
     assert (
@@ -254,12 +266,79 @@ def test_sync_converts_units_and_detects_upstream_unit_change(tmp_path):
 
 def test_update_metadata_keeps_extra_sources(tmp_path):
     path = tmp_path / "metadata.json"
-    data = {"SARIRates.csv": frame(ECDC_FILES["SARIRates.csv"], {"SARIrate"})}
+    data = {"SARIRates.csv": frame(ECDC_FILES["SARIRates.csv"], SARI)}
     update_metadata(path, data, "abc", extra_source="https://example.org/history.csv")
     update_metadata(path, data, "def")
     metadata = json.loads(path.read_text())
     assert metadata["data_sources"] == [ECDC_SOURCE, "https://example.org/history.csv"]
     assert metadata["ecdc_commit"] == "def"
+
+
+# --- virology files -----------------------------------------------------------
+
+
+def sentinel(*rows: str) -> pd.DataFrame:
+    return frame(virology_csv("primary care sentinel", *rows), SENTINEL)
+
+
+def test_virology_key_includes_pathogen_and_subtype():
+    df = sentinel(
+        "Italy,2025-W03,Influenza,Influenza,total,detections,total,64",
+        "Italy,2025-W03,Influenza,Influenza A,A(H3),detections,total,40",
+        "Italy,2025-W03,RSV,RSV,RSV,detections,total,12",
+    )
+    assert len(df) == 3
+    with pytest.raises(ValidationError, match="duplicate keys"):
+        sentinel(
+            "Italy,2025-W03,RSV,RSV,RSV,detections,total,12",
+            "Italy,2025-W03,RSV,RSV,RSV,detections,total,13",
+        )
+
+
+def test_virology_rejects_rate_layout_and_unknown_indicators():
+    with pytest.raises(ValidationError, match="expected columns"):
+        frame(ili_csv("Austria,2025-W03,ILIconsultationrate,total,20"), SENTINEL)
+    with pytest.raises(ValidationError, match="unexpected indicators"):
+        sentinel("Italy,2025-W03,RSV,RSV,RSV,ILIconsultationrate,total,12")
+
+
+def test_normalize_units_leaves_virology_unchanged():
+    # Malta/Luxembourg rates are rescaled, but positivity and counts never are
+    df = sentinel(
+        "Malta,2025-W03,Influenza,Influenza,total,positivity,total,25",
+        "Luxembourg,2025-W03,RSV,RSV,RSV,tests,total,40",
+    )
+    assert normalize_units(df)["value"].tolist() == [25, 40]
+
+
+def test_check_scale_per_virology_series():
+    def series(pathogen: str, values: list[float]) -> pd.DataFrame:
+        return sentinel(
+            *[
+                f"Italy,2025-W{w:02d},{pathogen},{pathogen},{pathogen},tests,total,{v}"
+                for w, v in enumerate(values, 1)
+            ]
+        )
+
+    check_scale(series("RSV", [100, 120, 90]), series("RSV", [110, 118, 95]), SENTINEL, "t")
+    with pytest.raises(ValidationError, match=r"Italy RSV RSV RSV tests total \(x1000\)"):
+        check_scale(series("RSV", [1, 2, 3]), series("RSV", [1000, 2000, 3000]), SENTINEL, "t")
+
+
+def test_sync_writes_virology_files_sorted_with_eu_aggregate(tmp_path):
+    sync(tmp_path, FakeSession(ECDC_FILES))
+    sentinel_out = (tmp_path / "sentinelTestsDetectionsPositivity.csv").read_text()
+    assert sentinel_out == virology_csv(
+        "primary care sentinel",
+        "Italy,2025-W03,Influenza,Influenza,total,detections,total,64",
+        "Italy,2025-W03,Influenza,Influenza A,A(H3),detections,total,40",
+        "Italy,2025-W03,Influenza,Influenza,total,positivity,total,32",
+        "Italy,2025-W03,Influenza,Influenza,total,tests,total,200",
+    )
+    sari_out = (tmp_path / "SARITestsDetectionsPositivity.csv").read_text()
+    assert "EU/EEA,2025-W03,RSV,RSV,RSV,positivity,total,12.5" in sari_out
+    units = json.loads((tmp_path / "metadata.json").read_text())["units"]
+    assert units["sentinelTestsDetectionsPositivity"]["positivity"] == "%"
 
 
 # --- output format ----------------------------------------------------------
@@ -274,7 +353,7 @@ def test_to_csv_is_sorted_and_formats_values_exactly():
             "Austria,2025-W01,ARIconsultationrate,total,123456.789",
         )
     )
-    assert to_csv(df) == ili_csv(
+    assert to_csv(df, ILI) == ili_csv(
         "Austria,2025-W01,ARIconsultationrate,total,123456.789",
         "Austria,2025-W01,ILIconsultationrate,total,0.1",
         "Austria,2025-W02,ILIconsultationrate,total,4345.3",
@@ -284,7 +363,7 @@ def test_to_csv_is_sorted_and_formats_values_exactly():
 
 def test_to_csv_round_trips():
     text = ili_csv("Austria,2025-W01,ILIconsultationrate,total,857.6")
-    assert to_csv(frame(text)) == text
+    assert to_csv(frame(text), ILI) == text
 
 
 # --- sync (end to end) ------------------------------------------------------
@@ -293,6 +372,18 @@ def test_to_csv_round_trips():
 ECDC_FILES = {
     "ILIARIRates.csv": ili_csv("Austria,2025-W03,ILIconsultationrate,total,20"),
     "SARIRates.csv": sari_csv("Spain,2025-W03,SARIrate,65+,5.5"),
+    "sentinelTestsDetectionsPositivity.csv": virology_csv(
+        "primary care sentinel",
+        "Italy,2025-W03,Influenza,Influenza,total,tests,total,200",
+        "Italy,2025-W03,Influenza,Influenza,total,detections,total,64",
+        "Italy,2025-W03,Influenza,Influenza,total,positivity,total,32",
+        "Italy,2025-W03,Influenza,Influenza A,A(H3),detections,total,40",
+    ),
+    "SARITestsDetectionsPositivity.csv": virology_csv(
+        "SARI virological",
+        "EU/EEA,2025-W03,RSV,RSV,RSV,tests,total,1000",
+        "EU/EEA,2025-W03,RSV,RSV,RSV,positivity,total,12.5",
+    ),
 }
 
 
@@ -306,7 +397,12 @@ def test_sync_seeds_empty_data_dir(tmp_path):
     assert (tmp_path / "SARIRates.csv").read_text() == ECDC_FILES["SARIRates.csv"]
     metadata = json.loads((tmp_path / "metadata.json").read_text())
     assert metadata["ecdc_commit"] == "abc123"
-    assert metadata["records_count"] == {"ILIARIRates": 1, "SARIRates": 1}
+    assert metadata["records_count"] == {
+        "ILIARIRates": 1,
+        "SARIRates": 1,
+        "sentinelTestsDetectionsPositivity": 4,
+        "SARITestsDetectionsPositivity": 2,
+    }
     assert metadata["date_range"]["SARIRates"] == {"start": "2025-W03", "end": "2025-W03"}
     assert metadata["units"]["ILIARIRates"]["default"] == "per 100,000 population"
     assert set(metadata["units"]["ILIARIRates"]["exceptions"]) == {
