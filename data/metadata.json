@@ -1,18 +1,18 @@
 {
-  "last_update": "2026-10-01",
-  "ecdc_commit": null,
+  "last_update": "2026-10-02",
+  "ecdc_commit": "06e99b7cedf4ecaf87c8d22da5a39b6226611935",
   "records_count": {
-    "ILIARIRates": 48887,
-    "SARIRates": 10867
+    "ILIARIRates": 49014,
+    "SARIRates": 10915
   },
   "date_range": {
     "ILIARIRates": {
       "start": "2014-W40",
-      "end": "2026-W38"
+      "end": "2026-W39"
     },
     "SARIRates": {
       "start": "2022-W25",
-      "end": "2026-W38"
+      "end": "2026-W39"
     }
   },
   "units": {
