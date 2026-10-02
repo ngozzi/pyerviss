@@ -15,6 +15,12 @@ import pyerviss as pv
 .. autofunction:: pyerviss.get_data
 ```
 
+## Positivity
+
+```{eval-rst}
+.. autofunction:: pyerviss.get_positivity
+```
+
 ## Discovering data
 
 ```{eval-rst}

@@ -1,0 +1,5 @@
+survtype,countryname,yearweek,pathogen,pathogentype,pathogensubtype,indicator,age,value
+SARI virological,Spain,2025-W02,Influenza,Influenza,total,detections,total,90
+SARI virological,Spain,2025-W02,Influenza,Influenza,total,positivity,total,45
+SARI virological,Spain,2025-W02,Influenza,Influenza,total,tests,total,200
+SARI virological,Spain,2025-W02,Influenza,Influenza B,B/Vic,detections,total,10

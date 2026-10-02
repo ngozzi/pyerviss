@@ -16,6 +16,8 @@ AGE_GROUPS = ["0-4", "5-14", "15-64", "65+", "total"]
 DATA_FILES = {
     "ILI_ARI": "ILIARIRates.csv",
     "SARI": "SARIRates.csv",
+    "SENTINEL_VIROLOGY": "sentinelTestsDetectionsPositivity.csv",
+    "SARI_VIROLOGY": "SARITestsDetectionsPositivity.csv",
 }
 
 # ISO 3166-1 alpha-2 codes for the country names used by ECDC (EU/EEA)
@@ -50,6 +52,8 @@ COUNTRY_CODES = {
     "Slovenia": "SI",
     "Spain": "ES",
     "Sweden": "SE",
+    # EU/EEA aggregate published by ECDC in some datasets; "EU" is reserved in ISO 3166
+    "EU/EEA": "EU",
 }
 
 # Other accepted spellings, mapped to ECDC names (EU institutions use "EL" for Greece)

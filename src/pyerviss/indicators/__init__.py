@@ -1,7 +1,8 @@
 """Indicator registry.
 
-To add an indicator, register an ``Indicator`` here and make sure the sync script
-mirrors its data file.
+To add a rate indicator, register an ``Indicator`` here and make sure the sync script
+mirrors its data file. Positivity (virology) is described by ``POSITIVITY_FILES`` and
+``PATHOGENS``.
 """
 
 from __future__ import annotations
@@ -19,10 +20,10 @@ from .base import Indicator
 # admissions). Data from Slovakia are based on ICU admissions."
 # Per-100 values are stored multiplied by 1000, so every value is per 100,000.
 _CONSULTATIONS = MappingProxyType(
-    dict.fromkeys(["Cyprus", "Finland", "Luxembourg", "Malta"], "consultations")
+    dict.fromkeys(["Cyprus", "Finland", "Luxembourg", "Malta"], "per 100,000 consultations")
 )
 _ADMISSIONS = MappingProxyType(
-    dict.fromkeys(["Greece", "Ireland", "Latvia", "Luxembourg"], "admissions")
+    dict.fromkeys(["Greece", "Ireland", "Latvia", "Luxembourg"], "per 100,000 hospital admissions")
 )
 
 INDICATORS: dict[str, Indicator] = {
@@ -31,14 +32,14 @@ INDICATORS: dict[str, Indicator] = {
         description="Influenza-like illness consultation rate (primary care)",
         data_file=DATA_FILES["ILI_ARI"],
         ecdc_indicator="ILIconsultationrate",
-        denominator_exceptions=_CONSULTATIONS,
+        unit_exceptions=_CONSULTATIONS,
     ),
     "ari": Indicator(
         name="ari",
         description="Acute respiratory infection consultation rate (primary care)",
         data_file=DATA_FILES["ILI_ARI"],
         ecdc_indicator="ARIconsultationrate",
-        denominator_exceptions=_CONSULTATIONS,
+        unit_exceptions=_CONSULTATIONS,
     ),
     "sari": Indicator(
         name="sari",
@@ -47,9 +48,20 @@ INDICATORS: dict[str, Indicator] = {
         ),
         data_file=DATA_FILES["SARI"],
         ecdc_indicator="SARIrate",
-        denominator_exceptions=_ADMISSIONS,
+        unit_exceptions=_ADMISSIONS,
     ),
 }
+
+# Positivity: setting -> virology data file. Primary care samples come from patients
+# with ILI and/or ARI at sentinel GPs; hospital samples from SARI patients.
+POSITIVITY_FILES = {
+    "primary care": DATA_FILES["SENTINEL_VIROLOGY"],
+    "hospital": DATA_FILES["SARI_VIROLOGY"],
+}
+
+# Pathogens with published positivity: API name -> name in ECDC's files
+PATHOGENS = {"influenza": "Influenza", "rsv": "RSV", "sars-cov-2": "SARS-CoV-2"}
+PATHOGEN_ALIASES = {"flu": "influenza", "covid": "sars-cov-2", "covid-19": "sars-cov-2"}
 
 
 def get_indicator(name: str) -> Indicator:
@@ -62,4 +74,11 @@ def get_indicator(name: str) -> Indicator:
     return INDICATORS[key]
 
 
-__all__ = ["INDICATORS", "Indicator", "get_indicator"]
+__all__ = [
+    "INDICATORS",
+    "PATHOGENS",
+    "PATHOGEN_ALIASES",
+    "POSITIVITY_FILES",
+    "Indicator",
+    "get_indicator",
+]

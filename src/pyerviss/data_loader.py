@@ -29,7 +29,6 @@ METADATA_FILE = "metadata.json"
 CHECK_INTERVAL_SECONDS = 60 * 60
 TIMEOUT_SECONDS = 60
 
-_TEXT_COLUMNS = ["survtype", "countryname", "yearweek", "indicator", "age"]
 
 # Parsed CSVs by path, with the file's modification time when parsed, so repeated
 # queries skip parsing until the file changes
@@ -112,12 +111,9 @@ def load_csv(file_name: str, force_refresh: bool = False) -> pd.DataFrame:
     cached = _frames.get(path)
     if cached is None or cached[0] != mtime:
         try:
-            frame = pd.read_csv(
-                path,
-                dtype={**dict.fromkeys(_TEXT_COLUMNS, str), "value": "float64"},
-                keep_default_na=False,
-                na_values=[""],
-            )
+            # Every column is text except value
+            frame = pd.read_csv(path, dtype=str, keep_default_na=False, na_values=[""])
+            frame["value"] = frame["value"].astype("float64")
         except (ValueError, pd.errors.ParserError) as error:
             raise DataFetchError(
                 f"Cached file {path} is unreadable ({error}); run pyerviss.clear_cache()"

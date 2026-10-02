@@ -14,10 +14,10 @@ This file tracks what is done and what is next.
 
 | Area | State |
 |------|-------|
-| Data mirror | `data/ILIARIRates.csv`, `data/SARIRates.csv`, `data/metadata.json` |
-| Coverage | ILI/ARI from 2014-W40 (total age only before 2022-W25), SARI from 2022-W25 |
+| Data mirror | `data/ILIARIRates.csv`, `data/SARIRates.csv`, `data/sentinelTestsDetectionsPositivity.csv`, `data/SARITestsDetectionsPositivity.csv`, `data/metadata.json` |
+| Coverage | ILI/ARI from 2014-W40 (total age only before 2022-W25), SARI and positivity (primary care, hospital) from 2022-W25 |
 | Daily sync | `.github/workflows/sync-ecdc-data.yml` + `scripts/sync_ecdc.py`, 18:17 UTC |
-| Library | `get_ili/get_ari/get_sari/get_data`, `coverage`, `list_countries`, `list_seasons`, `latest_week`, cache with hourly ETag checks |
+| Library | `get_ili/get_ari/get_sari/get_data`, `get_positivity`, `coverage`, `list_countries`, `list_seasons`, `latest_week`, cache with hourly ETag checks |
 | CI | `.github/workflows/ci.yml`: ruff, mypy, pytest on Python 3.10–3.12, strict docs build |
 | Docs | https://pyerviss.readthedocs.io (Sphinx, `docs/`), rebuilt on every push to `main` |
 | Releases | `.github/workflows/publish.yml`: a GitHub release `vX.Y.Z` publishes to PyPI (trusted publishing) |
@@ -28,7 +28,7 @@ This file tracks what is done and what is next.
 - [x] Tool: Sphinx + MyST (Markdown pages) + Furo theme; API reference from the
       Google-style docstrings (autodoc + napoleon)
 - [x] Pages: installation and quickstart; querying (countries, weeks, seasons, age groups);
-      output format; **units and denominators** (per-country table, Slovakia ICU note,
+      output format; **units** (per-country table, Slovakia ICU note,
       comparability caveat); data sources, sync and history (ECDC, RespiCast import,
       retained rows); caching and offline use; API reference generated from docstrings;
       disclaimer
@@ -51,13 +51,16 @@ This file tracks what is done and what is next.
 - [ ] Delete merged branches on GitHub
 
 ### Later
+- [ ] Influenza subtypes (A(H1)pdm09, A(H3), B/Victoria...) and RSV-A/B: detections are
+      already mirrored in the virology files; derived subtype positivity is
+      `subtype detections / influenza tests × 100`, understated by unsubtyped detections
+- [ ] Other ERVISS datasets: non-sentinel severity (hospital/ICU admissions, deaths),
+      non-sentinel tests and detections. Variants and sequencing are partly sourced from
+      GISAID, whose terms restrict redistribution: check before mirroring
 - [ ] Minimal plotting layer (discussed, on hold): `add_season_week()` (season and
       week-of-season columns) and a matplotlib `plot_seasons()` season overlay as an
-      optional `pyerviss[plot]` extra, labelling units from `denominator` and refusing
-      mixed denominators on one axis
-- [ ] More ERVISS datasets (e.g. virus detections, flu subtypes). A new indicator is an
-      entry in `src/pyerviss/indicators/__init__.py`, plus syncing its file in
-      `scripts/sync_ecdc.py` (`FILES`), with units checked against ECDC's notes
+      optional `pyerviss[plot]` extra, labelling axes from `unit` and refusing mixed
+      units on one axis
 - [ ] Snapshots (deferred): ECDC publishes dated snapshots since 2023-11-24, useful for
       reproducing what was known at a given date (e.g. forecast evaluation)
 
@@ -70,7 +73,7 @@ Recorded here so they aren't re-litigated.
   values win on overlap).
 - **Storage:** CSV in ECDC's column layout, deterministic sort and number formatting so
   git diffs show real revisions only. No data ships in the pip package.
-- **Units:** every value is per 100,000 of its denominator. ECDC's per-100 series are
+- **Units:** a `unit` column states what each value measures. Rates are per 100,000. ECDC's per-100 series are
   multiplied by 1000 in the sync: ILI/ARI for Cyprus, Luxembourg, Malta (consultations);
   SARI for Greece, Ireland, Latvia, Luxembourg (hospital admissions). Finland ILI/ARI is
   per 100,000 consultations; Slovakia SARI counts ICU admissions only. The sync fails if a
@@ -81,7 +84,8 @@ Recorded here so they aren't re-litigated.
 - **Weeks and seasons:** `date` is the Sunday ending the ISO week (RespiCast `truth_date`);
   a season "2024/25" runs 2024-W40 to 2025-W39.
 - **Output:** long format, snake_case columns `indicator, country, country_code,
-  year_week, date, age, value, denominator`; ISO2 country codes. `indicator` makes
+  year_week, date, age, value, unit`; positivity adds `setting`, `pathogen`, `tests`,
+  `detections`. ISO2 country codes, plus `EU` for ECDC's EU/EEA aggregate. `indicator` makes
   combined results (`pd.concat`) safe.
 - **Releases:** record changes under "Unreleased" in `CHANGELOG.md` as they are merged.
   To release: rename "Unreleased" to the version and date, bump `version` in
