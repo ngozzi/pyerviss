@@ -32,7 +32,7 @@ behavior. This file tracks what is done and what is next.
 - [x] `.readthedocs.yaml` and a `docs` optional dependency group
 - [x] Build the docs in CI (fail on warnings) so they can't silently break
 - [x] Docs link and badges in the README; `Documentation` URL in `pyproject.toml`
-- [ ] Import the project on readthedocs.org (needs the maintainer's account)
+- [x] Import the project on readthedocs.org
 - [ ] Release 0.1.1 so the PyPI page shows the Documentation link
 
 ### Maintenance
@@ -42,7 +42,7 @@ behavior. This file tracks what is done and what is next.
 - [ ] Single-source the version: `__version__` in `src/pyerviss/__init__.py` duplicates
       `pyproject.toml`, and the release check only compares the tag with `pyproject.toml`.
       Read it with `importlib.metadata.version("pyerviss")` instead
-- [ ] Add a `CHANGELOG.md` and use it for release notes
+- [x] Add a `CHANGELOG.md` (Keep a Changelog); use it for release notes
 - [ ] Test on Python 3.13 in CI and add the classifier
 - [ ] Delete merged branches on GitHub
 
@@ -75,5 +75,7 @@ Recorded here so they aren't re-litigated.
 - **Output:** long format, snake_case columns `indicator, country, country_code,
   year_week, date, age, value, denominator`; ISO2 country codes. `indicator` makes
   combined results (`pd.concat`) safe.
-- **Releases:** bump `version` in `pyproject.toml`, merge, publish a GitHub release tagged
-  `vX.Y.Z`. Versions can never be re-uploaded to PyPI.
+- **Releases:** record changes under "Unreleased" in `CHANGELOG.md` as they are merged.
+  To release: rename "Unreleased" to the version and date, bump `version` in
+  `pyproject.toml`, merge, and publish a GitHub release tagged `vX.Y.Z` with that
+  section as its notes. Versions can never be re-uploaded to PyPI.

@@ -51,6 +51,7 @@ Homepage = "https://github.com/ngozzi/pyerviss"
 Documentation = "https://pyerviss.readthedocs.io"
 Repository = "https://github.com/ngozzi/pyerviss"
 Issues = "https://github.com/ngozzi/pyerviss/issues"
+Changelog = "https://github.com/ngozzi/pyerviss/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/pyerviss"]
