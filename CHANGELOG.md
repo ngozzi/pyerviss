@@ -22,6 +22,8 @@ All notable changes to pyerviss are documented here. The format follows
 
 - Query results have a new first column, `indicator`. Code that selects columns by
   position needs updating; code that selects them by name is unaffected.
+- `pyerviss.__version__` is read from the installed package metadata, so the version is
+  defined only in `pyproject.toml`.
 
 ## [0.1.0] - 2026-10-01
 

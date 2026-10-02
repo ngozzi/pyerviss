@@ -3,6 +3,8 @@
 Not affiliated with or endorsed by ECDC.
 """
 
+from importlib.metadata import PackageNotFoundError, version
+
 from .api import (
     clear_cache,
     coverage,
@@ -16,7 +18,11 @@ from .api import (
     update_data,
 )
 
-__version__ = "0.1.0"
+# The version is defined once, in pyproject.toml, and read from the installed package
+try:
+    __version__ = version("pyerviss")
+except PackageNotFoundError:  # running from a source tree without installing
+    __version__ = "0+unknown"
 
 __all__ = [
     "__version__",

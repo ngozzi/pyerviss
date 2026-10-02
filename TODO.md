@@ -3,12 +3,14 @@
 Unofficial Python API for ERVISS (European Respiratory Virus Surveillance Summary) data:
 ILI, ARI and SARI rates. Not affiliated with ECDC.
 
-The README documents usage and units; the code and its tests are the reference for
-behavior. This file tracks what is done and what is next.
+Usage, units and data sources are documented at https://pyerviss.readthedocs.io; the code
+and its tests are the reference for behavior; `CHANGELOG.md` lists changes per release.
+This file tracks what is done and what is next.
 
 ## Status
 
-**v0.1.0 released on [PyPI](https://pypi.org/project/pyerviss/)** (`pip install pyerviss`).
+**v0.1.0 released on [PyPI](https://pypi.org/project/pyerviss/)** (`pip install pyerviss`);
+0.1.1 in progress (see "Unreleased" in `CHANGELOG.md`).
 
 | Area | State |
 |------|-------|
@@ -16,7 +18,8 @@ behavior. This file tracks what is done and what is next.
 | Coverage | ILI/ARI from 2014-W40 (total age only before 2022-W25), SARI from 2022-W25 |
 | Daily sync | `.github/workflows/sync-ecdc-data.yml` + `scripts/sync_ecdc.py`, 18:17 UTC |
 | Library | `get_ili/get_ari/get_sari/get_data`, `coverage`, `list_countries`, `list_seasons`, `latest_week`, cache with hourly ETag checks |
-| CI | `.github/workflows/ci.yml`: ruff, mypy, pytest on Python 3.10–3.12 |
+| CI | `.github/workflows/ci.yml`: ruff, mypy, pytest on Python 3.10–3.12, strict docs build |
+| Docs | https://pyerviss.readthedocs.io (Sphinx, `docs/`), rebuilt on every push to `main` |
 | Releases | `.github/workflows/publish.yml`: a GitHub release `vX.Y.Z` publishes to PyPI (trusted publishing) |
 
 ## Next
@@ -36,17 +39,22 @@ behavior. This file tracks what is done and what is next.
 - [ ] Release 0.1.1 so the PyPI page shows the Documentation link
 
 ### Maintenance
-- [ ] Confirm the daily sync works on GitHub: it has not run yet (first scheduled run
-      2026-10-02 18:17 UTC), and the first run that finds new ECDC data is the first
-      test of the bot committing to `main`
-- [ ] Single-source the version: `__version__` in `src/pyerviss/__init__.py` duplicates
-      `pyproject.toml`, and the release check only compares the tag with `pyproject.toml`.
-      Read it with `importlib.metadata.version("pyerviss")` instead
+- [ ] **Confirm the daily sync works on GitHub.** It has never run: the first scheduled
+      slot (2026-10-02 18:17 UTC) produced no run. Trigger it once manually (Actions →
+      Sync ECDC data → Run workflow); if scheduled runs still don't appear, investigate.
+      The first run that finds new ECDC data is also the first test of the bot
+      committing to `main`
+- [x] Single-source the version: `pyproject.toml` only; `__version__` is read from the
+      installed package metadata
 - [x] Add a `CHANGELOG.md` (Keep a Changelog); use it for release notes
 - [ ] Test on Python 3.13 in CI and add the classifier
 - [ ] Delete merged branches on GitHub
 
 ### Later
+- [ ] Minimal plotting layer (discussed, on hold): `add_season_week()` (season and
+      week-of-season columns) and a matplotlib `plot_seasons()` season overlay as an
+      optional `pyerviss[plot]` extra, labelling units from `denominator` and refusing
+      mixed denominators on one axis
 - [ ] More ERVISS datasets (e.g. virus detections, flu subtypes). A new indicator is an
       entry in `src/pyerviss/indicators/__init__.py`, plus syncing its file in
       `scripts/sync_ecdc.py` (`FILES`), with units checked against ECDC's notes
@@ -77,5 +85,5 @@ Recorded here so they aren't re-litigated.
   combined results (`pd.concat`) safe.
 - **Releases:** record changes under "Unreleased" in `CHANGELOG.md` as they are merged.
   To release: rename "Unreleased" to the version and date, bump `version` in
-  `pyproject.toml`, merge, and publish a GitHub release tagged `vX.Y.Z` with that
+  `pyproject.toml` (the only place the version is written), merge, and publish a GitHub release tagged `vX.Y.Z` with that
   section as its notes. Versions can never be re-uploaded to PyPI.
