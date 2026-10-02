@@ -9,8 +9,8 @@ This file tracks what is done and what is next.
 
 ## Status
 
-**v0.1.0 released on [PyPI](https://pypi.org/project/pyerviss/)** (`pip install pyerviss`);
-0.1.1 in progress (see "Unreleased" in `CHANGELOG.md`).
+**On [PyPI](https://pypi.org/project/pyerviss/)** (`pip install pyerviss`): v0.1.0, with
+v0.1.1 ready to publish (see `CHANGELOG.md`).
 
 | Area | State |
 |------|-------|
