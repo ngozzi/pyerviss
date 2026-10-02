@@ -1,0 +1,17 @@
+survtype,countryname,yearweek,pathogen,pathogentype,pathogensubtype,indicator,age,value
+primary care sentinel,EU/EEA,2024-W50,Influenza,Influenza,total,detections,total,1500
+primary care sentinel,EU/EEA,2024-W50,Influenza,Influenza,total,positivity,total,30
+primary care sentinel,EU/EEA,2024-W50,Influenza,Influenza,total,tests,total,5000
+primary care sentinel,Italy,2024-W50,Influenza,Influenza,total,detections,total,59
+primary care sentinel,Italy,2024-W50,Influenza,Influenza,total,positivity,total,32.1
+primary care sentinel,Italy,2024-W50,Influenza,Influenza,total,tests,total,184
+primary care sentinel,Italy,2024-W50,Influenza,Influenza A,A(H3),detections,total,40
+primary care sentinel,Italy,2024-W50,Influenza,Influenza A,A(H1)pdm09,detections,total,19
+primary care sentinel,Italy,2024-W50,RSV,RSV,RSV,detections,total,12
+primary care sentinel,Italy,2024-W50,RSV,RSV,RSV,positivity,total,6.5
+primary care sentinel,Italy,2024-W50,RSV,RSV,RSV,tests,total,184
+primary care sentinel,Italy,2024-W51,Influenza,Influenza,total,detections,total,0
+primary care sentinel,Italy,2024-W51,Influenza,Influenza,total,tests,total,0
+primary care sentinel,Malta,2024-W50,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,1
+primary care sentinel,Malta,2024-W50,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,100
+primary care sentinel,Malta,2024-W50,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,1

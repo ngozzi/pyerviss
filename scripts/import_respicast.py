@@ -26,7 +26,6 @@ from pathlib import Path
 import pandas as pd
 import requests
 from sync_ecdc import (
-    COLUMNS,
     FILES,
     TIMEOUT_SECONDS,
     ValidationError,
@@ -52,6 +51,7 @@ RESPICAST_SOURCE = (
 )
 
 MASTER_FILE = "ILIARIRates.csv"
+MASTER_SPEC = FILES[MASTER_FILE]
 SURVTYPE = "primary care syndromic"
 AGE = "total"
 
@@ -110,7 +110,8 @@ def to_master_format(raw: pd.DataFrame, indicator: str) -> pd.DataFrame:
             "value": raw["value"],
         }
     )
-    return out[COLUMNS]
+    result: pd.DataFrame = out[list(MASTER_SPEC.columns)]
+    return result
 
 
 def drop_all_zero_series(df: pd.DataFrame) -> tuple[pd.DataFrame, list[str]]:
@@ -133,30 +134,33 @@ def fetch_snapshot(session: requests.Session, indicator: str) -> pd.DataFrame:
 
 def import_respicast(data_dir: Path, session: requests.Session) -> int:
     """Merge RespiCast history into the master file. Returns the number of rows added."""
-    indicators = FILES[MASTER_FILE]
     master_path = data_dir / MASTER_FILE
-    master = validate(read_csv(master_path), indicators, f"local {MASTER_FILE}")
+    master = validate(read_csv(master_path), MASTER_SPEC, f"local {MASTER_FILE}")
 
     history = pd.concat(
         [to_master_format(fetch_snapshot(session, ind), ind) for ind in SNAPSHOT_FILES],
         ignore_index=True,
     )
-    history = validate(history, indicators, "RespiCast")
+    history = validate(history, MASTER_SPEC, "RespiCast")
     history, dropped = drop_all_zero_series(history)
     for series in dropped:
         print(f"dropped all-zero series: {series}")
 
     # Same units as the master on overlapping weeks, then fill gaps only (master wins)
-    check_scale(master, history, "RespiCast")
-    merged, stats = merge(history, master)
+    check_scale(master, history, MASTER_SPEC, "RespiCast")
+    merged, stats = merge(history, master, MASTER_SPEC)
     added = stats.local_only
     if added == 0:
         return 0
 
-    master_path.write_text(to_csv(merged))
+    master_path.write_text(to_csv(merged, MASTER_SPEC))
     metadata_path = data_dir / "metadata.json"
     metadata = json.loads(metadata_path.read_text()) if metadata_path.exists() else {}
-    datasets = {name: validate(read_csv(data_dir / name), FILES[name], name) for name in FILES}
+    datasets = {
+        name: validate(read_csv(data_dir / name), spec, name)
+        for name, spec in FILES.items()
+        if (data_dir / name).exists()
+    }
     update_metadata(
         metadata_path, datasets, metadata.get("ecdc_commit"), extra_source=RESPICAST_SOURCE
     )

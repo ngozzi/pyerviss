@@ -8,11 +8,19 @@ All notable changes to pyerviss are documented here. The format follows
 
 ### Added
 
+- `get_positivity`: weekly influenza, RSV and SARS-CoV-2 test positivity in primary care
+  (sentinel GPs) and hospitals (SARI), from 2022-W25, with the `tests` and `detections`
+  counts it is computed from. Results add `setting` and `pathogen` columns.
+- The EU/EEA aggregate published by ECDC, queryable as `"EU/EEA"` or `"EU"` (positivity).
+- `coverage`, `list_countries`, `list_seasons` and `latest_week` accept `"positivity"`.
+- Data: primary care and SARI virology files (tests, detections, positivity by pathogen,
+  type and subtype) mirrored and synced daily from ECDC.
+
 - `indicator` column (`"ili"`, `"ari"` or `"sari"`) as the first column of every query
   result, so results from different indicators stay distinguishable when combined with
   `pd.concat`.
-- Documentation site at https://pyerviss.readthedocs.io: quickstart, querying, units and
-  denominators, data sources, caching, and an API reference generated from docstrings.
+- Documentation site at https://pyerviss.readthedocs.io: quickstart, querying, positivity,
+  units, data sources, caching, and an API reference generated from docstrings.
 - Full parameter, return and exception documentation on `get_ili`, `get_ari` and
   `get_sari` (previously they only pointed to `get_data`), visible in `help()` and the
   API reference.
@@ -20,6 +28,10 @@ All notable changes to pyerviss are documented here. The format follows
 
 ### Changed
 
+- **The `denominator` column is replaced by `unit`**, which states the full unit, e.g.
+  `"per 100,000 population"`, `"per 100,000 consultations"`,
+  `"per 100,000 hospital admissions"`, or `"%"` for positivity. `coverage()` likewise
+  returns `unit`. Code using `denominator` needs updating; values map one-to-one.
 - Query results have a new first column, `indicator`. Code that selects columns by
   position needs updating; code that selects them by name is unaffected.
 - `pyerviss.__version__` is read from the installed package metadata, so the version is

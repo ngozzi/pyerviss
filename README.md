@@ -6,8 +6,9 @@
 
 Unofficial Python API to ERVISS, the European Respiratory Virus Surveillance Summary
 
-Weekly ILI, ARI and SARI rates for EU/EEA countries as pandas DataFrames, from ECDC's
-[ERVISS](https://erviss.org) data, with ILI and ARI history back to 2014.
+Weekly ILI, ARI and SARI rates and influenza, RSV and SARS-CoV-2 test positivity for
+EU/EEA countries as pandas DataFrames, from ECDC's [ERVISS](https://erviss.org) data,
+with ILI and ARI history back to 2014.
 
 > **Disclaimer:** pyerviss is an independent, unofficial project. It is not affiliated
 > with, endorsed by, or maintained by the European Centre for Disease Prevention and
@@ -39,19 +40,24 @@ df = pv.get_sari(start="2024-10-01", end="2025-03-31", age_groups="65+")
 
 # ARI rates for all countries
 df = pv.get_ari()
+
+# Influenza test positivity in primary care, with test and detection counts
+df = pv.get_positivity(pathogen="influenza", setting="primary care", countries="IT")
 ```
 
-Every query returns one row per country, week and age group:
+Rate queries return one row per country, week and age group:
 
-| indicator | country | country_code | year_week | date | age | value | denominator |
+| indicator | country | country_code | year_week | date | age | value | unit |
 |---|---|---|---|---|---|---|---|
-| ili | Italy | IT | 2024-W42 | 2024-10-20 | total | 592.8 | population |
-| ili | Malta | MT | 2024-W42 | 2024-10-20 | total | 5800.0 | consultations |
+| ili | Italy | IT | 2024-W42 | 2024-10-20 | total | 592.8 | per 100,000 population |
+| ili | Malta | MT | 2024-W42 | 2024-10-20 | total | 5800.0 | per 100,000 consultations |
 
 - `date` is the last day (Sunday) of the ISO week.
 - A season such as `"2024/25"` runs from 2024-W40 to 2025-W39.
-- `value` is a rate per 100,000 of `denominator`: `population`, `consultations` or
-  `admissions` (see [Units](https://github.com/ngozzi/pyerviss#units)).
+- `unit` says what `value` measures; it differs by country (see
+  [Units](https://github.com/ngozzi/pyerviss#units)).
+- Positivity rows add `setting` and `pathogen` columns, a `value` in `%`, and the
+  `tests` and `detections` counts it is computed from.
 - Data before 2022-W25 is only available for the `"total"` age group.
 
 Finding out what is available:
@@ -69,7 +75,8 @@ used. `pv.update_data()` checks for updates now and `pv.clear_cache()` removes t
 
 ## Data
 
-`data/` mirrors ILI, ARI and SARI rates from ECDC's
+`data/` mirrors ILI, ARI and SARI rates and primary care and SARI virology (tests,
+detections and positivity) from ECDC's
 [Respiratory_viruses_weekly_data](https://github.com/EU-ECDC/Respiratory_viruses_weekly_data),
 synced daily and merged cumulatively (rows ECDC removes are kept).
 ILI and ARI (total age group) also go back to 2014-W40, imported once from the
@@ -78,17 +85,18 @@ ERVISS snapshots of 2024-10-11 for weeks ECDC no longer publishes.
 
 ### Units
 
-Every `value` is a rate per 100,000 of the row's `denominator`, which differs by country:
+The `unit` column says what each `value` measures, which differs by country:
 
-| Indicator | Countries | `denominator` | Unit |
-|---|---|---|---|
-| ILI, ARI | most | `population` | per 100,000 population |
-| ILI, ARI | Finland | `consultations` | per 100,000 consultations |
-| ILI, ARI | Cyprus, Luxembourg, Malta | `consultations` | per 100,000 consultations (ECDC: per 100 consultations; multiplied by 1000) |
-| SARI | most | `population` | per 100,000 hospital catchment population |
-| SARI | Greece, Ireland, Latvia, Luxembourg | `admissions` | per 100,000 hospital admissions (ECDC: per 100 total hospital admissions; multiplied by 1000) |
+| Indicator | Countries | `unit` |
+|---|---|---|
+| ILI, ARI | most | `per 100,000 population` |
+| ILI, ARI | Finland | `per 100,000 consultations` |
+| ILI, ARI | Cyprus, Luxembourg, Malta | `per 100,000 consultations` (ECDC: per 100 consultations; multiplied by 1000) |
+| SARI | most | `per 100,000 population` (hospital catchment population) |
+| SARI | Greece, Ireland, Latvia, Luxembourg | `per 100,000 hospital admissions` (ECDC: per 100 total hospital admissions; multiplied by 1000) |
+| Positivity | all | `%` of tested samples |
 
-Rates with different denominators are not directly comparable. Slovakia's SARI data is based
+Rates with different units are not directly comparable. Slovakia's SARI data is based
 on ICU admissions only. The sync fails if a country's values change scale by orders of
 magnitude, which would indicate a unit change upstream.
 

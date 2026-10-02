@@ -16,6 +16,7 @@ from pyerviss.data_loader import (
     update_data,
 )
 from pyerviss.exceptions import DataFetchError
+from pyerviss.types import DATA_FILES
 
 URL = DEFAULT_DATA_URL + "SARIRates.csv"
 CSV = (
@@ -202,13 +203,11 @@ def test_get_metadata():
 
 @responses.activate
 def test_update_data_checks_every_file():
-    for name in ["ILIARIRates.csv", "SARIRates.csv", "metadata.json"]:
+    names = [*DATA_FILES.values(), "metadata.json"]
+    for name in names:
         serve(body="{}" if name.endswith("json") else CSV, url=DEFAULT_DATA_URL + name)
     update_data()
     update_data()  # forced: checks again despite the interval
-    assert len(responses.calls) == 6
-    assert sorted(p.name for p in get_cache_dir().glob("*") if "state" not in p.name) == [
-        "ILIARIRates.csv",
-        "SARIRates.csv",
-        "metadata.json",
-    ]
+    assert len(responses.calls) == 2 * len(names)
+    cached = sorted(p.name for p in get_cache_dir().glob("*") if "state" not in p.name)
+    assert cached == sorted(names)

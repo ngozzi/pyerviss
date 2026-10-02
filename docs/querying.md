@@ -20,6 +20,8 @@ With no filters, a function returns everything available for its indicator.
 {func}`~pyerviss.get_data` does the same with the indicator as its first argument
 (`"ili"`, `"ari"` or `"sari"`), which is convenient in loops.
 
+For influenza, RSV and SARS-CoV-2 test positivity, see {doc}`positivity`.
+
 ## Output format
 
 Every query returns a long-format DataFrame: one row per country, week and age group,
@@ -30,13 +32,13 @@ pv.get_sari(countries="Spain", start="2025-01-01", end="2025-01-31")
 ```
 
 ```text
-  indicator country country_code year_week       date    age  value denominator
-0      sari   Spain           ES  2025-W01 2025-01-05    0-4   57.2  population
-1      sari   Spain           ES  2025-W01 2025-01-05   5-14    3.8  population
-2      sari   Spain           ES  2025-W01 2025-01-05  15-64    6.3  population
-3      sari   Spain           ES  2025-W01 2025-01-05    65+   81.3  population
-4      sari   Spain           ES  2025-W01 2025-01-05  total   22.9  population
-5      sari   Spain           ES  2025-W02 2025-01-12    0-4   42.8  population
+  indicator country country_code year_week       date    age  value                    unit
+0      sari   Spain           ES  2025-W01 2025-01-05    0-4   57.2  per 100,000 population
+1      sari   Spain           ES  2025-W01 2025-01-05   5-14    3.8  per 100,000 population
+2      sari   Spain           ES  2025-W01 2025-01-05  15-64    6.3  per 100,000 population
+3      sari   Spain           ES  2025-W01 2025-01-05    65+   81.3  per 100,000 population
+4      sari   Spain           ES  2025-W01 2025-01-05  total   22.9  per 100,000 population
+5      sari   Spain           ES  2025-W02 2025-01-12    0-4   42.8  per 100,000 population
 ...
 ```
 
@@ -48,8 +50,8 @@ pv.get_sari(countries="Spain", start="2025-01-01", end="2025-01-31")
 | `year_week` | ISO 8601 week, e.g. `"2025-W01"` |
 | `date` | Last day (Sunday) of the ISO week, as a pandas datetime |
 | `age` | `"0-4"`, `"5-14"`, `"15-64"`, `"65+"` or `"total"` |
-| `value` | Rate per 100,000 of the denominator |
-| `denominator` | `"population"`, `"consultations"` or `"admissions"`; see {doc}`units` |
+| `value` | The rate |
+| `unit` | What `value` measures, e.g. `"per 100,000 population"`; see {doc}`units` |
 
 A query that matches nothing returns an empty DataFrame with the same columns.
 
@@ -80,7 +82,7 @@ date
 
 :::{warning}
 Rates are not always comparable across countries: case definitions, surveillance systems
-and denominators differ. See {doc}`units`.
+and units differ. See {doc}`units`.
 :::
 
 ## Countries
@@ -174,11 +176,11 @@ pv.coverage("ili")
 ```
 
 ```text
-   country country_code first_week last_week  n_weeks                      age_groups    denominator
-0  Austria           AT   2014-W40  2026-W14      315  [0-4, 5-14, 15-64, 65+, total]     population
-1  Belgium           BE   2014-W40  2026-W38      625  [0-4, 5-14, 15-64, 65+, total]     population
-2  Croatia           HR   2014-W40  2026-W37      424  [0-4, 5-14, 15-64, 65+, total]     population
-3   Cyprus           CY   2014-W40  2019-W25      242                         [total]  consultations
+   country country_code first_week last_week  n_weeks                      age_groups                       unit
+0  Austria           AT   2014-W40  2026-W14      315  [0-4, 5-14, 15-64, 65+, total]     per 100,000 population
+1  Belgium           BE   2014-W40  2026-W39      626  [0-4, 5-14, 15-64, 65+, total]     per 100,000 population
+2  Croatia           HR   2014-W40  2026-W39      426  [0-4, 5-14, 15-64, 65+, total]     per 100,000 population
+3   Cyprus           CY   2014-W40  2019-W25      242                         [total]  per 100,000 consultations
 ...
 ```
 
