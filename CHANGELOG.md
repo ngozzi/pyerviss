@@ -6,6 +6,21 @@ All notable changes to pyerviss are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- `plot_seasons`: season overlay chart (one line per season, aligned W40 to W39), with
+  the latest or chosen seasons highlighted, past seasons in grey, gaps for missing weeks,
+  y-axis from `unit`, `facet="country"` or `facet="age"` for small multiples, and
+  confidence bands for positivity. Requires matplotlib: `pip install "pyerviss[plot]"`.
+- `add_season_week`: adds `season` and `season_week` columns, for plotting with any
+  library.
+- `add_positivity_ci`: adds a Wilson confidence interval (`ci_low`, `ci_high`) for
+  positivity, computed from `tests` and `detections`.
+- Documentation: Plotting page, and a quickstart notebook
+  (`notebooks/quickstart.ipynb`) that opens in Google Colab.
+- `py.typed` marker: type checkers (mypy, pyright) now use pyerviss's type hints;
+  previously every pyerviss call was typed as `Any`.
+
 ## [0.1.1] - 2026-10-02
 
 ### Added

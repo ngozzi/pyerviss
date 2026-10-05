@@ -18,6 +18,8 @@ from .api import (
     list_seasons,
     update_data,
 )
+from .plotting import plot_seasons
+from .transforms import add_positivity_ci, add_season_week
 
 # The version is defined once, in pyproject.toml, and read from the installed package
 try:
@@ -27,6 +29,8 @@ except PackageNotFoundError:  # running from a source tree without installing
 
 __all__ = [
     "__version__",
+    "add_positivity_ci",
+    "add_season_week",
     "clear_cache",
     "coverage",
     "get_ari",
@@ -37,5 +41,6 @@ __all__ = [
     "latest_week",
     "list_countries",
     "list_seasons",
+    "plot_seasons",
     "update_data",
 ]

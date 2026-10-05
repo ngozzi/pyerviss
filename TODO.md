@@ -9,8 +9,8 @@ This file tracks what is done and what is next.
 
 ## Status
 
-**On [PyPI](https://pypi.org/project/pyerviss/)** (`pip install pyerviss`): v0.1.0, with
-v0.1.1 ready to publish (see `CHANGELOG.md`).
+**v0.1.1 on [PyPI](https://pypi.org/project/pyerviss/)** (`pip install pyerviss`); changes
+per release in `CHANGELOG.md`.
 
 | Area | State |
 |------|-------|
@@ -36,14 +36,15 @@ v0.1.1 ready to publish (see `CHANGELOG.md`).
 - [x] Build the docs in CI (fail on warnings) so they can't silently break
 - [x] Docs link and badges in the README; `Documentation` URL in `pyproject.toml`
 - [x] Import the project on readthedocs.org
-- [ ] Release 0.1.1 so the PyPI page shows the Documentation link
+- [x] Release 0.1.1 so the PyPI page shows the Documentation link
+- [ ] Read the Docs: rebuild "stable" (now v0.1.1) and deactivate the v0.1.0 version,
+      whose tag predates `.readthedocs.yaml` and fails with "missing configuration file"
 
 ### Maintenance
-- [ ] **Confirm the daily sync works on GitHub.** It has never run: the first scheduled
-      slot (2026-10-02 18:17 UTC) produced no run. Trigger it once manually (Actions →
-      Sync ECDC data → Run workflow); if scheduled runs still don't appear, investigate.
-      The first run that finds new ECDC data is also the first test of the bot
-      committing to `main`
+- [x] Confirm the daily sync works on GitHub: a manual run (2026-10-02) found new ECDC
+      data and the bot committed it to `main`; the schedule fires, but late (the
+      2026-10-02 18:17 UTC slot ran at 22:10 UTC). GitHub delays scheduled runs under
+      load; the data is still updated daily
 - [x] Single-source the version: `pyproject.toml` only; `__version__` is read from the
       installed package metadata
 - [x] Add a `CHANGELOG.md` (Keep a Changelog); use it for release notes
@@ -57,10 +58,10 @@ v0.1.1 ready to publish (see `CHANGELOG.md`).
 - [ ] Other ERVISS datasets: non-sentinel severity (hospital/ICU admissions, deaths),
       non-sentinel tests and detections. Variants and sequencing are partly sourced from
       GISAID, whose terms restrict redistribution: check before mirroring
-- [ ] Minimal plotting layer (discussed, on hold): `add_season_week()` (season and
-      week-of-season columns) and a matplotlib `plot_seasons()` season overlay as an
-      optional `pyerviss[plot]` extra, labelling axes from `unit` and refusing mixed
-      units on one axis
+- [x] Minimal plotting layer: `add_season_week`, `add_positivity_ci` and a matplotlib
+      `plot_seasons` (optional `pyerviss[plot]` extra) with highlights, confidence bands
+      and `facet="country"`/`"age"`. Figures in the docs: `scripts/make_doc_figures.py`
+- [ ] ILI+ (ILI × positivity) as a data function; would plot with `plot_seasons` as is
 - [ ] Snapshots (deferred): ECDC publishes dated snapshots since 2023-11-24, useful for
       reproducing what was known at a given date (e.g. forecast evaluation)
 

@@ -22,3 +22,26 @@ def test_version_comes_from_pyproject():
     declared = re.search(r'^version = "([^"]+)"$', pyproject, re.M)
     assert declared is not None
     assert pyerviss.__version__ == declared[1]
+
+
+NOTEBOOKS = Path(__file__).parent.parent / "notebooks"
+
+
+def test_notebooks_are_valid_and_link_to_themselves_on_colab():
+    import json
+
+    notebooks = sorted(NOTEBOOKS.glob("*.ipynb"))
+    assert notebooks
+    for path in notebooks:
+        nb = json.loads(path.read_text())
+        assert nb["nbformat"] == 4
+        colab = f"colab.research.google.com/github/ngozzi/pyerviss/blob/main/notebooks/{path.name}"
+        assert colab in "".join(nb["cells"][0]["source"]), f"{path.name}: Colab badge link"
+        errors = [
+            output
+            for cell in nb["cells"]
+            if cell["cell_type"] == "code"
+            for output in cell.get("outputs", [])
+            if output["output_type"] == "error"
+        ]
+        assert not errors, f"{path.name} was saved with errors in its outputs"

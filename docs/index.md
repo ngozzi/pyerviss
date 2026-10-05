@@ -38,6 +38,9 @@ df = pv.get_ili(countries=["Italy", "MT"], season="2024/25", age_groups="total")
 ...
 ```
 
+To try it without installing anything, open the
+[quickstart notebook in Colab](https://colab.research.google.com/github/ngozzi/pyerviss/blob/main/notebooks/quickstart.ipynb).
+
 The first call downloads the data (a few MB) and caches it; later calls are fast and work
 offline. See {doc}`querying` for all filters and {doc}`units` before comparing countries.
 
@@ -47,6 +50,7 @@ offline. See {doc}`querying` for all filters and {doc}`units` before comparing c
 
 querying
 positivity
+plotting
 units
 data
 caching
@@ -58,6 +62,8 @@ api
 - {doc}`querying`: countries, weeks, seasons, age groups and the output format
 - {doc}`positivity`: influenza, RSV and SARS-CoV-2 test positivity, and combining it
   with ILI/ARI/SARI
+- {doc}`plotting`: season charts, comparing countries and age groups, positivity with
+  confidence bands
 - {doc}`units`: what each value measures, by country (read this before comparing
   countries)
 - {doc}`data`: where the data comes from, how it is updated and what differs from ECDC
