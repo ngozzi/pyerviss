@@ -9,7 +9,7 @@ This file tracks what is done and what is next.
 
 ## Status
 
-**v0.1.1 on [PyPI](https://pypi.org/project/pyerviss/)** (`pip install pyerviss`); changes
+**v0.2.0 on [PyPI](https://pypi.org/project/pyerviss/)** (`pip install pyerviss`); changes
 per release in `CHANGELOG.md`.
 
 | Area | State |
