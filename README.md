@@ -3,6 +3,7 @@
 [![CI](https://github.com/ngozzi/pyerviss/actions/workflows/ci.yml/badge.svg)](https://github.com/ngozzi/pyerviss/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/pyerviss)](https://pypi.org/project/pyerviss/)
 [![Docs](https://readthedocs.org/projects/pyerviss/badge/?version=latest)](https://pyerviss.readthedocs.io)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ngozzi/pyerviss/blob/main/notebooks/quickstart.ipynb)
 
 Unofficial Python API to ERVISS, the European Respiratory Virus Surveillance Summary
 
@@ -17,7 +18,8 @@ with ILI and ARI history back to 2014.
 > ECDC later removes are kept), so it can differ from the official figures. For official
 > data, see [erviss.org](https://erviss.org).
 
-Documentation: **https://pyerviss.readthedocs.io**
+Documentation: **https://pyerviss.readthedocs.io** · Try it without installing: [quickstart
+notebook on Colab](https://colab.research.google.com/github/ngozzi/pyerviss/blob/main/notebooks/quickstart.ipynb) ([`notebooks/quickstart.ipynb`](notebooks/quickstart.ipynb))
 
 ## Installation
 

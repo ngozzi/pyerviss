@@ -16,7 +16,8 @@ All notable changes to pyerviss are documented here. The format follows
   library.
 - `add_positivity_ci`: adds a Wilson confidence interval (`ci_low`, `ci_high`) for
   positivity, computed from `tests` and `detections`.
-- Documentation: Plotting page.
+- Documentation: Plotting page, and a quickstart notebook
+  (`notebooks/quickstart.ipynb`) that opens in Google Colab.
 - `py.typed` marker: type checkers (mypy, pyright) now use pyerviss's type hints;
   previously every pyerviss call was typed as `Any`.
 

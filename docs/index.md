@@ -38,6 +38,9 @@ df = pv.get_ili(countries=["Italy", "MT"], season="2024/25", age_groups="total")
 ...
 ```
 
+To try it without installing anything, open the
+[quickstart notebook in Colab](https://colab.research.google.com/github/ngozzi/pyerviss/blob/main/notebooks/quickstart.ipynb).
+
 The first call downloads the data (a few MB) and caches it; later calls are fast and work
 offline. See {doc}`querying` for all filters and {doc}`units` before comparing countries.
 

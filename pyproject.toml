@@ -65,6 +65,7 @@ exclude = [
     "data/",
     "tests/",
     "docs/",
+    "notebooks/",
     "scripts/",
     ".github/",
     ".gitignore",
