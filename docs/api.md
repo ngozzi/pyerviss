@@ -21,6 +21,21 @@ import pyerviss as pv
 .. autofunction:: pyerviss.get_positivity
 ```
 
+## Plotting
+
+Requires matplotlib: `pip install "pyerviss[plot]"`.
+
+```{eval-rst}
+.. autofunction:: pyerviss.plot_seasons
+```
+
+## Derived columns
+
+```{eval-rst}
+.. autofunction:: pyerviss.add_season_week
+.. autofunction:: pyerviss.add_positivity_ci
+```
+
 ## Discovering data
 
 ```{eval-rst}

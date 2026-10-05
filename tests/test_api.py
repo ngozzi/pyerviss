@@ -272,6 +272,8 @@ def test_latest_week():
 def test_public_exports():
     assert set(pv.__all__) == {
         "__version__",
+        "add_positivity_ci",
+        "add_season_week",
         "clear_cache",
         "coverage",
         "get_ari",
@@ -282,6 +284,7 @@ def test_public_exports():
         "latest_week",
         "list_countries",
         "list_seasons",
+        "plot_seasons",
         "update_data",
     }
 

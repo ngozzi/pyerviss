@@ -60,6 +60,13 @@ Rate queries return one row per country, week and age group:
   `tests` and `detections` counts it is computed from.
 - Data before 2022-W25 is only available for the `"total"` age group.
 
+Plotting (requires `pip install "pyerviss[plot]"`): one line per season, the latest
+highlighted, with `facet="country"` or `facet="age"` for comparisons:
+
+```python
+pv.plot_seasons(pv.get_ili(countries="Italy", age_groups="total"))
+```
+
 Finding out what is available:
 
 ```python

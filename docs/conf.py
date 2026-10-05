@@ -30,6 +30,7 @@ napoleon_numpy_docstring = False
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "pandas": ("https://pandas.pydata.org/docs", None),
+    "matplotlib": ("https://matplotlib.org/stable", None),
 }
 
 html_theme = "furo"

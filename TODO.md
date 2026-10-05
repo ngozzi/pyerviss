@@ -57,10 +57,10 @@ v0.1.1 ready to publish (see `CHANGELOG.md`).
 - [ ] Other ERVISS datasets: non-sentinel severity (hospital/ICU admissions, deaths),
       non-sentinel tests and detections. Variants and sequencing are partly sourced from
       GISAID, whose terms restrict redistribution: check before mirroring
-- [ ] Minimal plotting layer (discussed, on hold): `add_season_week()` (season and
-      week-of-season columns) and a matplotlib `plot_seasons()` season overlay as an
-      optional `pyerviss[plot]` extra, labelling axes from `unit` and refusing mixed
-      units on one axis
+- [x] Minimal plotting layer: `add_season_week`, `add_positivity_ci` and a matplotlib
+      `plot_seasons` (optional `pyerviss[plot]` extra) with highlights, confidence bands
+      and `facet="country"`/`"age"`. Figures in the docs: `scripts/make_doc_figures.py`
+- [ ] ILI+ (ILI × positivity) as a data function; would plot with `plot_seasons` as is
 - [ ] Snapshots (deferred): ECDC publishes dated snapshots since 2023-11-24, useful for
       reproducing what was known at a given date (e.g. forecast evaluation)
 
