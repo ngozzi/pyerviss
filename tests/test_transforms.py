@@ -27,6 +27,26 @@ def test_add_season_week(year_week, season, week):
     assert out["season_week"].dtype == "int64"
 
 
+@pytest.mark.parametrize(
+    "year_week, season, week",
+    [
+        ("2024-W25", "2024/25", 1),
+        ("2024-W40", "2024/25", 16),
+        ("2025-W24", "2024/25", 52),
+        ("2025-W25", "2025/26", 1),
+        ("2021-W24", "2020/21", 53),  # contains 2020-W53
+    ],
+)
+def test_add_season_week_with_start_week(year_week, season, week):
+    out = pv.add_season_week(pd.DataFrame({"year_week": [year_week]}), start_week=25)
+    assert out.iloc[0][["season", "season_week"]].tolist() == [season, week]
+
+
+def test_add_season_week_rejects_invalid_start_week():
+    with pytest.raises(InvalidParameterError, match="start_week"):
+        pv.add_season_week(pd.DataFrame({"year_week": ["2024-W40"]}), start_week=53)
+
+
 def test_add_season_week_returns_copy():
     df = pd.DataFrame({"year_week": ["2024-W40"]})
     pv.add_season_week(df)

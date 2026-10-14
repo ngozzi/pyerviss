@@ -78,8 +78,19 @@ def parse_season(season: str) -> tuple[str, str]:
     return first, date_to_yearweek(last_day)
 
 
-def season_of(year_week: str) -> str:
-    """Season a week belongs to: "2024-W40" -> "2024/25", "2025-W39" -> "2024/25"."""
+def check_start_week(start_week: int) -> None:
+    """Raise InvalidParameterError unless start_week is an ISO week from 1 to 52."""
+    if isinstance(start_week, bool) or not isinstance(start_week, int) or not 1 <= start_week <= 52:
+        raise InvalidParameterError(f"start_week must be a week from 1 to 52, got {start_week!r}")
+
+
+def season_of(year_week: str, start_week: int = SEASON_START_WEEK) -> str:
+    """Season a week belongs to: "2024-W40" -> "2024/25", "2025-W39" -> "2024/25".
+
+    With another ``start_week``, seasons run from that week to the week before it, e.g.
+    start_week=25: "2024-W25" -> "2024/25", "2025-W24" -> "2024/25".
+    """
+    check_start_week(start_week)
     year, week = parse_yearweek(year_week)
-    start_year = year if week >= SEASON_START_WEEK else year - 1
+    start_year = year if week >= start_week else year - 1
     return f"{start_year}/{(start_year + 1) % 100:02d}"

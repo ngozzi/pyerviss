@@ -16,6 +16,7 @@ from .api import (
     latest_week,
     list_countries,
     list_seasons,
+    list_vintages,
     update_data,
 )
 from .plotting import plot_seasons
@@ -41,6 +42,7 @@ __all__ = [
     "latest_week",
     "list_countries",
     "list_seasons",
+    "list_vintages",
     "plot_seasons",
     "update_data",
 ]

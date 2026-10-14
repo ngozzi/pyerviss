@@ -49,12 +49,13 @@ from sync_ecdc import (
     ValidationError,
     check_scale,
     merge,
-    normalize_units,
     read_csv,
     to_csv,
     update_metadata,
     validate,
 )
+
+from pyerviss.units import PER_100K_BEFORE_SWITCH, normalize_units
 
 ECDC_COMMITS_URL = "https://api.github.com/repos/{repo}/commits"
 PAGE_SIZE = 100
@@ -67,7 +68,6 @@ HISTORY_SOURCE = (
 # First ECDC commit (2025-10-24) publishing these rates per 100 admissions; versions
 # older than it already have them per 100,000
 UNIT_SWITCH_COMMIT = "b7a19c70856c95a39e9b1f7563e317f1ffccac33"
-PER_100K_BEFORE_SWITCH = {"SARIrate": {"Greece", "Latvia"}}
 
 # Files where a series of zeros means missing data; virology zeros are real counts
 RATE_FILES = {"ILIARIRates.csv", "SARIRates.csv"}
@@ -129,12 +129,7 @@ def missing_rows(df: pd.DataFrame, present: pd.DataFrame, spec: FileSpec) -> pd.
 
 def normalize_version(df: pd.DataFrame, before_switch: bool) -> pd.DataFrame:
     """Unit-normalize one version, leaving rates it already has per 100,000 unchanged."""
-    if not before_switch:
-        return normalize_units(df)
-    exempt = pd.Series(False, index=df.index)
-    for indicator, countries in PER_100K_BEFORE_SWITCH.items():
-        exempt |= (df["indicator"] == indicator) & df["countryname"].isin(countries)
-    return pd.concat([normalize_units(df[~exempt]), df[exempt]])
+    return normalize_units(df, PER_100K_BEFORE_SWITCH if before_switch else None)
 
 
 def collect_history(

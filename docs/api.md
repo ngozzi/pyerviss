@@ -21,6 +21,15 @@ import pyerviss as pv
 .. autofunction:: pyerviss.get_positivity
 ```
 
+## Past vintages
+
+Pass `as_of` to any query function above to get data as ECDC published it on a past
+date; see {doc}`vintages`.
+
+```{eval-rst}
+.. autofunction:: pyerviss.list_vintages
+```
+
 ## Plotting
 
 Requires matplotlib: `pip install "pyerviss[plot]"`.

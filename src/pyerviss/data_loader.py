@@ -106,7 +106,11 @@ def fetch_file(file_name: str, force_refresh: bool = False) -> Path:
 
 def load_csv(file_name: str, force_refresh: bool = False) -> pd.DataFrame:
     """Load a data file as a DataFrame with ECDC's columns (value as float)."""
-    path = fetch_file(file_name, force_refresh=force_refresh)
+    return read_frame(fetch_file(file_name, force_refresh=force_refresh))
+
+
+def read_frame(path: Path) -> pd.DataFrame:
+    """Parse a cached CSV in ECDC's layout, reusing the parsed copy until the file changes."""
     mtime = path.stat().st_mtime_ns
     cached = _frames.get(path)
     if cached is None or cached[0] != mtime:

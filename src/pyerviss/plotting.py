@@ -32,8 +32,12 @@ SERIES_COLUMNS = ["indicator", "setting", "pathogen", "country", "age"]
 FACETS = {"age": "age", "country": "country"}
 MAX_COLUMNS = 4
 
-# Evenly spaced ticks, as season weeks of a 52-week season (W40 is week 1, W01 week 14)
-_TICKS = [(1, "W40"), (14, "W01"), (27, "W14"), (40, "W27")]
+# Week that starts a plotted season: 25, as on ERVISS's dashboard, so the summer trough
+# comes first and the autumn rise and winter peak are fully visible
+PLOT_START_WEEK = 25
+# Ticks every TICK_SPACING weeks from the start week (25, 37, 49, 9, 21), labelled with
+# the ISO week as on ERVISS's dashboard
+TICK_SPACING = 12
 _INDICATOR_LABELS = {"ili": "ILI", "ari": "ARI", "sari": "SARI", "positivity": "Positivity"}
 
 
@@ -44,6 +48,7 @@ def plot_seasons(
     facet: None = ...,
     sharey: bool = ...,
     ax: matplotlib.axes.Axes | None = ...,
+    start_week: int = ...,
 ) -> matplotlib.axes.Axes: ...
 
 
@@ -55,6 +60,7 @@ def plot_seasons(
     facet: str,
     sharey: bool = ...,
     ax: matplotlib.axes.Axes | None = ...,
+    start_week: int = ...,
 ) -> matplotlib.figure.Figure: ...
 
 
@@ -65,6 +71,7 @@ def plot_seasons(
     facet: str,
     sharey: bool = ...,
     ax: matplotlib.axes.Axes | None = ...,
+    start_week: int = ...,
 ) -> matplotlib.figure.Figure: ...
 
 
@@ -74,8 +81,14 @@ def plot_seasons(
     facet: str | None = None,
     sharey: bool = False,
     ax: matplotlib.axes.Axes | None = None,
+    start_week: int = PLOT_START_WEEK,
 ) -> matplotlib.axes.Axes | matplotlib.figure.Figure:
-    """Plot one line per season, aligned on the week of the season (W40 to W39).
+    """Plot one line per season, aligned on the week of the season (W25 to W24).
+
+    As on ERVISS's dashboard, plotted seasons run from week 25 to week 24 of the next
+    year, so the summer trough comes first and the autumn rise and winter peak are fully
+    visible. A plotted season "2024/25" therefore runs from 2024-W25 to 2025-W24, unlike
+    the ``season`` filter of queries (W40 to W39); pass ``start_week=40`` to plot those.
 
     Past seasons are drawn in grey for context; highlighted seasons in colour. If ``df``
     has ``ci_low`` and ``ci_high`` columns (see ``add_positivity_ci``), the interval is
@@ -92,6 +105,7 @@ def plot_seasons(
         sharey: Use the same y-axis range in all panels (facets only). Only allowed when
             all panels have the same unit.
         ax: Matplotlib axes to draw on (without facet only). Default: a new figure.
+        start_week: ISO week that starts a plotted season. Default 25.
 
     Returns:
         The matplotlib ``Axes`` without facet, or the ``Figure`` with facets.
@@ -109,7 +123,7 @@ def plot_seasons(
     if facet_column is not None and ax is not None:
         raise InvalidParameterError("ax cannot be combined with facet")
 
-    df = add_season_week(df)
+    df = add_season_week(df, start_week)
     seasons = _resolve_highlight(highlight, df)
     ordered = sorted(seasons, reverse=True)  # most recent season gets the first colour
     colors = dict(zip(ordered, HIGHLIGHT_COLORS[: len(ordered)], strict=True))
@@ -118,9 +132,10 @@ def plot_seasons(
         _require_single_series(df, exclude=None)
         if ax is None:
             _, ax = plt.subplots(figsize=(8, 4.5), layout="constrained")
-        _draw_panel(ax, df, colors)
+        _draw_panel(ax, df, colors, start_week)
         ax.set_title(_series_title(df), loc="left", color="black")
         ax.set_ylabel(_axis_label(df), color=TEXT_COLOR)
+        ax.set_xlabel("ISO week", color=TEXT_COLOR)
         ax.legend(handles=_legend_handles(df, colors), **_LEGEND_STYLE)
         return ax
 
@@ -148,7 +163,7 @@ def plot_seasons(
     flat = axes.ravel()
     mixed_units = len(set(units.values())) > 1
     for panel_ax, key in zip(flat[: len(panels)], panels, strict=True):
-        _draw_panel(panel_ax, df[df[facet_column] == key], colors)
+        _draw_panel(panel_ax, df[df[facet_column] == key], colors, start_week)
         title = f"{key} ({units[key]})" if mixed_units else str(key)
         panel_ax.set_title(title, loc="left", fontsize="medium", color="black")
     for unused in flat[len(panels) :]:
@@ -161,6 +176,7 @@ def plot_seasons(
     if not mixed_units:
         for row in axes:
             row[0].set_ylabel(_axis_label(df), color=TEXT_COLOR)
+    fig.supxlabel("ISO week", color=TEXT_COLOR, fontsize="medium")
     fig.suptitle(_series_title(df, exclude=facet_column), x=0.01, ha="left")
     fig.legend(
         handles=_legend_handles(df, colors),
@@ -246,7 +262,9 @@ def _panel_order(df: pd.DataFrame, column: str) -> list[str]:
     return keys  # query results are sorted by country
 
 
-def _draw_panel(ax: matplotlib.axes.Axes, df: pd.DataFrame, colors: dict[str, str]) -> None:
+def _draw_panel(
+    ax: matplotlib.axes.Axes, df: pd.DataFrame, colors: dict[str, str], start_week: int
+) -> None:
     max_week = int(df["season_week"].max())
     weeks = np.arange(1, max(max_week, 52) + 1)
     has_ci = {"ci_low", "ci_high"} <= set(df.columns)
@@ -292,7 +310,8 @@ def _draw_panel(ax: matplotlib.axes.Axes, df: pd.DataFrame, colors: dict[str, st
         )
 
     ax.set_xlim(1, weeks[-1])
-    ax.set_xticks([w for w, _ in _TICKS], [label for _, label in _TICKS])
+    ticks = list(range(1, 53, TICK_SPACING))
+    ax.set_xticks(ticks, [str((start_week + t - 2) % 52 + 1) for t in ticks])
     ax.set_ylim(bottom=0)
     ax.grid(axis="y", color=GRID_COLOR, linewidth=1)
     ax.set_axisbelow(True)
