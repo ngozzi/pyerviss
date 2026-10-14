@@ -23,7 +23,12 @@ if TYPE_CHECKING:
 # Highlighted seasons, most recent first. The first three slots of a palette validated
 # for colour-vision deficiency on all pairs; at most three seasons can be highlighted.
 HIGHLIGHT_COLORS = ["#2a78d6", "#eb6834", "#1baf7a"]
-CONTEXT_COLOR = "#bdbcb6"  # other seasons
+CONTEXT_COLOR = "#bdbcb6"  # other seasons, with past_seasons=None
+# Past seasons shown for context, oldest to most recent: one neutral hue, light to dark,
+# validated as an ordinal ramp (monotone lightness, light end at 2.3:1 on white)
+PAST_SEASON_COLORS = ["#a9a8a2", "#86857f", "#5f5e59"]
+# Past seasons drawn by default, as on ERVISS's dashboard
+PAST_SEASONS = 3
 TEXT_COLOR = "#52514e"
 GRID_COLOR = "#e8e7e3"
 
@@ -49,6 +54,7 @@ def plot_seasons(
     sharey: bool = ...,
     ax: matplotlib.axes.Axes | None = ...,
     start_week: int = ...,
+    past_seasons: int | None = ...,
 ) -> matplotlib.axes.Axes: ...
 
 
@@ -61,6 +67,7 @@ def plot_seasons(
     sharey: bool = ...,
     ax: matplotlib.axes.Axes | None = ...,
     start_week: int = ...,
+    past_seasons: int | None = ...,
 ) -> matplotlib.figure.Figure: ...
 
 
@@ -72,6 +79,7 @@ def plot_seasons(
     sharey: bool = ...,
     ax: matplotlib.axes.Axes | None = ...,
     start_week: int = ...,
+    past_seasons: int | None = ...,
 ) -> matplotlib.figure.Figure: ...
 
 
@@ -82,6 +90,7 @@ def plot_seasons(
     sharey: bool = False,
     ax: matplotlib.axes.Axes | None = None,
     start_week: int = PLOT_START_WEEK,
+    past_seasons: int | None = PAST_SEASONS,
 ) -> matplotlib.axes.Axes | matplotlib.figure.Figure:
     """Plot one line per season, aligned on the week of the season (W25 to W24).
 
@@ -90,7 +99,8 @@ def plot_seasons(
     visible. A plotted season "2024/25" therefore runs from 2024-W25 to 2025-W24, unlike
     the ``season`` filter of queries (W40 to W39); pass ``start_week=40`` to plot those.
 
-    Past seasons are drawn in grey for context; highlighted seasons in colour. If ``df``
+    Highlighted seasons are drawn in colour. For context, the 3 most recent other
+    seasons are drawn in shades of grey (darker = more recent) and named in the legend. If ``df``
     has ``ci_low`` and ``ci_high`` columns (see ``add_positivity_ci``), the interval is
     drawn as a band around highlighted seasons. Weeks without data are left as gaps.
 
@@ -106,6 +116,9 @@ def plot_seasons(
             all panels have the same unit.
         ax: Matplotlib axes to draw on (without facet only). Default: a new figure.
         start_week: ISO week that starts a plotted season. Default 25.
+        past_seasons: How many other seasons to draw for context, the most recent ones
+            first. Default 3. None draws every season in the data, in a single grey
+            labelled "other seasons"; 0 draws only the highlighted seasons.
 
     Returns:
         The matplotlib ``Axes`` without facet, or the ``Figure`` with facets.
@@ -127,16 +140,20 @@ def plot_seasons(
     seasons = _resolve_highlight(highlight, df)
     ordered = sorted(seasons, reverse=True)  # most recent season gets the first colour
     colors = dict(zip(ordered, HIGHLIGHT_COLORS[: len(ordered)], strict=True))
+    context = _context_colors(df, seasons, past_seasons)
 
     if facet_column is None:
         _require_single_series(df, exclude=None)
         if ax is None:
             _, ax = plt.subplots(figsize=(8, 4.5), layout="constrained")
-        _draw_panel(ax, df, colors, start_week)
+        _draw_panel(ax, df, colors, context, start_week)
         ax.set_title(_series_title(df), loc="left", color="black")
         ax.set_ylabel(_axis_label(df), color=TEXT_COLOR)
         ax.set_xlabel("ISO week", color=TEXT_COLOR)
-        ax.legend(handles=_legend_handles(df, colors), **_LEGEND_STYLE)
+        ax.legend(
+            handles=_legend_handles(colors, context, graded=past_seasons is not None),
+            **_LEGEND_STYLE,
+        )
         return ax
 
     _require_single_series(df, exclude=facet_column)
@@ -163,7 +180,7 @@ def plot_seasons(
     flat = axes.ravel()
     mixed_units = len(set(units.values())) > 1
     for panel_ax, key in zip(flat[: len(panels)], panels, strict=True):
-        _draw_panel(panel_ax, df[df[facet_column] == key], colors, start_week)
+        _draw_panel(panel_ax, df[df[facet_column] == key], colors, context, start_week)
         title = f"{key} ({units[key]})" if mixed_units else str(key)
         panel_ax.set_title(title, loc="left", fontsize="medium", color="black")
     for unused in flat[len(panels) :]:
@@ -178,12 +195,8 @@ def plot_seasons(
             row[0].set_ylabel(_axis_label(df), color=TEXT_COLOR)
     fig.supxlabel("ISO week", color=TEXT_COLOR, fontsize="medium")
     fig.suptitle(_series_title(df, exclude=facet_column), x=0.01, ha="left")
-    fig.legend(
-        handles=_legend_handles(df, colors),
-        loc="outside upper right",
-        ncols=len(colors) + 1,
-        **_LEGEND_STYLE,
-    )
+    handles = _legend_handles(colors, context, graded=past_seasons is not None)
+    fig.legend(handles=handles, loc="outside upper right", ncols=len(handles), **_LEGEND_STYLE)
     return cast("matplotlib.figure.Figure", fig)
 
 
@@ -238,6 +251,40 @@ def _resolve_highlight(highlight: str | Iterable[str] | None, df: pd.DataFrame) 
     return list(dict.fromkeys(normalized))
 
 
+def _context_colors(
+    df: pd.DataFrame, highlighted: list[str], past_seasons: int | None
+) -> dict[str, str]:
+    """Colour of each context season: the most recent past_seasons, graded, or all, grey."""
+    if past_seasons is not None and (
+        isinstance(past_seasons, bool) or not isinstance(past_seasons, int) or past_seasons < 0
+    ):
+        raise InvalidParameterError(
+            f"past_seasons must be a number of seasons (0 or more) or None, got {past_seasons!r}"
+        )
+    others = sorted(set(df["season"]) - set(highlighted))
+    if past_seasons is None:
+        return dict.fromkeys(others, CONTEXT_COLOR)
+    shown = others[-past_seasons:] if past_seasons else []
+    return dict(zip(shown, _grey_ramp(len(shown)), strict=True))
+
+
+def _grey_ramp(n: int) -> list[str]:
+    """n shades from PAST_SEASON_COLORS, light to dark; the darkest end for n <= 3."""
+    if n <= len(PAST_SEASON_COLORS):
+        return PAST_SEASON_COLORS[len(PAST_SEASON_COLORS) - n :]
+    light, dark = (
+        [int(c[i : i + 2], 16) for i in (1, 3, 5)]
+        for c in (PAST_SEASON_COLORS[0], PAST_SEASON_COLORS[-1])
+    )
+    return [
+        "#"
+        + "".join(
+            f"{round(a + (b - a) * k / (n - 1)):02x}" for a, b in zip(light, dark, strict=True)
+        )
+        for k in range(n)
+    ]
+
+
 def _require_single_series(df: pd.DataFrame, exclude: str | None) -> None:
     for column in SERIES_COLUMNS:
         if column == exclude or column not in df:
@@ -263,7 +310,11 @@ def _panel_order(df: pd.DataFrame, column: str) -> list[str]:
 
 
 def _draw_panel(
-    ax: matplotlib.axes.Axes, df: pd.DataFrame, colors: dict[str, str], start_week: int
+    ax: matplotlib.axes.Axes,
+    df: pd.DataFrame,
+    colors: dict[str, str],
+    context: dict[str, str],
+    start_week: int,
 ) -> None:
     max_week = int(df["season_week"].max())
     weeks = np.arange(1, max(max_week, 52) + 1)
@@ -274,9 +325,9 @@ def _draw_panel(
         values = season_df.set_index("season_week")[column].astype("float64")
         return np.asarray(values.reindex(weeks), dtype="float64")
 
-    for season, season_df in df.groupby("season", sort=True):
-        if season not in colors:
-            ax.plot(weeks, series(season_df, "value"), color=CONTEXT_COLOR, linewidth=1)
+    for season, season_df in df.groupby("season", sort=True):  # oldest first, recent on top
+        if str(season) in context:
+            ax.plot(weeks, series(season_df, "value"), color=context[str(season)], linewidth=1)
     for season in sorted(colors):  # highlighted seasons on top
         season_df = df[df["season"] == season]
         if season_df.empty:
@@ -325,13 +376,18 @@ def _draw_panel(
 _LEGEND_STYLE: dict[str, Any] = {"frameon": False, "fontsize": "small", "labelcolor": TEXT_COLOR}
 
 
-def _legend_handles(df: pd.DataFrame, colors: dict[str, str]) -> list[Any]:
+def _legend_handles(colors: dict[str, str], context: dict[str, str], graded: bool) -> list[Any]:
     from matplotlib.lines import Line2D
 
     handles = [
         Line2D([], [], color=colors[s], linewidth=2, label=s) for s in sorted(colors, reverse=True)
     ]
-    if (~df["season"].isin(list(colors))).any():
+    if graded:
+        handles += [
+            Line2D([], [], color=context[s], linewidth=1, label=s)
+            for s in sorted(context, reverse=True)
+        ]
+    elif context:
         handles.append(Line2D([], [], color=CONTEXT_COLOR, linewidth=1, label="other seasons"))
     return handles
 

@@ -15,6 +15,7 @@ from pyerviss import plotting  # noqa: E402
 from pyerviss.exceptions import InvalidParameterError  # noqa: E402
 
 BLUE, ORANGE, AQUA = plotting.HIGHLIGHT_COLORS
+LIGHT, MID, DARK = plotting.PAST_SEASON_COLORS
 
 
 @pytest.fixture(autouse=True)
@@ -63,11 +64,65 @@ def line_colors(ax):
 def test_returns_axes_with_context_and_highlight():
     ax = pv.plot_seasons(rates())
     colors = line_colors(ax)
-    # Two past seasons in grey, the latest (2024/25) highlighted and drawn last
-    assert colors == [plotting.CONTEXT_COLOR, plotting.CONTEXT_COLOR, BLUE]
+    # Two past seasons in greys (darker = more recent), the latest (2024/25) highlighted
+    # and drawn last
+    assert colors == [MID, DARK, BLUE]
     assert ax.get_title(loc="left") == "ILI, Italy"
     assert ax.get_ylabel() == "per 100,000 population"
+    assert [t.get_text() for t in ax.get_legend().get_texts()] == [
+        "2024/25",
+        "2023/24",
+        "2022/23",
+    ]
+
+
+SIX_SEASONS = ("2019/20", "2020/21", "2021/22", "2022/23", "2023/24", "2024/25")
+
+
+def test_default_draws_three_most_recent_past_seasons():
+    ax = pv.plot_seasons(rates(seasons=SIX_SEASONS))
+    assert line_colors(ax) == [LIGHT, MID, DARK, BLUE]
+    assert [t.get_text() for t in ax.get_legend().get_texts()] == [
+        "2024/25",
+        "2023/24",
+        "2022/23",
+        "2021/22",
+    ]
+
+
+def test_past_seasons_none_draws_every_season_in_grey():
+    ax = pv.plot_seasons(rates(seasons=SIX_SEASONS), past_seasons=None)
+    assert line_colors(ax) == [plotting.CONTEXT_COLOR] * 5 + [BLUE]
     assert [t.get_text() for t in ax.get_legend().get_texts()] == ["2024/25", "other seasons"]
+
+
+def test_past_seasons_counts():
+    # Fewer past seasons than requested: all of them, darkest shades
+    assert line_colors(pv.plot_seasons(rates(), past_seasons=5)) == [
+        plotting._grey_ramp(2)[0],
+        plotting._grey_ramp(2)[1],
+        BLUE,
+    ]
+    df = rates(seasons=SIX_SEASONS)
+    assert line_colors(pv.plot_seasons(df, past_seasons=0)) == [BLUE]
+    assert line_colors(pv.plot_seasons(df, past_seasons=1)) == [DARK, BLUE]
+    # More than three: an even ramp from the lightest to the darkest grey
+    colors = line_colors(pv.plot_seasons(df, past_seasons=5))
+    assert colors[0] == LIGHT and colors[4] == DARK and colors[5] == BLUE
+    assert len(set(colors)) == 6
+
+
+@pytest.mark.parametrize("past_seasons", [-1, 2.5, True, "3"])
+def test_invalid_past_seasons(past_seasons):
+    with pytest.raises(InvalidParameterError, match="past_seasons"):
+        pv.plot_seasons(rates(), past_seasons=past_seasons)
+
+
+def test_facets_draw_the_same_past_seasons():
+    df = rates(seasons=SIX_SEASONS, countries=("Italy", "Spain"))
+    fig = pv.plot_seasons(df, facet="country")
+    assert [line_colors(ax) for ax in fig.axes] == [[LIGHT, MID, DARK, BLUE]] * 2
+    assert len(fig.legends) == 1
 
 
 def test_weeks_are_aligned_on_season_week():
@@ -94,7 +149,7 @@ def test_summer_weeks_belong_to_the_next_plotted_season():
     summer = df.iloc[[0]].assign(year_week="2025-W30", value=99.0)
     ax = pv.plot_seasons(pd.concat([df, summer]))
     # 2025-W30 starts the plotted 2025/26 season, which is highlighted as the latest
-    assert [t.get_text() for t in ax.get_legend().get_texts()] == ["2025/26", "other seasons"]
+    assert [t.get_text() for t in ax.get_legend().get_texts()] == ["2025/26", "2024/25"]
 
 
 @pytest.mark.parametrize("start_week", [0, 53, "25", 2.5])
@@ -115,11 +170,12 @@ def test_missing_weeks_are_gaps_not_interpolated():
 def test_highlight_order_and_colors():
     ax = pv.plot_seasons(rates(), highlight=["2022/23", "2024/25"])
     # Most recent highlighted season gets the first colour
-    assert line_colors(ax) == [plotting.CONTEXT_COLOR, ORANGE, BLUE]
+    # Past seasons are drawn first, highlighted seasons on top
+    assert line_colors(ax) == [DARK, ORANGE, BLUE]
     assert [t.get_text() for t in ax.get_legend().get_texts()] == [
         "2024/25",
         "2022/23",
-        "other seasons",
+        "2023/24",
     ]
 
 
