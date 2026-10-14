@@ -363,7 +363,7 @@ def _load_positivity(settings: list[str], as_of: DateLike | None = None) -> pd.D
         wide = wide.reindex(columns=["positivity", "tests", "detections"])
         wide = wide[wide["positivity"].notna()].reset_index()
         if VINTAGE in wide.columns:
-            wide[VINTAGE] = wide[VINTAGE].replace(pd.Timestamp.min, pd.NaT)
+            wide[VINTAGE] = wide[VINTAGE].mask(wide[VINTAGE] == pd.Timestamp.min)
         wide.insert(0, "setting", setting)
         frames.append(wide)
     return pd.concat(frames, ignore_index=True)
