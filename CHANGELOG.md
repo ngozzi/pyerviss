@@ -8,6 +8,10 @@ All notable changes to pyerviss are documented here. The format follows
 
 ### Added
 
+- `get_detections`: influenza and RSV detections by type (A, B; RSV-A, RSV-B) or
+  subtype (A(H1)pdm09, A(H3), B/Victoria, B/Yamagata), with each category's share of
+  the week's detections. Supports the usual filters and `as_of`. See the Positivity
+  page.
 - `as_of` argument for `get_ili`, `get_ari`, `get_sari`, `get_data`, `get_positivity`,
   `coverage` and `latest_week`: data as ECDC published it on a past date, from ECDC's
   weekly snapshots (from 2023-11-24; SARI from 2024-11-08), for backtesting forecasts
