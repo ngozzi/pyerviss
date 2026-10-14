@@ -111,4 +111,8 @@ addopts = [
     "--cov=pyerviss",
     "--cov=scripts",
     "--cov-report=term-missing",
+    "-m", "not live",
+]
+markers = [
+    "live: downloads real data from ECDC and this repository (run with -m live)",
 ]

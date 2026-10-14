@@ -51,6 +51,7 @@ offline. See {doc}`querying` for all filters and {doc}`units` before comparing c
 
 querying
 positivity
+vintages
 plotting
 units
 data
@@ -63,6 +64,7 @@ api
 - {doc}`querying`: countries, weeks, seasons, age groups and the output format
 - {doc}`positivity`: influenza, RSV and SARS-CoV-2 test positivity, and combining it
   with ILI/ARI/SARI
+- {doc}`vintages`: data as published on a past date, for backtesting forecasts
 - {doc}`plotting`: season charts, comparing countries and age groups, positivity with
   confidence bands
 - {doc}`units`: what each value measures, by country (read this before comparing

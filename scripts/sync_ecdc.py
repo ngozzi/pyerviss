@@ -36,6 +36,8 @@ import numpy as np
 import pandas as pd
 import requests
 
+from pyerviss.units import normalize_units
+
 ECDC_REPO = "EU-ECDC/Respiratory_viruses_weekly_data"
 ECDC_BRANCH = "main"
 ECDC_RAW_URL = "https://raw.githubusercontent.com/{repo}/{ref}/data/{file}"
@@ -111,21 +113,6 @@ TIMEOUT_SECONDS = 60
 
 ECDC_SOURCE = f"https://github.com/{ECDC_REPO} (cumulative merge)"
 
-# ECDC: "ILI and ARI consultation rates are calculated per 100 000 population, except
-# for Cyprus, Luxembourg, Malta (per 100 consultations) and Finland (per 100 000
-# consultations)." and "SARI rates are calculated per 100 000 hospital catchment
-# population, except for Greece, Ireland, Latvia and Luxembourg (per 100 total hospital
-# admissions). Data from Slovakia are based on ICU admissions."
-# Multiplying the per-100 countries by 1000 puts every value per 100,000 of its
-# denominator; the denominator itself still differs by country.
-_PER_100_CONSULTATIONS = {"Cyprus", "Luxembourg", "Malta"}
-_PER_100_ADMISSIONS = {"Greece", "Ireland", "Latvia", "Luxembourg"}
-PER_100_COUNTRIES = {
-    "ILIconsultationrate": _PER_100_CONSULTATIONS,
-    "ARIconsultationrate": _PER_100_CONSULTATIONS,
-    "SARIrate": _PER_100_ADMISSIONS,
-}
-RESCALE_FACTOR = 1000
 
 _CONSULTATIONS = (
     "per 100,000 consultations (ECDC publishes per 100 consultations; multiplied by 1000)"
@@ -219,19 +206,6 @@ def validate(df: pd.DataFrame, spec: FileSpec, source: str) -> pd.DataFrame:
         examples = df.loc[duplicates, key].head(3).to_dict("records")
         raise ValidationError(f"{source}: {int(duplicates.sum())} duplicate keys, e.g. {examples}")
 
-    return df
-
-
-def normalize_units(df: pd.DataFrame) -> pd.DataFrame:
-    """Convert rates ECDC publishes per 100 (consultations/admissions) to per 100,000."""
-    mask = pd.Series(False, index=df.index)
-    for indicator, countries in PER_100_COUNTRIES.items():
-        mask |= (df["indicator"] == indicator) & df["countryname"].isin(countries)
-    if not mask.any():
-        return df
-    df = df.copy()
-    # Round away float noise from the multiplication (e.g. 2.9 * 1000 = 2900.0000000000005)
-    df.loc[mask, "value"] = (df.loc[mask, "value"] * RESCALE_FACTOR).round(9)
     return df
 
 

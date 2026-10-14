@@ -22,6 +22,9 @@ group:
 
 ``get_positivity`` returns the same layout with setting and pathogen columns, value in
 percent, and the tests and detections counts the positivity is computed from.
+
+With ``as_of``, data is returned as ECDC published it on that date, with an extra
+``vintage`` column (see ``pyerviss.vintages``).
 """
 
 from __future__ import annotations
@@ -45,6 +48,7 @@ from .indicators import (
 )
 from .types import AGE_GROUPS, COUNTRY_ALIASES, COUNTRY_CODES
 from .utils import parse_season, season_of, to_yearweek, yearweek_to_date
+from .vintages import load_as_of, parse_as_of, snapshot_dates
 
 COLUMNS = [
     "indicator",
@@ -70,6 +74,7 @@ POSITIVITY_COLUMNS = [
     "tests",
     "detections",
 ]
+VINTAGE = "vintage"
 POSITIVITY = "positivity"
 
 # Shared by get_data and the per-indicator functions, so their docs can't drift apart
@@ -82,12 +87,17 @@ _FILTER_ARGS = """
             Cannot be combined with start/end.
         age_groups: Age group(s) among "0-4", "5-14", "15-64", "65+" and "total".
             Default: all. Before 2022-W25, some countries only have "total".
+        as_of: Return the data as ECDC published it on this date (a date or
+            "YYYY-MM-DD"), for backtesting without later revisions. Default: current
+            data.
 """
 _RETURNS_RAISES = """
     Returns:
         DataFrame with columns indicator ("ili", "ari" or "sari"), country,
         country_code, year_week, date (Sunday of the week), age, value (the rate) and
-        unit (e.g. "per 100,000 population"). Empty if nothing matches.
+        unit (e.g. "per 100,000 population"). Empty if nothing matches. With as_of,
+        also vintage: the date of the ECDC snapshot a row comes from, or NaT for weeks
+        older than the snapshot covers.
 
     Raises:
         InvalidParameterError: Unknown indicator, country or age group, a malformed
@@ -102,6 +112,7 @@ def _query_doc(summary: str, indicator_arg: bool = False) -> str:
 
 
 WeekLike = str | date
+DateLike = str | date
 OneOrMany = str | Iterable[str] | None
 
 
@@ -112,12 +123,13 @@ def get_data(
     end: WeekLike | None = None,
     season: OneOrMany = None,
     age_groups: OneOrMany = None,
+    as_of: DateLike | None = None,
 ) -> pd.DataFrame:
     ind = get_indicator(indicator)
     week_ranges = _week_ranges(start, end, season)
     ages = _resolve_age_groups(age_groups)
 
-    df = _load(ind)
+    df = _load(ind, as_of)
     if countries is not None:
         df = df[df["countryname"].isin(_resolve_countries(countries, ind.name, df))]
     if ages is not None:
@@ -135,8 +147,9 @@ def get_ili(
     end: WeekLike | None = None,
     season: OneOrMany = None,
     age_groups: OneOrMany = None,
+    as_of: DateLike | None = None,
 ) -> pd.DataFrame:
-    return get_data("ili", countries, start, end, season, age_groups)
+    return get_data("ili", countries, start, end, season, age_groups, as_of)
 
 
 get_ili.__doc__ = _query_doc(
@@ -150,8 +163,9 @@ def get_ari(
     end: WeekLike | None = None,
     season: OneOrMany = None,
     age_groups: OneOrMany = None,
+    as_of: DateLike | None = None,
 ) -> pd.DataFrame:
-    return get_data("ari", countries, start, end, season, age_groups)
+    return get_data("ari", countries, start, end, season, age_groups, as_of)
 
 
 get_ari.__doc__ = _query_doc(
@@ -165,8 +179,9 @@ def get_sari(
     end: WeekLike | None = None,
     season: OneOrMany = None,
     age_groups: OneOrMany = None,
+    as_of: DateLike | None = None,
 ) -> pd.DataFrame:
-    return get_data("sari", countries, start, end, season, age_groups)
+    return get_data("sari", countries, start, end, season, age_groups, as_of)
 
 
 get_sari.__doc__ = _query_doc(
@@ -181,6 +196,7 @@ def get_positivity(
     start: WeekLike | None = None,
     end: WeekLike | None = None,
     season: OneOrMany = None,
+    as_of: DateLike | None = None,
 ) -> pd.DataFrame:
     """Weekly test positivity for influenza, RSV and SARS-CoV-2.
 
@@ -198,13 +214,18 @@ def get_positivity(
         end: Last week to include (inclusive), in the same formats.
         season: Season(s) such as "2024/25", which runs from 2024-W40 to 2025-W39.
             Cannot be combined with start/end.
+        as_of: Return the data as ECDC published it on this date (a date or
+            "YYYY-MM-DD"), for backtesting without later revisions. Default: current
+            data.
 
     Returns:
         DataFrame with columns indicator ("positivity"), setting, pathogen
         ("Influenza", "RSV" or "SARS-CoV-2"), country, country_code, year_week, date
         (Sunday of the week), age ("total"), value (positivity in percent), unit ("%"),
         tests and detections (the counts positivity is computed from; small numbers of
-        tests make positivity noisy). Empty if nothing matches.
+        tests make positivity noisy). Empty if nothing matches. With as_of, also
+        vintage: the date of the ECDC snapshot a row comes from, or NaT for weeks older
+        than the snapshot covers.
 
     Raises:
         InvalidParameterError: Unknown pathogen, setting or country, a malformed week
@@ -216,7 +237,7 @@ def get_positivity(
     settings = _resolve_settings(setting)
     week_ranges = _week_ranges(start, end, season)
 
-    df = _load_positivity(settings)
+    df = _load_positivity(settings, as_of)
     df = df[df["pathogen"].isin(pathogens)]
     if countries is not None:
         df = df[df["countryname"].isin(_resolve_countries(countries, POSITIVITY, df))]
@@ -224,11 +245,12 @@ def get_positivity(
     return _positivity_output(df)
 
 
-def coverage(indicator: str) -> pd.DataFrame:
+def coverage(indicator: str, as_of: DateLike | None = None) -> pd.DataFrame:
     """Per country: first and last week with data, number of weeks, and unit.
 
     Args:
         indicator: "ili", "ari", "sari" or "positivity".
+        as_of: Describe the data as ECDC published it on this date. Default: current data.
 
     Returns:
         A DataFrame. For rates, one row per country with columns country, country_code,
@@ -238,9 +260,9 @@ def coverage(indicator: str) -> pd.DataFrame:
         n_weeks and unit.
     """
     if _is_positivity(indicator):
-        return _positivity_coverage()
+        return _positivity_coverage(as_of)
     ind = get_indicator(indicator)
-    df = _load(ind)
+    df = _load(ind, as_of)
     grouped = df.groupby("countryname")
     out = pd.DataFrame(
         {
@@ -268,16 +290,47 @@ def list_seasons(indicator: str | None = None) -> list[str]:
     return sorted({season_of(week) for week in weeks})
 
 
-def latest_week(indicator: str | None = None) -> str:
-    """Most recent week with data, e.g. "2026-W38". Default: across all indicators."""
-    return max(_all_weeks(indicator))
+def latest_week(indicator: str | None = None, as_of: DateLike | None = None) -> str:
+    """Most recent week with data, e.g. "2026-W38". Default: across all indicators.
+
+    With as_of, the most recent week ECDC had published on that date.
+    """
+    return max(_all_weeks(indicator, as_of))
+
+
+def list_vintages(indicator: str, setting: OneOrMany = None) -> list[date]:
+    """Dates of ECDC's snapshots of an indicator, usable as as_of, oldest first.
+
+    Args:
+        indicator: "ili", "ari", "sari" or "positivity".
+        setting: For positivity, "primary care" or "hospital", or a list. Default: both
+            (dates on which either was published).
+
+    ILI and ARI snapshots start on 2023-11-24, primary care positivity on 2023-12-01,
+    SARI and hospital positivity on 2024-11-08. Most weeks have one snapshot, but ECDC
+    skipped some weeks.
+    """
+    if _is_positivity(indicator):
+        files = [POSITIVITY_FILES[s] for s in _resolve_settings(setting)]
+    else:
+        if setting is not None:
+            raise InvalidParameterError("setting only applies to positivity")
+        files = [get_indicator(indicator).data_file]
+    return sorted({d for file_name in files for d in snapshot_dates(file_name)})
 
 
 # --- helpers ----------------------------------------------------------------
 
 
-def _load(ind: Indicator) -> pd.DataFrame:
-    df = load_csv(ind.data_file)
+def _load_file(file_name: str, as_of: DateLike | None) -> pd.DataFrame:
+    """A data file as of now (ECDC's columns) or as of a date (plus vintage)."""
+    if as_of is None:
+        return load_csv(file_name)
+    return load_as_of(file_name, parse_as_of(as_of))
+
+
+def _load(ind: Indicator, as_of: DateLike | None = None) -> pd.DataFrame:
+    df = _load_file(ind.data_file, as_of)
     return df[df["indicator"] == ind.ecdc_indicator]
 
 
@@ -285,44 +338,52 @@ def _is_positivity(name: str) -> bool:
     return isinstance(name, str) and name.lower() == POSITIVITY
 
 
-def _load_positivity(settings: list[str]) -> pd.DataFrame:
+def _load_positivity(settings: list[str], as_of: DateLike | None = None) -> pd.DataFrame:
     """Pathogen-level positivity, one row per setting, pathogen, country and week.
 
-    Columns: setting, pathogen, countryname, yearweek, positivity, tests, detections.
+    Columns: setting, pathogen, countryname, yearweek, positivity, tests, detections,
+    and vintage if as_of is given.
     """
     frames = []
     for setting in settings:
-        df = load_csv(POSITIVITY_FILES[setting])
+        df = _load_file(POSITIVITY_FILES[setting], as_of)
         # Pathogen-level rows only: type and subtype rows have detections but no tests
         df = df[(df["pathogentype"] == df["pathogen"]) & (df["age"] == "total")]
+        index = ["countryname", "yearweek", "pathogen"]
+        if VINTAGE in df.columns:
+            # Constant within a week's cells; NaT must not drop rows from the pivot
+            df = df.assign(vintage=df[VINTAGE].fillna(pd.Timestamp.min))
+            index.append(VINTAGE)
         wide = df.pivot_table(
-            index=["countryname", "yearweek", "pathogen"],
+            index=index,
             columns="indicator",
             values="value",
             aggfunc="first",
         )
         wide = wide.reindex(columns=["positivity", "tests", "detections"])
         wide = wide[wide["positivity"].notna()].reset_index()
+        if VINTAGE in wide.columns:
+            wide[VINTAGE] = wide[VINTAGE].replace(pd.Timestamp.min, pd.NaT)
         wide.insert(0, "setting", setting)
         frames.append(wide)
     return pd.concat(frames, ignore_index=True)
 
 
-def _countries_and_weeks(indicator: str) -> pd.DataFrame:
+def _countries_and_weeks(indicator: str, as_of: DateLike | None = None) -> pd.DataFrame:
     """countryname and yearweek columns for an indicator, including positivity."""
     if _is_positivity(indicator):
-        return _load_positivity(list(POSITIVITY_FILES))
+        return _load_positivity(list(POSITIVITY_FILES), as_of)
     if isinstance(indicator, str) and indicator.lower() in INDICATORS:
-        return _load(get_indicator(indicator))
+        return _load(get_indicator(indicator), as_of)
     names = ", ".join([*INDICATORS, POSITIVITY])
     raise InvalidParameterError(f"Unknown indicator {indicator!r}; available: {names}")
 
 
-def _all_weeks(indicator: str | None) -> set[str]:
+def _all_weeks(indicator: str | None, as_of: DateLike | None = None) -> set[str]:
     names = [indicator] if indicator is not None else [*INDICATORS, POSITIVITY]
     weeks: set[str] = set()
     for name in names:
-        weeks.update(_countries_and_weeks(name)["yearweek"].unique())
+        weeks.update(_countries_and_weeks(name, as_of)["yearweek"].unique())
     if not weeks:
         raise DataNotFoundError("No data available")
     return weeks
@@ -453,6 +514,8 @@ def _to_output(df: pd.DataFrame, ind: Indicator) -> pd.DataFrame:
         },
         columns=COLUMNS,
     )
+    if VINTAGE in df.columns:
+        out[VINTAGE] = df[VINTAGE].astype("datetime64[ns]")
     age_order = out["age"].map({age: i for i, age in enumerate(AGE_GROUPS)})
     out = out.assign(_age_order=age_order).sort_values(["country", "date", "_age_order"])
     return out.drop(columns="_age_order").reset_index(drop=True)
@@ -476,12 +539,14 @@ def _positivity_output(df: pd.DataFrame) -> pd.DataFrame:
         },
         columns=POSITIVITY_COLUMNS,
     )
+    if VINTAGE in df.columns:
+        out[VINTAGE] = df[VINTAGE].astype("datetime64[ns]")
     out = out.sort_values(["setting", "pathogen", "country", "date"])
     return out.reset_index(drop=True)
 
 
-def _positivity_coverage() -> pd.DataFrame:
-    df = _load_positivity(list(POSITIVITY_FILES))
+def _positivity_coverage(as_of: DateLike | None = None) -> pd.DataFrame:
+    df = _load_positivity(list(POSITIVITY_FILES), as_of)
     grouped = df.groupby(["setting", "pathogen", "countryname"])
     out = pd.DataFrame(
         {
@@ -507,5 +572,6 @@ __all__ = [
     "latest_week",
     "list_countries",
     "list_seasons",
+    "list_vintages",
     "update_data",
 ]

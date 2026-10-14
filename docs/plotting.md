@@ -21,8 +21,13 @@ pv.plot_seasons(df)
 
 ![ILI in Italy by season, 2024/25 highlighted](_static/plotting/seasons.png)
 
-- Seasons run from W40 to W39; the x-axis is the week of the season, so seasons line
-  up regardless of the calendar year.
+- As on ERVISS's dashboard, plotted seasons run from week 25 to week 24 of the next
+  year: the summer trough comes first, then the autumn rise and the winter peak, so the
+  current season is never cut at its start. The x-axis is labelled with ISO weeks
+  (25, 37, 49, 9, 21).
+- A plotted season "2024/25" therefore runs from 2024-W25 to 2025-W24, while
+  `season="2024/25"` in queries means 2024-W40 to 2025-W39. Pass `start_week=40` to
+  plot seasons as queries define them.
 - The most recent season in the data is highlighted. Choose others with
   `highlight="2023/24"` or a list of up to three seasons; the most recent one is blue.
 - The y-axis label is the data's `unit`, and the title names the indicator and country.
@@ -105,6 +110,7 @@ pandas:
 ```python
 import seaborn as sns
 
-df = pv.add_season_week(pv.get_ili(countries="Italy", age_groups="total"))
+# start_week=25 matches plot_seasons; the default, 40, matches season= in queries
+df = pv.add_season_week(pv.get_ili(countries="Italy", age_groups="total"), start_week=25)
 sns.lineplot(data=df, x="season_week", y="value", hue="season")
 ```

@@ -284,6 +284,7 @@ def test_public_exports():
         "latest_week",
         "list_countries",
         "list_seasons",
+        "list_vintages",
         "plot_seasons",
         "update_data",
     }

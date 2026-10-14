@@ -25,7 +25,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install "pandas>=2.0.0" "requests>=2.28.0"
+        run: pip install .
 
       - name: Sync from ECDC
         run: python scripts/sync_ecdc.py --data-dir data --summary-file sync-summary.md

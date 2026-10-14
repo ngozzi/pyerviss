@@ -62,8 +62,12 @@ per release in `CHANGELOG.md`.
       `plot_seasons` (optional `pyerviss[plot]` extra) with highlights, confidence bands
       and `facet="country"`/`"age"`. Figures in the docs: `scripts/make_doc_figures.py`
 - [ ] ILI+ (ILI × positivity) as a data function; would plot with `plot_seasons` as is
-- [ ] Snapshots (deferred): ECDC publishes dated snapshots since 2023-11-24, useful for
-      reproducing what was known at a given date (e.g. forecast evaluation)
+- [x] Snapshots: `as_of=` on the query functions and `list_vintages`, from ECDC's dated
+      snapshots (downloaded on demand, cached forever; not mirrored)
+- [ ] Archive ECDC's snapshots (the four mirrored files, ~1.1 GB) outside the main repo,
+      e.g. GitHub release or Zenodo, as a fallback if ECDC removes them
+- [ ] `get_detections(level="type" | "subtype")`: influenza A/B, H1/H3 and RSV-A/B
+      detections, which `get_positivity` drops (needed as features by Respiro)
 
 ## Decisions
 

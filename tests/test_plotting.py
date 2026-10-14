@@ -71,17 +71,44 @@ def test_returns_axes_with_context_and_highlight():
 
 
 def test_weeks_are_aligned_on_season_week():
+    # Seasons start at W25 by default, as on ERVISS's dashboard
     ax = pv.plot_seasons(rates(seasons=("2024/25",)))
+    x, y = ax.get_lines()[0].get_data()
+    assert x[0] == 1 and np.isnan(y[0])  # 2024-W25 is season week 1 (no data)
+    assert y[15] == 0  # 2024-W40 is season week 16
+    assert y[28] == 13  # 2025-W01 is season week 29
+    assert [t.get_text() for t in ax.get_xticklabels()] == ["25", "37", "49", "9", "21"]
+    assert ax.get_xlim() == (1, 52)
+
+
+def test_start_week_40_matches_query_seasons():
+    ax = pv.plot_seasons(rates(seasons=("2024/25",)), start_week=40)
     x, y = ax.get_lines()[0].get_data()
     assert x[0] == 1 and y[0] == 0  # 2024-W40 is season week 1
     assert y[13] == 13  # 2025-W01 is season week 14
+    assert [t.get_text() for t in ax.get_xticklabels()] == ["40", "52", "12", "24", "36"]
+
+
+def test_summer_weeks_belong_to_the_next_plotted_season():
+    df = rates(seasons=("2024/25",))
+    summer = df.iloc[[0]].assign(year_week="2025-W30", value=99.0)
+    ax = pv.plot_seasons(pd.concat([df, summer]))
+    # 2025-W30 starts the plotted 2025/26 season, which is highlighted as the latest
+    assert [t.get_text() for t in ax.get_legend().get_texts()] == ["2025/26", "other seasons"]
+
+
+@pytest.mark.parametrize("start_week", [0, 53, "25", 2.5])
+def test_invalid_start_week(start_week):
+    with pytest.raises(InvalidParameterError, match="start_week"):
+        pv.plot_seasons(rates(), start_week=start_week)
 
 
 def test_missing_weeks_are_gaps_not_interpolated():
     df = rates(seasons=("2024/25",))
     df = df[df["year_week"] != "2024-W45"]
     _, y = pv.plot_seasons(df).get_lines()[0].get_data()
-    assert np.isnan(y[5])  # 2024-W45 is season week 6
+    assert np.isnan(y[20])  # 2024-W45 is season week 21
+    assert y[19] == 4 and y[21] == 6
     assert np.isnan(y[-1])  # summer weeks without data
 
 
