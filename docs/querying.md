@@ -163,7 +163,8 @@ pv.get_ili(age_groups=["0-4", "5-14"])
 ```
 
 :::{note}
-ILI and ARI data before 2022-W25 is only available for `"total"`. See {doc}`data`.
+Before 2022-W25, some countries only have ILI and ARI for `"total"`. Use
+{func}`~pyerviss.coverage` to check, and see {doc}`data`.
 :::
 
 ## What is available

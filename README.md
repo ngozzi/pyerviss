@@ -9,7 +9,7 @@ Unofficial Python API to ERVISS, the European Respiratory Virus Surveillance Sum
 
 Weekly ILI, ARI and SARI rates and influenza, RSV and SARS-CoV-2 test positivity for
 EU/EEA countries as pandas DataFrames, from ECDC's [ERVISS](https://erviss.org) data,
-with ILI and ARI history back to 2014.
+with history back to 2014 (ILI, ARI, primary care positivity) and 2020 (SARI).
 
 > **Disclaimer:** pyerviss is an independent, unofficial project. It is not affiliated
 > with, endorsed by, or maintained by the European Centre for Disease Prevention and
@@ -60,7 +60,7 @@ Rate queries return one row per country, week and age group:
   [Units](https://github.com/ngozzi/pyerviss#units)).
 - Positivity rows add `setting` and `pathogen` columns, a `value` in `%`, and the
   `tests` and `detections` counts it is computed from.
-- Data before 2022-W25 is only available for the `"total"` age group.
+- Before 2022-W25, some countries only have the `"total"` age group (see `coverage`).
 
 Plotting (requires `pip install "pyerviss[plot]"`): one line per season, the latest
 highlighted, with `facet="country"` or `facet="age"` for comparisons:
@@ -88,9 +88,12 @@ used. `pv.update_data()` checks for updates now and `pv.clear_cache()` removes t
 detections and positivity) from ECDC's
 [Respiratory_viruses_weekly_data](https://github.com/EU-ECDC/Respiratory_viruses_weekly_data),
 synced daily and merged cumulatively (rows ECDC removes are kept).
-ILI and ARI (total age group) also go back to 2014-W40, imported once from the
+Weeks ECDC no longer publishes were imported once from earlier versions of ECDC's files
+in its git history (ILI and ARI by age group from 2014-W40, primary care virology from
+2014-W25, SARI rates and virology from 2020-W40), and ILI and ARI for the total age
+group from the
 [RespiCast](https://github.com/european-modelling-hubs/RespiCast-SyndromicIndicators)
-ERVISS snapshots of 2024-10-11 for weeks ECDC no longer publishes.
+ERVISS snapshots of 2024-10-11.
 
 ### Units
 

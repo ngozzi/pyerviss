@@ -1,11 +1,11 @@
 {
-  "last_update": "2026-10-09",
+  "last_update": "2026-10-14",
   "ecdc_commit": "c41550037d19ede7988bfa23ea4261abfc28b7cc",
   "records_count": {
-    "ILIARIRates": 49284,
-    "SARIRates": 10974,
-    "sentinelTestsDetectionsPositivity": 50977,
-    "SARITestsDetectionsPositivity": 27168
+    "ILIARIRates": 91810,
+    "SARIRates": 13124,
+    "sentinelTestsDetectionsPositivity": 103824,
+    "SARITestsDetectionsPositivity": 31691
   },
   "date_range": {
     "ILIARIRates": {
@@ -13,15 +13,15 @@
       "end": "2026-W40"
     },
     "SARIRates": {
-      "start": "2022-W25",
+      "start": "2020-W40",
       "end": "2026-W40"
     },
     "sentinelTestsDetectionsPositivity": {
-      "start": "2022-W25",
+      "start": "2014-W25",
       "end": "2026-W40"
     },
     "SARITestsDetectionsPositivity": {
-      "start": "2022-W25",
+      "start": "2020-W40",
       "end": "2026-W40"
     }
   },
@@ -58,6 +58,7 @@
   },
   "data_sources": [
     "https://github.com/EU-ECDC/Respiratory_viruses_weekly_data (cumulative merge)",
-    "https://github.com/european-modelling-hubs/RespiCast-SyndromicIndicators (one-off import of 2024-10-11 ERVISS snapshots: ILI and ARI, total age, from 2014-W40)"
+    "https://github.com/european-modelling-hubs/RespiCast-SyndromicIndicators (one-off import of 2024-10-11 ERVISS snapshots: ILI and ARI, total age, from 2014-W40)",
+    "https://github.com/EU-ECDC/Respiratory_viruses_weekly_data git history (one-off import of weeks ECDC has since trimmed: ILI/ARI by age group from 2014-W40, primary care virology from 2014-W25, SARI rates and virology from 2020-W40)"
   ]
 }

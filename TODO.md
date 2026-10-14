@@ -81,7 +81,14 @@ Recorded here so they aren't re-litigated.
   country's values shift by more than 100x, which signals a unit change upstream.
 - **History:** ILI/ARI total-age history from 2014-W40 imported once from RespiCast's
   2024-10-11 ERVISS snapshots (`scripts/import_respicast.py`), filling gaps only; Malta
-  ARI 2014–2015 (all zeros) dropped as missing data.
+  ARI 2014–2015 (all zeros) dropped as missing data. Weeks ECDC trimmed from its rolling
+  window imported once from ECDC's git history (`scripts/import_ecdc_history.py`): ILI/ARI
+  by age from 2014-W40, primary care virology from 2014-W25, SARI rates and virology from
+  2020-W40 (the floor: ECDC's first SARI files, 2024-11-09, already started there). Latest
+  ECDC version of each row wins; only weeks before ECDC's current window, not rows ECDC
+  removed within it; master wins on overlap. Greece/Latvia SARI were published per
+  100,000 admissions until ECDC commit b7a19c7 (2025-10-24), so older versions aren't
+  rescaled.
 - **Weeks and seasons:** `date` is the Sunday ending the ISO week (RespiCast `truth_date`);
   a season "2024/25" runs 2024-W40 to 2025-W39.
 - **Output:** long format, snake_case columns `indicator, country, country_code,

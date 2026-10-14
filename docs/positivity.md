@@ -23,7 +23,9 @@ df[["setting", "pathogen", "country", "year_week", "value", "unit", "tests", "de
 
 The full columns are `indicator` (`"positivity"`), `setting`, `pathogen`, `country`,
 `country_code`, `year_week`, `date`, `age`, `value`, `unit`, `tests` and `detections`.
-Data is available from 2022-W25, for all ages combined (`age` is always `"total"`).
+Data is for all ages combined (`age` is always `"total"`). Primary care data starts
+in 2014-W25 for influenza, 2016-W40 for RSV and 2020-W03 for SARS-CoV-2; hospital
+data starts in 2020-W40. Coverage varies by country.
 
 ## Settings
 

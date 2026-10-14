@@ -81,7 +81,7 @@ _FILTER_ARGS = """
         season: Season(s) such as "2024/25", which runs from 2024-W40 to 2025-W39.
             Cannot be combined with start/end.
         age_groups: Age group(s) among "0-4", "5-14", "15-64", "65+" and "total".
-            Default: all. ILI/ARI data before 2022-W25 is only available for "total".
+            Default: all. Before 2022-W25, some countries only have "total".
 """
 _RETURNS_RAISES = """
     Returns:

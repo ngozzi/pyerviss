@@ -74,8 +74,8 @@ pv.plot_seasons(pv.get_ili(countries="Belgium"), facet="age")
 
 ![ILI in Belgium by season and age group](_static/plotting/facet_age.png)
 
-Age-specific data starts in 2022-W25, so these panels show fewer past seasons than
-`total`, which goes back to 2014.
+Some countries only have age-specific data from 2022-W25, in which case these panels
+show fewer past seasons than `total`, which goes back to 2014.
 
 `facet` returns the matplotlib `Figure`. Only one facet at a time: for age groups in
 several countries, make one plot per country.

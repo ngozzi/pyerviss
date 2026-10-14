@@ -5,7 +5,8 @@ respiratory infection (SARI) rates for EU/EEA countries, and test positivity for
 influenza, RSV and SARS-CoV-2, as pandas DataFrames.
 
 pyerviss gives Python access to data from [ERVISS](https://erviss.org), the European
-Respiratory Virus Surveillance Summary, with ILI and ARI history back to 2014.
+Respiratory Virus Surveillance Summary, with history back to 2014 (ILI, ARI, primary
+care positivity) and 2020 (SARI).
 
 :::{important}
 pyerviss is an independent, **unofficial** project. It is not affiliated with, endorsed

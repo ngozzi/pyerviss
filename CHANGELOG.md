@@ -6,6 +6,14 @@ All notable changes to pyerviss are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- Longer history, recovered from earlier versions of ECDC's files in its git history:
+  SARI rates and hospital positivity from 2020-W40 (previously 2022-W25), primary care
+  positivity from 2014-W25 (previously 2022-W25), and ILI and ARI by age group from
+  2014-W40 for most countries (previously `"total"` only before 2022-W25). See the Data
+  sources page.
+
 ## [0.2.0] - 2026-10-05
 
 ### Added

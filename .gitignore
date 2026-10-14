@@ -147,5 +147,7 @@ cython_debug/
 Thumbs.db
 
 # Project specific
+# Downloads cached by scripts/import_ecdc_history.py
+.ecdc-history-cache/
 # NOTE: data/ folder is tracked (contains mirrored ECDC data)
 # Do NOT add data/ to .gitignore
