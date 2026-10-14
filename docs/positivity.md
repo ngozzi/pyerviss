@@ -44,7 +44,8 @@ syndrome: depending on the country, sentinel GPs swab ILI patients, ARI patients
 column uses ECDC's names: `"Influenza"`, `"RSV"`, `"SARS-CoV-2"`.
 
 Positivity is published for influenza overall, not by type or subtype (A(H1)pdm09,
-A(H3), B/Victoria). Subtype data is not available in pyerviss yet.
+A(H3), B/Victoria). For the split of detections by type or subtype, see
+[Types and subtypes](#types-and-subtypes).
 
 ## Tests and detections
 
@@ -58,6 +59,54 @@ df = df[df["tests"] >= 20]  # drop weeks with fewer than 20 tests
 ```
 
 Weeks with tests but no positivity (for example zero tests) are not returned.
+
+## Types and subtypes
+
+{func}`~pyerviss.get_detections` says which kind of influenza or RSV was detected: how
+many detections fell into each type or subtype, and that category's share of all
+detections of the pathogen that week.
+
+```python
+df = pv.get_detections(pathogen="influenza", setting="primary care", countries="Italy",
+                       season="2025/26", level="subtype")
+```
+
+```text
+   year_week type      subtype  value     share  total
+10  2025-W46    A        A(H3)     63  0.707865     89
+11  2025-W46    A  A (unknown)      2  0.022472     89
+12  2025-W47    A   A(H1)pdm09     22  0.226804     97
+13  2025-W47    A        A(H3)     74  0.762887     97
+14  2025-W47    A  A (unknown)      1  0.010309     97
+```
+
+| `level` | Influenza | RSV |
+|---|---|---|
+| `"type"` (default) | `A`, `B`, `untyped` | `RSV-A`, `RSV-B`, `untyped` |
+| `"subtype"` | `A(H1)pdm09`, `A(H3)`, `A (unknown)`, `B/Victoria`, `B/Yamagata`, `B (unknown)`, `untyped` | as `"type"` |
+
+- `share` is `value / total`, where `total` is the sum over all categories of the
+  week, so shares add up to 1. Detections that were not typed or subtyped are kept as
+  categories (`untyped`, `A (unknown)`, `B (unknown)`). For shares among subtyped
+  samples only, drop them and rescale:
+
+  ```python
+  typed = df[~df["subtype"].isin(["A (unknown)", "B (unknown)", "untyped"])]
+  typed = typed.assign(share=typed["value"] / typed.groupby("year_week")["value"].transform("sum"))
+  ```
+
+- ECDC only publishes categories with at least one detection, so a category missing
+  from a week means 0. Pivoting with `fill_value=0` gives one column per subtype:
+
+  ```python
+  df.pivot_table(index="date", columns="subtype", values="share", fill_value=0)
+  ```
+
+- `total` matches the detections of {func}`~pyerviss.get_positivity` in almost every
+  week; in a few weeks the categories add up to slightly more.
+- Availability: influenza from 2014 in primary care and 2020 in hospitals; RSV-A/B
+  mostly from 2021; B/Yamagata has not been detected since 2024. SARS-CoV-2 is not split
+  by type.
 
 ## EU/EEA aggregate
 

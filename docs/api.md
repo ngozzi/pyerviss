@@ -19,6 +19,7 @@ import pyerviss as pv
 
 ```{eval-rst}
 .. autofunction:: pyerviss.get_positivity
+.. autofunction:: pyerviss.get_detections
 ```
 
 ## Past vintages

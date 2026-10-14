@@ -278,6 +278,7 @@ def test_public_exports():
         "coverage",
         "get_ari",
         "get_data",
+        "get_detections",
         "get_ili",
         "get_positivity",
         "get_sari",

@@ -52,9 +52,8 @@ per release in `CHANGELOG.md`.
 - [ ] Delete merged branches on GitHub
 
 ### Later
-- [ ] Influenza subtypes (A(H1)pdm09, A(H3), B/Victoria...) and RSV-A/B: detections are
-      already mirrored in the virology files; derived subtype positivity is
-      `subtype detections / influenza tests × 100`, understated by unsubtyped detections
+- [x] Influenza subtypes (A(H1)pdm09, A(H3), B/Victoria...) and RSV-A/B:
+      `get_detections(level="type" | "subtype")`, with shares of the week's detections
 - [ ] Other ERVISS datasets: non-sentinel severity (hospital/ICU admissions, deaths),
       non-sentinel tests and detections. Variants and sequencing are partly sourced from
       GISAID, whose terms restrict redistribution: check before mirroring
@@ -66,8 +65,6 @@ per release in `CHANGELOG.md`.
       snapshots (downloaded on demand, cached forever; not mirrored)
 - [ ] Archive ECDC's snapshots (the four mirrored files, ~1.1 GB) outside the main repo,
       e.g. GitHub release or Zenodo, as a fallback if ECDC removes them
-- [ ] `get_detections(level="type" | "subtype")`: influenza A/B, H1/H3 and RSV-A/B
-      detections, which `get_positivity` drops (needed as features by Respiro)
 
 ## Decisions
 

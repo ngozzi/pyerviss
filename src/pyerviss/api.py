@@ -22,6 +22,7 @@ group:
 
 ``get_positivity`` returns the same layout with setting and pathogen columns, value in
 percent, and the tests and detections counts the positivity is computed from.
+``get_detections`` splits influenza and RSV detections by type or subtype.
 
 With ``as_of``, data is returned as ECDC published it on that date, with an extra
 ``vintage`` column (see ``pyerviss.vintages``).
@@ -76,6 +77,60 @@ POSITIVITY_COLUMNS = [
 ]
 VINTAGE = "vintage"
 POSITIVITY = "positivity"
+DETECTIONS = "detections"
+DETECTION_LEVELS = ("type", "subtype")
+DETECTION_COLUMNS = [
+    "indicator",
+    "setting",
+    "pathogen",
+    "type",
+    "subtype",
+    "country",
+    "country_code",
+    "year_week",
+    "date",
+    "age",
+    "value",
+    "unit",
+    "share",
+    "total",
+]
+# ECDC pathogentype -> type, and influenza pathogensubtype -> subtype. Labels not listed
+# here are kept as ECDC publishes them. RSV has no subtypes: its subtype is its type.
+_TYPES = {
+    "Influenza A": "A",
+    "Influenza B": "B",
+    "Influenza untyped": "untyped",
+    "Influenza unknown": "untyped",
+    "RSV-A": "RSV-A",
+    "RSV-B": "RSV-B",
+    "RSV untyped": "untyped",
+}
+_SUBTYPES = {
+    "A(H1)pdm09": "A(H1)pdm09",
+    "A(H3)": "A(H3)",
+    "A (unknown)": "A (unknown)",
+    "B/Vic": "B/Victoria",
+    "B/Yam": "B/Yamagata",
+    "B (unknown)": "B (unknown)",
+    "Influenza untyped": "untyped",
+    "unk": "untyped",
+}
+_CATEGORY_ORDER = [
+    "A",
+    "A(H1)pdm09",
+    "A(H3)",
+    "A (unknown)",
+    "B",
+    "B/Victoria",
+    "B/Yamagata",
+    "B (unknown)",
+    "RSV-A",
+    "RSV-B",
+    "untyped",
+]
+# Pathogens ECDC splits by type (SARS-CoV-2 is published as a total only)
+_WITH_TYPES = ["Influenza", "RSV"]
 
 # Shared by get_data and the per-indicator functions, so their docs can't drift apart
 _FILTER_ARGS = """
@@ -245,6 +300,85 @@ def get_positivity(
     return _positivity_output(df)
 
 
+def get_detections(
+    pathogen: OneOrMany = None,
+    setting: OneOrMany = None,
+    countries: OneOrMany = None,
+    start: WeekLike | None = None,
+    end: WeekLike | None = None,
+    season: OneOrMany = None,
+    level: str = "type",
+    as_of: DateLike | None = None,
+) -> pd.DataFrame:
+    """Weekly influenza and RSV detections by type or subtype, with their shares.
+
+    For each country and week: how many positive samples were of each type (influenza A,
+    B; RSV-A, RSV-B) or subtype (A(H1)pdm09, A(H3), B/Victoria...), and that
+    category's share of all detections of the pathogen. Samples that were not typed or
+    subtyped are kept as categories ("untyped", "A (unknown)", "B (unknown)"), so
+    shares add up to 1; for shares among typed samples only, drop those rows and
+    rescale.
+
+    ECDC only publishes categories with at least one detection: a category missing
+    from a week means 0 detections. Weeks without any typed detection have no rows,
+    and neither do weeks before a country started reporting types (for RSV, mostly
+    before 2021).
+
+    Args:
+        pathogen: "influenza" or "rsv" (case-insensitive; "flu" is accepted), or both.
+            Default: both. SARS-CoV-2 detections are not split by type.
+        setting: "primary care" or "hospital", or a list. Default: both.
+        countries: Country name(s) or ISO2 code(s), case-insensitive. Default: all.
+        start: First week to include, as "2024-W40", "2024-10-01" or a date.
+        end: Last week to include (inclusive), in the same formats.
+        season: Season(s) such as "2024/25", which runs from 2024-W40 to 2025-W39.
+            Cannot be combined with start/end.
+        level: "type" (influenza A, B, untyped; RSV-A, RSV-B, untyped) or "subtype"
+            (A(H1)pdm09, A(H3), A (unknown), B/Victoria, B/Yamagata, B (unknown),
+            untyped; RSV is the same as at type level).
+        as_of: Return the data as ECDC published it on this date (a date or
+            "YYYY-MM-DD"), for backtesting without later revisions. Default: current
+            data.
+
+    Returns:
+        DataFrame with columns indicator ("detections"), setting, pathogen
+        ("Influenza" or "RSV"), type, subtype (with level="subtype" only), country,
+        country_code, year_week, date (Sunday of the week), age ("total"), value
+        (number of detections), unit ("count"), share (value / total, NaN when total
+        is 0) and total (detections of the pathogen that week, summed over the
+        categories). With as_of, also vintage. Empty if nothing matches.
+
+    Raises:
+        InvalidParameterError: Unknown or untyped pathogen (SARS-CoV-2), unknown
+            setting, country or level, a malformed week or season, or season combined
+            with start/end.
+        DataNotFoundError: A requested country has no detections for the requested
+            pathogens and settings.
+    """
+    if pathogen is None:
+        pathogens = _WITH_TYPES
+    else:
+        pathogens = _resolve_pathogens(pathogen)
+        untyped = [p for p in pathogens if p not in _WITH_TYPES]
+        if untyped:
+            raise InvalidParameterError(
+                f"{', '.join(untyped)} detections are not split by type; "
+                "get_detections covers influenza and RSV"
+            )
+    if level not in DETECTION_LEVELS:
+        raise InvalidParameterError(
+            f"Unknown level {level!r}; available: {', '.join(map(repr, DETECTION_LEVELS))}"
+        )
+    settings = _resolve_settings(setting)
+    week_ranges = _week_ranges(start, end, season)
+
+    df = _load_detections(settings, pathogens, level, as_of)
+    if countries is not None:
+        df = df[df["countryname"].isin(_resolve_countries(countries, DETECTIONS, df))]
+    df = _filter_weeks(df, week_ranges)
+    return _detections_output(df, level)
+
+
 def coverage(indicator: str, as_of: DateLike | None = None) -> pd.DataFrame:
     """Per country: first and last week with data, number of weeks, and unit.
 
@@ -369,6 +503,44 @@ def _load_positivity(settings: list[str], as_of: DateLike | None = None) -> pd.D
     return pd.concat(frames, ignore_index=True)
 
 
+def _load_detections(
+    settings: list[str], pathogens: list[str], level: str, as_of: DateLike | None
+) -> pd.DataFrame:
+    """Detections per setting, pathogen, category, country and week, with their total.
+
+    Columns: setting, pathogen, type, subtype (level "subtype"), countryname, yearweek,
+    value, total, and vintage if as_of is given.
+    """
+    columns = ["pathogen", "type", *(["subtype"] if level == "subtype" else [])]
+    frames = []
+    for setting in settings:
+        df = _load_file(POSITIVITY_FILES[setting], as_of)
+        df = df[
+            (df["indicator"] == DETECTIONS)
+            & df["pathogen"].isin(pathogens)
+            & (df["pathogentype"] != df["pathogen"])
+            & (df["age"] == "total")
+        ]
+        types = df["pathogentype"].map(lambda t: _TYPES.get(t, t))
+        subtypes = df["pathogensubtype"].map(lambda t: _SUBTYPES.get(t, t))
+        df = df.assign(type=types, subtype=subtypes.where(df["pathogen"] != "RSV", types))
+        aggregations = {"value": ("value", "sum")}
+        if VINTAGE in df.columns:
+            # Categories of a week can come from different sources; keep the latest
+            aggregations[VINTAGE] = (VINTAGE, "max")
+        out = (
+            df.groupby([*columns, "countryname", "yearweek"], sort=False)
+            .agg(**aggregations)
+            .reset_index()
+        )
+        out["total"] = out.groupby(["pathogen", "countryname", "yearweek"])["value"].transform(
+            "sum"
+        )
+        out.insert(0, "setting", setting)
+        frames.append(out)
+    return pd.concat(frames, ignore_index=True)
+
+
 def _countries_and_weeks(indicator: str, as_of: DateLike | None = None) -> pd.DataFrame:
     """countryname and yearweek columns for an indicator, including positivity."""
     if _is_positivity(indicator):
@@ -477,7 +649,9 @@ def _resolve_countries(
     lookup.update({name.lower(): name for name in df["countryname"].unique()})
 
     available = set(df["countryname"].unique())
-    label = indicator if indicator == POSITIVITY else indicator.upper()
+    label = indicator.upper() if indicator in INDICATORS else indicator
+    # Countries with detections also report positivity
+    listed = POSITIVITY if indicator == DETECTIONS else indicator
     resolved = []
     for country in _as_list(countries, "countries"):
         name = lookup.get(country.strip().lower())
@@ -489,7 +663,7 @@ def _resolve_countries(
         if name not in available:
             raise DataNotFoundError(
                 f"{name} has no {label} data; "
-                f"use pyerviss.list_countries({indicator!r}) to see available countries"
+                f"use pyerviss.list_countries({listed!r}) to see available countries"
             )
         resolved.append(name)
     return resolved
@@ -545,6 +719,37 @@ def _positivity_output(df: pd.DataFrame) -> pd.DataFrame:
     return out.reset_index(drop=True)
 
 
+def _detections_output(df: pd.DataFrame, level: str) -> pd.DataFrame:
+    category = "subtype" if level == "subtype" else "type"
+    columns = [c for c in DETECTION_COLUMNS if c != "subtype" or level == "subtype"]
+    total = df["total"].astype("float64")
+    out = pd.DataFrame(
+        {
+            "indicator": DETECTIONS,
+            "setting": df["setting"],
+            "pathogen": df["pathogen"],
+            "type": df["type"],
+            "subtype": df.get("subtype"),
+            "country": df["countryname"],
+            "country_code": df["countryname"].map(COUNTRY_CODES),
+            "year_week": df["yearweek"],
+            "date": _week_dates(df["yearweek"]),
+            "age": "total",
+            "value": df["value"].round().astype("Int64"),
+            "unit": "count",
+            "share": (df["value"] / total.where(total > 0)).astype("float64"),
+            "total": df["total"].round().astype("Int64"),
+        },
+        columns=columns,
+    )
+    if VINTAGE in df.columns:
+        out[VINTAGE] = df[VINTAGE].astype("datetime64[ns]")
+    order = {name: i for i, name in enumerate(_CATEGORY_ORDER)}
+    out = out.assign(_order=out[category].map(order).fillna(len(order)))
+    out = out.sort_values(["setting", "pathogen", "country", "date", "_order", category])
+    return out.drop(columns="_order").reset_index(drop=True)
+
+
 def _positivity_coverage(as_of: DateLike | None = None) -> pd.DataFrame:
     df = _load_positivity(list(POSITIVITY_FILES), as_of)
     grouped = df.groupby(["setting", "pathogen", "countryname"])
@@ -566,6 +771,7 @@ __all__ = [
     "coverage",
     "get_ari",
     "get_data",
+    "get_detections",
     "get_ili",
     "get_positivity",
     "get_sari",
