@@ -178,9 +178,9 @@ pv.coverage("ili")
 
 ```text
    country country_code first_week last_week  n_weeks                      age_groups                       unit
-0  Austria           AT   2014-W40  2026-W14      315  [0-4, 5-14, 15-64, 65+, total]     per 100,000 population
-1  Belgium           BE   2014-W40  2026-W39      626  [0-4, 5-14, 15-64, 65+, total]     per 100,000 population
-2  Croatia           HR   2014-W40  2026-W39      426  [0-4, 5-14, 15-64, 65+, total]     per 100,000 population
+0  Austria           AT   2014-W40  2026-W40      316  [0-4, 5-14, 15-64, 65+, total]     per 100,000 population
+1  Belgium           BE   2014-W40  2026-W40      627  [0-4, 5-14, 15-64, 65+, total]     per 100,000 population
+2  Croatia           HR   2014-W40  2026-W40      427  [0-4, 5-14, 15-64, 65+, total]     per 100,000 population
 3   Cyprus           CY   2014-W40  2019-W25      242                         [total]  per 100,000 consultations
 ...
 ```

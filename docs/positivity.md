@@ -111,7 +111,7 @@ pv.latest_week("positivity")
 
 ```text
          setting    pathogen country country_code first_week last_week  n_weeks unit
-3       hospital   Influenza  EU/EEA           EU   2022-W25  2026-W39      223    %
+3       hospital   Influenza  EU/EEA           EU   2020-W40  2026-W40      314    %
 ...
-62  primary care   Influenza   Italy           IT   2022-W34  2026-W09       93    %
+62  primary care   Influenza   Italy           IT   2014-W46  2026-W09      248    %
 ```

@@ -84,9 +84,14 @@ def list_commits(session: requests.Session, file_name: str) -> list[str]:
     shas: list[str] = []
     page = 1
     while True:
+        params: dict[str, str | int] = {
+            "path": f"data/{file_name}",
+            "per_page": PAGE_SIZE,
+            "page": page,
+        }
         response = session.get(
             ECDC_COMMITS_URL.format(repo=ECDC_REPO),
-            params={"path": f"data/{file_name}", "per_page": PAGE_SIZE, "page": page},
+            params=params,
             headers=_api_headers(),
             timeout=TIMEOUT_SECONDS,
         )

@@ -30,7 +30,7 @@ def main() -> None:
     ili = pv.get_ili(countries=["Belgium", "France", "Spain", "Malta"], age_groups="total")
     pv.plot_seasons(ili, facet="country").savefig(OUT / "facet_country.png", dpi=DPI)
 
-    pv.plot_seasons(pv.get_ili(countries="Belgium"), facet="age").savefig(
+    pv.plot_seasons(pv.get_ili(countries="Belgium"), facet="age", highlight="2025/26").savefig(
         OUT / "facet_age.png", dpi=DPI
     )
 

@@ -69,7 +69,7 @@ season says so.
 `facet="age"` draws one panel per age group, in age order with `total` last:
 
 ```python
-pv.plot_seasons(pv.get_ili(countries="Belgium"), facet="age")
+pv.plot_seasons(pv.get_ili(countries="Belgium"), facet="age", highlight="2025/26")
 ```
 
 ![ILI in Belgium by season and age group](_static/plotting/facet_age.png)
