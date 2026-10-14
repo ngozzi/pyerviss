@@ -15,18 +15,21 @@ All notable changes to pyerviss are documented here. The format follows
   available dates. See the Past vintages page.
 - `start_week` argument for `add_season_week` and `utils.season_of`, for seasons that
   don't start at W40.
-
-### Changed
-
-- `plot_seasons` runs seasons from W25 to W24, as ERVISS's dashboard does, so the
-  summer trough comes first and the autumn rise is fully visible; ticks are ISO weeks
-  (25, 37, 49, 9, 21). `start_week=40` restores the previous W40 to W39 layout.
-
 - Longer history, recovered from earlier versions of ECDC's files in its git history:
   SARI rates and hospital positivity from 2020-W40 (previously 2022-W25), primary care
   positivity from 2014-W25 (previously 2022-W25), and ILI and ARI by age group from
   2014-W40 for most countries (previously `"total"` only before 2022-W25). See the Data
   sources page.
+
+### Changed
+
+- `plot_seasons` follows ERVISS's dashboard:
+  - seasons run from W25 to W24, so the summer trough comes first and the autumn rise
+    is fully visible; ticks are ISO weeks (25, 37, 49, 9, 21). `start_week=40` restores
+    the previous W40 to W39 layout.
+  - only the 3 most recent other seasons are drawn for context, in shades of grey
+    (darker = more recent) and named in the legend. `past_seasons` changes the number;
+    `past_seasons=None` draws every season in grey, as before.
 
 ## [0.2.0] - 2026-10-05
 

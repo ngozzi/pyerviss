@@ -1,8 +1,8 @@
 # Plotting
 
 {func}`~pyerviss.plot_seasons` draws the classic surveillance chart: one line per season,
-aligned on the week of the season, with past seasons in grey for context and the
-current season highlighted. Plotting requires matplotlib:
+aligned on the week of the season, with the current season highlighted and the previous
+seasons in grey for context. Plotting requires matplotlib:
 
 ```bash
 pip install "pyerviss[plot]"
@@ -28,6 +28,9 @@ pv.plot_seasons(df)
 - A plotted season "2024/25" therefore runs from 2024-W25 to 2025-W24, while
   `season="2024/25"` in queries means 2024-W40 to 2025-W39. Pass `start_week=40` to
   plot seasons as queries define them.
+- For context, the 3 most recent other seasons are drawn in shades of grey, darker for
+  more recent ones, and named in the legend. Use `past_seasons=5` for more, or
+  `past_seasons=None` to draw every season in the data in a single grey.
 - The most recent season in the data is highlighted. Choose others with
   `highlight="2023/24"` or a list of up to three seasons; the most recent one is blue.
 - The y-axis label is the data's `unit`, and the title names the indicator and country.
