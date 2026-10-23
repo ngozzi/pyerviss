@@ -913,6 +913,8 @@ primary care sentinel,Austria,2026-W40,Influenza,Influenza,total,detections,tota
 primary care sentinel,Austria,2026-W40,Influenza,Influenza A,A (unknown),detections,total,1
 primary care sentinel,Austria,2026-W41,Influenza,Influenza,total,detections,total,2
 primary care sentinel,Austria,2026-W41,Influenza,Influenza A,A(H1)pdm09,detections,total,2
+primary care sentinel,Austria,2026-W42,Influenza,Influenza,total,detections,total,5
+primary care sentinel,Austria,2026-W42,Influenza,Influenza A,A(H1)pdm09,detections,total,5
 primary care sentinel,Belgium,2014-W40,Influenza,Influenza,total,detections,total,1
 primary care sentinel,Belgium,2014-W40,Influenza,Influenza A,A(H3),detections,total,1
 primary care sentinel,Belgium,2014-W41,Influenza,Influenza,total,detections,total,1
@@ -2565,6 +2567,9 @@ primary care sentinel,Belgium,2026-W21,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detectio
 primary care sentinel,Belgium,2026-W22,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Belgium,2026-W22,RSV,RSV,RSV,detections,total,0
 primary care sentinel,Belgium,2026-W22,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,0
+primary care sentinel,Belgium,2026-W24,Influenza,Influenza,total,detections,total,0
+primary care sentinel,Belgium,2026-W24,RSV,RSV,RSV,detections,total,0
+primary care sentinel,Belgium,2026-W24,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,0
 primary care sentinel,Belgium,2026-W28,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Belgium,2026-W28,RSV,RSV,RSV,detections,total,0
 primary care sentinel,Belgium,2026-W28,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,0
@@ -2597,6 +2602,9 @@ primary care sentinel,Belgium,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detectio
 primary care sentinel,Belgium,2026-W41,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Belgium,2026-W41,RSV,RSV,RSV,detections,total,0
 primary care sentinel,Belgium,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,0
+primary care sentinel,Belgium,2026-W42,Influenza,Influenza,total,detections,total,0
+primary care sentinel,Belgium,2026-W42,RSV,RSV,RSV,detections,total,0
+primary care sentinel,Belgium,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,1
 primary care sentinel,Bulgaria,2015-W03,Influenza,Influenza,total,detections,total,3
 primary care sentinel,Bulgaria,2015-W03,Influenza,Influenza A,A(H3),detections,total,3
 primary care sentinel,Bulgaria,2015-W04,Influenza,Influenza,total,detections,total,17
@@ -3267,6 +3275,8 @@ primary care sentinel,Bulgaria,2026-W40,Influenza,Influenza,total,detections,tot
 primary care sentinel,Bulgaria,2026-W40,RSV,RSV,RSV,detections,total,0
 primary care sentinel,Bulgaria,2026-W41,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Bulgaria,2026-W41,RSV,RSV,RSV,detections,total,0
+primary care sentinel,Bulgaria,2026-W42,Influenza,Influenza,total,detections,total,0
+primary care sentinel,Bulgaria,2026-W42,RSV,RSV,RSV,detections,total,0
 primary care sentinel,Croatia,2014-W42,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Croatia,2014-W44,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Croatia,2014-W45,Influenza,Influenza,total,detections,total,0
@@ -6242,6 +6252,8 @@ primary care sentinel,Czechia,2026-W34,Influenza,Influenza A,A(H1)pdm09,detectio
 primary care sentinel,Czechia,2026-W35,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,1
 primary care sentinel,Czechia,2026-W36,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,1
 primary care sentinel,Czechia,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,2
+primary care sentinel,Czechia,2026-W42,Influenza,Influenza,total,detections,total,1
+primary care sentinel,Czechia,2026-W42,Influenza,Influenza A,A(H1)pdm09,detections,total,1
 primary care sentinel,Denmark,2014-W25,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Denmark,2014-W26,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Denmark,2014-W27,Influenza,Influenza,total,detections,total,0
@@ -8474,6 +8486,12 @@ primary care sentinel,Denmark,2026-W41,Influenza,Influenza,total,detections,tota
 primary care sentinel,Denmark,2026-W41,Influenza,Influenza A,A(H1)pdm09,detections,total,2
 primary care sentinel,Denmark,2026-W41,RSV,RSV,RSV,detections,total,0
 primary care sentinel,Denmark,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,2
+primary care sentinel,Denmark,2026-W42,Influenza,Influenza,total,detections,total,11
+primary care sentinel,Denmark,2026-W42,Influenza,Influenza A,A(H1)pdm09,detections,total,9
+primary care sentinel,Denmark,2026-W42,Influenza,Influenza B,B (unknown),detections,total,2
+primary care sentinel,Denmark,2026-W42,RSV,RSV,RSV,detections,total,1
+primary care sentinel,Denmark,2026-W42,RSV,RSV-A,NA,detections,total,1
+primary care sentinel,Denmark,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,3
 primary care sentinel,EU/EEA,2014-W25,Influenza,Influenza,total,detections,total,0
 primary care sentinel,EU/EEA,2014-W26,Influenza,Influenza,total,detections,total,1
 primary care sentinel,EU/EEA,2014-W26,Influenza,Influenza A,A(H3),detections,total,1
@@ -12819,23 +12837,36 @@ primary care sentinel,EU/EEA,2026-W39,Influenza,Influenza untyped,Influenza unty
 primary care sentinel,EU/EEA,2026-W39,RSV,RSV,RSV,detections,total,1
 primary care sentinel,EU/EEA,2026-W39,RSV,RSV untyped,NA,detections,total,1
 primary care sentinel,EU/EEA,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,214
-primary care sentinel,EU/EEA,2026-W40,Influenza,Influenza,total,detections,total,58
-primary care sentinel,EU/EEA,2026-W40,Influenza,Influenza A,A (unknown),detections,total,9
-primary care sentinel,EU/EEA,2026-W40,Influenza,Influenza A,A(H1)pdm09,detections,total,20
-primary care sentinel,EU/EEA,2026-W40,Influenza,Influenza A,A(H3),detections,total,23
+primary care sentinel,EU/EEA,2026-W40,Influenza,Influenza,total,detections,total,64
+primary care sentinel,EU/EEA,2026-W40,Influenza,Influenza A,A (unknown),detections,total,10
+primary care sentinel,EU/EEA,2026-W40,Influenza,Influenza A,A(H1)pdm09,detections,total,23
+primary care sentinel,EU/EEA,2026-W40,Influenza,Influenza A,A(H3),detections,total,25
 primary care sentinel,EU/EEA,2026-W40,Influenza,Influenza B,B (unknown),detections,total,2
 primary care sentinel,EU/EEA,2026-W40,Influenza,Influenza untyped,Influenza untyped,detections,total,4
-primary care sentinel,EU/EEA,2026-W40,RSV,RSV,RSV,detections,total,0
-primary care sentinel,EU/EEA,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,363
-primary care sentinel,EU/EEA,2026-W41,Influenza,Influenza,total,detections,total,59
-primary care sentinel,EU/EEA,2026-W41,Influenza,Influenza A,A (unknown),detections,total,13
-primary care sentinel,EU/EEA,2026-W41,Influenza,Influenza A,A(H1)pdm09,detections,total,33
-primary care sentinel,EU/EEA,2026-W41,Influenza,Influenza A,A(H3),detections,total,6
+primary care sentinel,EU/EEA,2026-W40,RSV,RSV,RSV,detections,total,1
+primary care sentinel,EU/EEA,2026-W40,RSV,RSV-B,NA,detections,total,1
+primary care sentinel,EU/EEA,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,370
+primary care sentinel,EU/EEA,2026-W41,Influenza,Influenza,total,detections,total,76
+primary care sentinel,EU/EEA,2026-W41,Influenza,Influenza A,A (unknown),detections,total,15
+primary care sentinel,EU/EEA,2026-W41,Influenza,Influenza A,A(H1)pdm09,detections,total,41
+primary care sentinel,EU/EEA,2026-W41,Influenza,Influenza A,A(H3),detections,total,13
 primary care sentinel,EU/EEA,2026-W41,Influenza,Influenza B,B (unknown),detections,total,4
 primary care sentinel,EU/EEA,2026-W41,Influenza,Influenza untyped,Influenza untyped,detections,total,3
-primary care sentinel,EU/EEA,2026-W41,RSV,RSV,RSV,detections,total,3
+primary care sentinel,EU/EEA,2026-W41,RSV,RSV,RSV,detections,total,4
 primary care sentinel,EU/EEA,2026-W41,RSV,RSV untyped,NA,detections,total,3
-primary care sentinel,EU/EEA,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,313
+primary care sentinel,EU/EEA,2026-W41,RSV,RSV-A,NA,detections,total,1
+primary care sentinel,EU/EEA,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,359
+primary care sentinel,EU/EEA,2026-W42,Influenza,Influenza,total,detections,total,66
+primary care sentinel,EU/EEA,2026-W42,Influenza,Influenza A,A (unknown),detections,total,19
+primary care sentinel,EU/EEA,2026-W42,Influenza,Influenza A,A(H1)pdm09,detections,total,33
+primary care sentinel,EU/EEA,2026-W42,Influenza,Influenza A,A(H3),detections,total,5
+primary care sentinel,EU/EEA,2026-W42,Influenza,Influenza B,B (unknown),detections,total,8
+primary care sentinel,EU/EEA,2026-W42,Influenza,Influenza untyped,Influenza untyped,detections,total,1
+primary care sentinel,EU/EEA,2026-W42,RSV,RSV,RSV,detections,total,5
+primary care sentinel,EU/EEA,2026-W42,RSV,RSV untyped,NA,detections,total,2
+primary care sentinel,EU/EEA,2026-W42,RSV,RSV-A,NA,detections,total,2
+primary care sentinel,EU/EEA,2026-W42,RSV,RSV-B,NA,detections,total,1
+primary care sentinel,EU/EEA,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,286
 primary care sentinel,Estonia,2014-W36,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Estonia,2014-W42,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Estonia,2014-W42,RSV,RSV,RSV,detections,total,0
@@ -14702,6 +14733,9 @@ primary care sentinel,Estonia,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detectio
 primary care sentinel,Estonia,2026-W41,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Estonia,2026-W41,RSV,RSV,RSV,detections,total,0
 primary care sentinel,Estonia,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,0
+primary care sentinel,Estonia,2026-W42,Influenza,Influenza,total,detections,total,0
+primary care sentinel,Estonia,2026-W42,RSV,RSV,RSV,detections,total,0
+primary care sentinel,Estonia,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,1
 primary care sentinel,Finland,2014-W33,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Finland,2014-W34,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Finland,2014-W35,Influenza,Influenza,total,detections,total,0
@@ -18335,11 +18369,17 @@ primary care sentinel,France,2026-W40,Influenza,Influenza A,A(H1)pdm09,detection
 primary care sentinel,France,2026-W40,Influenza,Influenza A,A(H3),detections,total,3
 primary care sentinel,France,2026-W40,RSV,RSV,RSV,detections,total,0
 primary care sentinel,France,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,21
-primary care sentinel,France,2026-W41,Influenza,Influenza,total,detections,total,7
+primary care sentinel,France,2026-W41,Influenza,Influenza,total,detections,total,11
+primary care sentinel,France,2026-W41,Influenza,Influenza A,A (unknown),detections,total,2
 primary care sentinel,France,2026-W41,Influenza,Influenza A,A(H1)pdm09,detections,total,6
-primary care sentinel,France,2026-W41,Influenza,Influenza A,A(H3),detections,total,1
+primary care sentinel,France,2026-W41,Influenza,Influenza A,A(H3),detections,total,3
 primary care sentinel,France,2026-W41,RSV,RSV,RSV,detections,total,0
-primary care sentinel,France,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,13
+primary care sentinel,France,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,19
+primary care sentinel,France,2026-W42,Influenza,Influenza,total,detections,total,6
+primary care sentinel,France,2026-W42,Influenza,Influenza A,A (unknown),detections,total,2
+primary care sentinel,France,2026-W42,Influenza,Influenza A,A(H1)pdm09,detections,total,4
+primary care sentinel,France,2026-W42,RSV,RSV,RSV,detections,total,0
+primary care sentinel,France,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,13
 primary care sentinel,Germany,2014-W25,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Germany,2014-W26,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Germany,2014-W27,Influenza,Influenza,total,detections,total,0
@@ -22332,6 +22372,11 @@ primary care sentinel,Greece,2026-W41,Influenza,Influenza A,A (unknown),detectio
 primary care sentinel,Greece,2026-W41,Influenza,Influenza A,A(H1)pdm09,detections,total,6
 primary care sentinel,Greece,2026-W41,RSV,RSV,RSV,detections,total,0
 primary care sentinel,Greece,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,6
+primary care sentinel,Greece,2026-W42,Influenza,Influenza,total,detections,total,4
+primary care sentinel,Greece,2026-W42,Influenza,Influenza A,A (unknown),detections,total,1
+primary care sentinel,Greece,2026-W42,Influenza,Influenza A,A(H1)pdm09,detections,total,3
+primary care sentinel,Greece,2026-W42,RSV,RSV,RSV,detections,total,0
+primary care sentinel,Greece,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,6
 primary care sentinel,Hungary,2014-W51,Influenza,Influenza,total,detections,total,1
 primary care sentinel,Hungary,2014-W51,Influenza,Influenza B,B/Yam,detections,total,1
 primary care sentinel,Hungary,2015-W02,Influenza,Influenza,total,detections,total,5
@@ -23663,6 +23708,10 @@ primary care sentinel,Hungary,2026-W41,Influenza,Influenza,total,detections,tota
 primary care sentinel,Hungary,2026-W41,Influenza,Influenza A,A (unknown),detections,total,4
 primary care sentinel,Hungary,2026-W41,RSV,RSV,RSV,detections,total,0
 primary care sentinel,Hungary,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,5
+primary care sentinel,Hungary,2026-W42,Influenza,Influenza,total,detections,total,1
+primary care sentinel,Hungary,2026-W42,Influenza,Influenza A,A(H1)pdm09,detections,total,1
+primary care sentinel,Hungary,2026-W42,RSV,RSV,RSV,detections,total,0
+primary care sentinel,Hungary,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,8
 primary care sentinel,Ireland,2014-W25,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Ireland,2014-W26,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Ireland,2014-W27,Influenza,Influenza,total,detections,total,0
@@ -25915,12 +25964,27 @@ primary care sentinel,Ireland,2026-W39,Influenza,Influenza A,A(H1)pdm09,detectio
 primary care sentinel,Ireland,2026-W39,Influenza,Influenza A,A(H3),detections,total,4
 primary care sentinel,Ireland,2026-W39,RSV,RSV,RSV,detections,total,0
 primary care sentinel,Ireland,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,10
-primary care sentinel,Ireland,2026-W40,Influenza,Influenza,total,detections,total,12
-primary care sentinel,Ireland,2026-W40,Influenza,Influenza A,A(H1)pdm09,detections,total,7
+primary care sentinel,Ireland,2026-W40,Influenza,Influenza,total,detections,total,16
+primary care sentinel,Ireland,2026-W40,Influenza,Influenza A,A (unknown),detections,total,1
+primary care sentinel,Ireland,2026-W40,Influenza,Influenza A,A(H1)pdm09,detections,total,10
 primary care sentinel,Ireland,2026-W40,Influenza,Influenza A,A(H3),detections,total,4
 primary care sentinel,Ireland,2026-W40,Influenza,Influenza B,B (unknown),detections,total,1
-primary care sentinel,Ireland,2026-W40,RSV,RSV,RSV,detections,total,0
-primary care sentinel,Ireland,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,12
+primary care sentinel,Ireland,2026-W40,RSV,RSV,RSV,detections,total,1
+primary care sentinel,Ireland,2026-W40,RSV,RSV-B,NA,detections,total,1
+primary care sentinel,Ireland,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,17
+primary care sentinel,Ireland,2026-W41,Influenza,Influenza,total,detections,total,11
+primary care sentinel,Ireland,2026-W41,Influenza,Influenza A,A(H1)pdm09,detections,total,8
+primary care sentinel,Ireland,2026-W41,Influenza,Influenza A,A(H3),detections,total,2
+primary care sentinel,Ireland,2026-W41,Influenza,Influenza B,B (unknown),detections,total,1
+primary care sentinel,Ireland,2026-W41,RSV,RSV,RSV,detections,total,1
+primary care sentinel,Ireland,2026-W41,RSV,RSV-A,NA,detections,total,1
+primary care sentinel,Ireland,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,14
+primary care sentinel,Ireland,2026-W42,Influenza,Influenza,total,detections,total,9
+primary care sentinel,Ireland,2026-W42,Influenza,Influenza A,A(H1)pdm09,detections,total,6
+primary care sentinel,Ireland,2026-W42,Influenza,Influenza A,A(H3),detections,total,1
+primary care sentinel,Ireland,2026-W42,Influenza,Influenza B,B (unknown),detections,total,2
+primary care sentinel,Ireland,2026-W42,RSV,RSV,RSV,detections,total,0
+primary care sentinel,Ireland,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,7
 primary care sentinel,Italy,2014-W41,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Italy,2014-W41,RSV,RSV,RSV,detections,total,0
 primary care sentinel,Italy,2014-W42,Influenza,Influenza,total,detections,total,0
@@ -29290,6 +29354,7 @@ primary care sentinel,Lithuania,2026-W39,Influenza,Influenza A,A (unknown),detec
 primary care sentinel,Lithuania,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,6
 primary care sentinel,Lithuania,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,113
 primary care sentinel,Lithuania,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,154
+primary care sentinel,Lithuania,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,145
 primary care sentinel,Luxembourg,2014-W49,Influenza,Influenza,total,detections,total,2
 primary care sentinel,Luxembourg,2014-W49,Influenza,Influenza A,A(H1)pdm09,detections,total,1
 primary care sentinel,Luxembourg,2014-W49,Influenza,Influenza B,B (unknown),detections,total,1
@@ -31041,8 +31106,15 @@ primary care sentinel,Luxembourg,2026-W40,RSV,RSV,RSV,detections,total,0
 primary care sentinel,Luxembourg,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,7
 primary care sentinel,Luxembourg,2026-W41,Influenza,Influenza,total,detections,total,1
 primary care sentinel,Luxembourg,2026-W41,Influenza,Influenza A,A (unknown),detections,total,1
+primary care sentinel,Luxembourg,2026-W41,Influenza,Influenza A,A(H3),detections,total,1
 primary care sentinel,Luxembourg,2026-W41,RSV,RSV,RSV,detections,total,0
 primary care sentinel,Luxembourg,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,6
+primary care sentinel,Luxembourg,2026-W42,Influenza,Influenza,total,detections,total,3
+primary care sentinel,Luxembourg,2026-W42,Influenza,Influenza A,A (unknown),detections,total,1
+primary care sentinel,Luxembourg,2026-W42,Influenza,Influenza B,B (unknown),detections,total,2
+primary care sentinel,Luxembourg,2026-W42,RSV,RSV,RSV,detections,total,1
+primary care sentinel,Luxembourg,2026-W42,RSV,RSV-A,NA,detections,total,1
+primary care sentinel,Luxembourg,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,3
 primary care sentinel,Malta,2015-W02,Influenza,Influenza,total,detections,total,2
 primary care sentinel,Malta,2015-W02,Influenza,Influenza A,A(H3),detections,total,2
 primary care sentinel,Malta,2015-W03,Influenza,Influenza,total,detections,total,1
@@ -33370,6 +33442,10 @@ primary care sentinel,Netherlands,2026-W41,Influenza,Influenza,total,detections,
 primary care sentinel,Netherlands,2026-W41,Influenza,Influenza A,A(H1)pdm09,detections,total,1
 primary care sentinel,Netherlands,2026-W41,RSV,RSV,RSV,detections,total,0
 primary care sentinel,Netherlands,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,1
+primary care sentinel,Netherlands,2026-W42,Influenza,Influenza,total,detections,total,0
+primary care sentinel,Netherlands,2026-W42,RSV,RSV,RSV,detections,total,1
+primary care sentinel,Netherlands,2026-W42,RSV,RSV-B,NA,detections,total,1
+primary care sentinel,Netherlands,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,1
 primary care sentinel,Norway,2014-W40,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Norway,2014-W41,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Norway,2014-W42,Influenza,Influenza,total,detections,total,0
@@ -35290,7 +35366,11 @@ primary care sentinel,Norway,2026-W40,RSV,RSV,RSV,detections,total,0
 primary care sentinel,Norway,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,0
 primary care sentinel,Norway,2026-W41,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Norway,2026-W41,RSV,RSV,RSV,detections,total,0
-primary care sentinel,Norway,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,0
+primary care sentinel,Norway,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,1
+primary care sentinel,Norway,2026-W42,Influenza,Influenza,total,detections,total,1
+primary care sentinel,Norway,2026-W42,Influenza,Influenza A,A (unknown),detections,total,1
+primary care sentinel,Norway,2026-W42,RSV,RSV,RSV,detections,total,0
+primary care sentinel,Norway,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,1
 primary care sentinel,Poland,2014-W25,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Poland,2014-W26,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Poland,2014-W28,Influenza,Influenza,total,detections,total,0
@@ -39413,6 +39493,9 @@ primary care sentinel,Romania,2026-W41,Influenza,Influenza,total,detections,tota
 primary care sentinel,Romania,2026-W41,Influenza,Influenza A,A (unknown),detections,total,1
 primary care sentinel,Romania,2026-W41,Influenza,Influenza A,A(H1)pdm09,detections,total,3
 primary care sentinel,Romania,2026-W41,RSV,RSV,RSV,detections,total,0
+primary care sentinel,Romania,2026-W42,Influenza,Influenza,total,detections,total,1
+primary care sentinel,Romania,2026-W42,Influenza,Influenza A,A (unknown),detections,total,1
+primary care sentinel,Romania,2026-W42,RSV,RSV,RSV,detections,total,0
 primary care sentinel,Slovakia,2015-W06,Influenza,Influenza,total,detections,total,4
 primary care sentinel,Slovakia,2015-W06,Influenza,Influenza A,A(H3),detections,total,4
 primary care sentinel,Slovakia,2015-W08,Influenza,Influenza,total,detections,total,15
@@ -40611,6 +40694,10 @@ primary care sentinel,Slovakia,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detecti
 primary care sentinel,Slovakia,2026-W41,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Slovakia,2026-W41,RSV,RSV,RSV,detections,total,0
 primary care sentinel,Slovakia,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,0
+primary care sentinel,Slovakia,2026-W42,Influenza,Influenza,total,detections,total,3
+primary care sentinel,Slovakia,2026-W42,Influenza,Influenza A,A (unknown),detections,total,3
+primary care sentinel,Slovakia,2026-W42,RSV,RSV,RSV,detections,total,0
+primary care sentinel,Slovakia,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,2
 primary care sentinel,Slovenia,2014-W25,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Slovenia,2014-W26,Influenza,Influenza,total,detections,total,1
 primary care sentinel,Slovenia,2014-W26,Influenza,Influenza A,A(H3),detections,total,1
@@ -42779,6 +42866,9 @@ primary care sentinel,Slovenia,2026-W41,Influenza,Influenza,total,detections,tot
 primary care sentinel,Slovenia,2026-W41,Influenza,Influenza A,A(H1)pdm09,detections,total,1
 primary care sentinel,Slovenia,2026-W41,RSV,RSV,RSV,detections,total,0
 primary care sentinel,Slovenia,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,0
+primary care sentinel,Slovenia,2026-W42,Influenza,Influenza,total,detections,total,0
+primary care sentinel,Slovenia,2026-W42,RSV,RSV,RSV,detections,total,0
+primary care sentinel,Slovenia,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,0
 primary care sentinel,Spain,2014-W25,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Spain,2014-W26,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Spain,2014-W27,Influenza,Influenza,total,detections,total,0
@@ -45360,22 +45450,31 @@ primary care sentinel,Spain,2026-W39,Influenza,Influenza A,A(H3),detections,tota
 primary care sentinel,Spain,2026-W39,RSV,RSV,RSV,detections,total,1
 primary care sentinel,Spain,2026-W39,RSV,RSV untyped,NA,detections,total,1
 primary care sentinel,Spain,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,172
-primary care sentinel,Spain,2026-W40,Influenza,Influenza,total,detections,total,26
+primary care sentinel,Spain,2026-W40,Influenza,Influenza,total,detections,total,28
 primary care sentinel,Spain,2026-W40,Influenza,Influenza A,A (unknown),detections,total,4
 primary care sentinel,Spain,2026-W40,Influenza,Influenza A,A(H1)pdm09,detections,total,4
-primary care sentinel,Spain,2026-W40,Influenza,Influenza A,A(H3),detections,total,14
+primary care sentinel,Spain,2026-W40,Influenza,Influenza A,A(H3),detections,total,16
 primary care sentinel,Spain,2026-W40,Influenza,Influenza untyped,Influenza untyped,detections,total,4
 primary care sentinel,Spain,2026-W40,RSV,RSV,RSV,detections,total,0
-primary care sentinel,Spain,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,192
-primary care sentinel,Spain,2026-W41,Influenza,Influenza,total,detections,total,28
+primary care sentinel,Spain,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,194
+primary care sentinel,Spain,2026-W41,Influenza,Influenza,total,detections,total,29
 primary care sentinel,Spain,2026-W41,Influenza,Influenza A,A (unknown),detections,total,4
 primary care sentinel,Spain,2026-W41,Influenza,Influenza A,A(H1)pdm09,detections,total,12
-primary care sentinel,Spain,2026-W41,Influenza,Influenza A,A(H3),detections,total,5
-primary care sentinel,Spain,2026-W41,Influenza,Influenza B,B (unknown),detections,total,4
+primary care sentinel,Spain,2026-W41,Influenza,Influenza A,A(H3),detections,total,7
+primary care sentinel,Spain,2026-W41,Influenza,Influenza B,B (unknown),detections,total,3
 primary care sentinel,Spain,2026-W41,Influenza,Influenza untyped,Influenza untyped,detections,total,3
 primary care sentinel,Spain,2026-W41,RSV,RSV,RSV,detections,total,3
 primary care sentinel,Spain,2026-W41,RSV,RSV untyped,NA,detections,total,3
-primary care sentinel,Spain,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,124
+primary care sentinel,Spain,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,149
+primary care sentinel,Spain,2026-W42,Influenza,Influenza,total,detections,total,21
+primary care sentinel,Spain,2026-W42,Influenza,Influenza A,A (unknown),detections,total,10
+primary care sentinel,Spain,2026-W42,Influenza,Influenza A,A(H1)pdm09,detections,total,4
+primary care sentinel,Spain,2026-W42,Influenza,Influenza A,A(H3),detections,total,4
+primary care sentinel,Spain,2026-W42,Influenza,Influenza B,B (unknown),detections,total,2
+primary care sentinel,Spain,2026-W42,Influenza,Influenza untyped,Influenza untyped,detections,total,1
+primary care sentinel,Spain,2026-W42,RSV,RSV,RSV,detections,total,2
+primary care sentinel,Spain,2026-W42,RSV,RSV untyped,NA,detections,total,2
+primary care sentinel,Spain,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,94
 primary care sentinel,Sweden,2014-W40,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Sweden,2014-W41,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Sweden,2014-W42,Influenza,Influenza,total,detections,total,0
@@ -46655,6 +46754,13 @@ primary care sentinel,Sweden,2026-W20,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detection
 primary care sentinel,Sweden,2026-W40,Influenza,Influenza,total,detections,total,0
 primary care sentinel,Sweden,2026-W40,RSV,RSV,RSV,detections,total,0
 primary care sentinel,Sweden,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,0
+primary care sentinel,Sweden,2026-W41,Influenza,Influenza,total,detections,total,1
+primary care sentinel,Sweden,2026-W41,Influenza,Influenza A,A (unknown),detections,total,1
+primary care sentinel,Sweden,2026-W41,RSV,RSV,RSV,detections,total,0
+primary care sentinel,Sweden,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,0
+primary care sentinel,Sweden,2026-W42,Influenza,Influenza,total,detections,total,0
+primary care sentinel,Sweden,2026-W42,RSV,RSV,RSV,detections,total,0
+primary care sentinel,Sweden,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,detections,total,1
 primary care sentinel,Austria,2014-W45,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Austria,2014-W46,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Austria,2014-W50,Influenza,Influenza,total,positivity,total,18.2
@@ -46956,6 +47062,7 @@ primary care sentinel,Austria,2026-W38,Influenza,Influenza,total,positivity,tota
 primary care sentinel,Austria,2026-W39,Influenza,Influenza,total,positivity,total,3.3
 primary care sentinel,Austria,2026-W40,Influenza,Influenza,total,positivity,total,0.7
 primary care sentinel,Austria,2026-W41,Influenza,Influenza,total,positivity,total,1.3
+primary care sentinel,Austria,2026-W42,Influenza,Influenza,total,positivity,total,3.2
 primary care sentinel,Belgium,2014-W40,Influenza,Influenza,total,positivity,total,11.1
 primary care sentinel,Belgium,2014-W41,Influenza,Influenza,total,positivity,total,8.3
 primary care sentinel,Belgium,2014-W43,Influenza,Influenza,total,positivity,total,4.3
@@ -47849,6 +47956,9 @@ primary care sentinel,Belgium,2026-W21,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivi
 primary care sentinel,Belgium,2026-W22,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Belgium,2026-W22,RSV,RSV,RSV,positivity,total,0
 primary care sentinel,Belgium,2026-W22,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,0
+primary care sentinel,Belgium,2026-W24,Influenza,Influenza,total,positivity,total,0
+primary care sentinel,Belgium,2026-W24,RSV,RSV,RSV,positivity,total,0
+primary care sentinel,Belgium,2026-W24,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,0
 primary care sentinel,Belgium,2026-W28,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Belgium,2026-W28,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,0
 primary care sentinel,Belgium,2026-W30,Influenza,Influenza,total,positivity,total,0
@@ -47876,6 +47986,8 @@ primary care sentinel,Belgium,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivi
 primary care sentinel,Belgium,2026-W41,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Belgium,2026-W41,RSV,RSV,RSV,positivity,total,0
 primary care sentinel,Belgium,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,0
+primary care sentinel,Belgium,2026-W42,Influenza,Influenza,total,positivity,total,0
+primary care sentinel,Belgium,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,50
 primary care sentinel,Bulgaria,2015-W03,Influenza,Influenza,total,positivity,total,27.3
 primary care sentinel,Bulgaria,2015-W04,Influenza,Influenza,total,positivity,total,58.6
 primary care sentinel,Bulgaria,2015-W05,Influenza,Influenza,total,positivity,total,44.1
@@ -48149,6 +48261,8 @@ primary care sentinel,Bulgaria,2026-W12,Influenza,Influenza,total,positivity,tot
 primary care sentinel,Bulgaria,2026-W12,RSV,RSV,RSV,positivity,total,14.7
 primary care sentinel,Bulgaria,2026-W13,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Bulgaria,2026-W13,RSV,RSV,RSV,positivity,total,33.3
+primary care sentinel,Bulgaria,2026-W42,Influenza,Influenza,total,positivity,total,0
+primary care sentinel,Bulgaria,2026-W42,RSV,RSV,RSV,positivity,total,0
 primary care sentinel,Croatia,2019-W46,Influenza,Influenza,total,positivity,total,5.6
 primary care sentinel,Croatia,2021-W01,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Croatia,2021-W02,Influenza,Influenza,total,positivity,total,0
@@ -49406,6 +49520,7 @@ primary care sentinel,Czechia,2026-W34,Influenza,Influenza,total,positivity,tota
 primary care sentinel,Czechia,2026-W35,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,5.3
 primary care sentinel,Czechia,2026-W36,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,5.3
 primary care sentinel,Czechia,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,3.6
+primary care sentinel,Czechia,2026-W42,Influenza,Influenza,total,positivity,total,2.3
 primary care sentinel,Denmark,2014-W25,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Denmark,2014-W43,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Denmark,2014-W44,Influenza,Influenza,total,positivity,total,0
@@ -50511,9 +50626,12 @@ primary care sentinel,Denmark,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivi
 primary care sentinel,Denmark,2026-W40,Influenza,Influenza,total,positivity,total,3.2
 primary care sentinel,Denmark,2026-W40,RSV,RSV,RSV,positivity,total,0
 primary care sentinel,Denmark,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,2.1
-primary care sentinel,Denmark,2026-W41,Influenza,Influenza,total,positivity,total,2.3
+primary care sentinel,Denmark,2026-W41,Influenza,Influenza,total,positivity,total,2
 primary care sentinel,Denmark,2026-W41,RSV,RSV,RSV,positivity,total,0
-primary care sentinel,Denmark,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,2.3
+primary care sentinel,Denmark,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,2
+primary care sentinel,Denmark,2026-W42,Influenza,Influenza,total,positivity,total,12.2
+primary care sentinel,Denmark,2026-W42,RSV,RSV,RSV,positivity,total,1.1
+primary care sentinel,Denmark,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,3.3
 primary care sentinel,EU/EEA,2014-W25,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,EU/EEA,2014-W26,Influenza,Influenza,total,positivity,total,4
 primary care sentinel,EU/EEA,2014-W27,Influenza,Influenza,total,positivity,total,0
@@ -52025,12 +52143,15 @@ primary care sentinel,EU/EEA,2026-W38,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivit
 primary care sentinel,EU/EEA,2026-W39,Influenza,Influenza,total,positivity,total,2.8
 primary care sentinel,EU/EEA,2026-W39,RSV,RSV,RSV,positivity,total,0.1
 primary care sentinel,EU/EEA,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,14.2
-primary care sentinel,EU/EEA,2026-W40,Influenza,Influenza,total,positivity,total,3.3
-primary care sentinel,EU/EEA,2026-W40,RSV,RSV,RSV,positivity,total,0
-primary care sentinel,EU/EEA,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,15.6
-primary care sentinel,EU/EEA,2026-W41,Influenza,Influenza,total,positivity,total,4
+primary care sentinel,EU/EEA,2026-W40,Influenza,Influenza,total,positivity,total,3.5
+primary care sentinel,EU/EEA,2026-W40,RSV,RSV,RSV,positivity,total,0.1
+primary care sentinel,EU/EEA,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,15.4
+primary care sentinel,EU/EEA,2026-W41,Influenza,Influenza,total,positivity,total,4.1
 primary care sentinel,EU/EEA,2026-W41,RSV,RSV,RSV,positivity,total,0.2
-primary care sentinel,EU/EEA,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,15.9
+primary care sentinel,EU/EEA,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,15.2
+primary care sentinel,EU/EEA,2026-W42,Influenza,Influenza,total,positivity,total,4.5
+primary care sentinel,EU/EEA,2026-W42,RSV,RSV,RSV,positivity,total,0.4
+primary care sentinel,EU/EEA,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,13.9
 primary care sentinel,Estonia,2014-W36,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Estonia,2014-W42,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Estonia,2014-W43,Influenza,Influenza,total,positivity,total,0
@@ -53307,6 +53428,9 @@ primary care sentinel,Estonia,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivi
 primary care sentinel,Estonia,2026-W41,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Estonia,2026-W41,RSV,RSV,RSV,positivity,total,0
 primary care sentinel,Estonia,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,0
+primary care sentinel,Estonia,2026-W42,Influenza,Influenza,total,positivity,total,0
+primary care sentinel,Estonia,2026-W42,RSV,RSV,RSV,positivity,total,0
+primary care sentinel,Estonia,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,3.1
 primary care sentinel,Finland,2014-W33,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Finland,2014-W34,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Finland,2014-W35,Influenza,Influenza,total,positivity,total,0
@@ -55172,10 +55296,13 @@ primary care sentinel,France,2026-W39,RSV,RSV,RSV,positivity,total,0
 primary care sentinel,France,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,8.3
 primary care sentinel,France,2026-W40,Influenza,Influenza,total,positivity,total,3.6
 primary care sentinel,France,2026-W40,RSV,RSV,RSV,positivity,total,0
-primary care sentinel,France,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,12.7
-primary care sentinel,France,2026-W41,Influenza,Influenza,total,positivity,total,5.6
+primary care sentinel,France,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,12.6
+primary care sentinel,France,2026-W41,Influenza,Influenza,total,positivity,total,6
 primary care sentinel,France,2026-W41,RSV,RSV,RSV,positivity,total,0
-primary care sentinel,France,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,10.3
+primary care sentinel,France,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,10.4
+primary care sentinel,France,2026-W42,Influenza,Influenza,total,positivity,total,4.2
+primary care sentinel,France,2026-W42,RSV,RSV,RSV,positivity,total,0
+primary care sentinel,France,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,9.1
 primary care sentinel,Germany,2014-W25,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Germany,2014-W26,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Germany,2014-W27,Influenza,Influenza,total,positivity,total,0
@@ -57420,6 +57547,9 @@ primary care sentinel,Greece,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivit
 primary care sentinel,Greece,2026-W41,Influenza,Influenza,total,positivity,total,12.7
 primary care sentinel,Greece,2026-W41,RSV,RSV,RSV,positivity,total,0
 primary care sentinel,Greece,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,10.9
+primary care sentinel,Greece,2026-W42,Influenza,Influenza,total,positivity,total,6.7
+primary care sentinel,Greece,2026-W42,RSV,RSV,RSV,positivity,total,0
+primary care sentinel,Greece,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,10
 primary care sentinel,Hungary,2014-W51,Influenza,Influenza,total,positivity,total,5.9
 primary care sentinel,Hungary,2015-W02,Influenza,Influenza,total,positivity,total,50
 primary care sentinel,Hungary,2015-W03,Influenza,Influenza,total,positivity,total,52.8
@@ -58043,6 +58173,9 @@ primary care sentinel,Hungary,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivi
 primary care sentinel,Hungary,2026-W41,Influenza,Influenza,total,positivity,total,3.4
 primary care sentinel,Hungary,2026-W41,RSV,RSV,RSV,positivity,total,0
 primary care sentinel,Hungary,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,4.3
+primary care sentinel,Hungary,2026-W42,Influenza,Influenza,total,positivity,total,0.6
+primary care sentinel,Hungary,2026-W42,RSV,RSV,RSV,positivity,total,0
+primary care sentinel,Hungary,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,4.7
 primary care sentinel,Ireland,2014-W25,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Ireland,2014-W32,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Ireland,2014-W33,Influenza,Influenza,total,positivity,total,0
@@ -59220,9 +59353,15 @@ primary care sentinel,Ireland,2026-W38,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivi
 primary care sentinel,Ireland,2026-W39,Influenza,Influenza,total,positivity,total,8.3
 primary care sentinel,Ireland,2026-W39,RSV,RSV,RSV,positivity,total,0
 primary care sentinel,Ireland,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,11.9
-primary care sentinel,Ireland,2026-W40,Influenza,Influenza,total,positivity,total,12.4
-primary care sentinel,Ireland,2026-W40,RSV,RSV,RSV,positivity,total,0
-primary care sentinel,Ireland,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,12.4
+primary care sentinel,Ireland,2026-W40,Influenza,Influenza,total,positivity,total,11.2
+primary care sentinel,Ireland,2026-W40,RSV,RSV,RSV,positivity,total,0.7
+primary care sentinel,Ireland,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,11.9
+primary care sentinel,Ireland,2026-W41,Influenza,Influenza,total,positivity,total,6.8
+primary care sentinel,Ireland,2026-W41,RSV,RSV,RSV,positivity,total,0.6
+primary care sentinel,Ireland,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,8.6
+primary care sentinel,Ireland,2026-W42,Influenza,Influenza,total,positivity,total,11.8
+primary care sentinel,Ireland,2026-W42,RSV,RSV,RSV,positivity,total,0
+primary care sentinel,Ireland,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,9.2
 primary care sentinel,Italy,2014-W46,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Italy,2014-W47,Influenza,Influenza,total,positivity,total,5
 primary care sentinel,Italy,2014-W48,Influenza,Influenza,total,positivity,total,0
@@ -60275,6 +60414,7 @@ primary care sentinel,Lithuania,2026-W39,Influenza,Influenza,total,positivity,to
 primary care sentinel,Lithuania,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,5.5
 primary care sentinel,Lithuania,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,15.7
 primary care sentinel,Lithuania,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,22.6
+primary care sentinel,Lithuania,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,19.1
 primary care sentinel,Luxembourg,2014-W49,Influenza,Influenza,total,positivity,total,33.3
 primary care sentinel,Luxembourg,2014-W50,Influenza,Influenza,total,positivity,total,10
 primary care sentinel,Luxembourg,2014-W52,Influenza,Influenza,total,positivity,total,40
@@ -61223,6 +61363,9 @@ primary care sentinel,Luxembourg,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,posit
 primary care sentinel,Luxembourg,2026-W41,Influenza,Influenza,total,positivity,total,2.2
 primary care sentinel,Luxembourg,2026-W41,RSV,RSV,RSV,positivity,total,0
 primary care sentinel,Luxembourg,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,13.3
+primary care sentinel,Luxembourg,2026-W42,Influenza,Influenza,total,positivity,total,4.6
+primary care sentinel,Luxembourg,2026-W42,RSV,RSV,RSV,positivity,total,1.6
+primary care sentinel,Luxembourg,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,4.6
 primary care sentinel,Malta,2015-W02,Influenza,Influenza,total,positivity,total,66.7
 primary care sentinel,Malta,2015-W03,Influenza,Influenza,total,positivity,total,100
 primary care sentinel,Malta,2015-W07,Influenza,Influenza,total,positivity,total,100
@@ -62689,9 +62832,12 @@ primary care sentinel,Netherlands,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,posi
 primary care sentinel,Netherlands,2026-W40,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Netherlands,2026-W40,RSV,RSV,RSV,positivity,total,0
 primary care sentinel,Netherlands,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,0
-primary care sentinel,Netherlands,2026-W41,Influenza,Influenza,total,positivity,total,2.7
+primary care sentinel,Netherlands,2026-W41,Influenza,Influenza,total,positivity,total,2
 primary care sentinel,Netherlands,2026-W41,RSV,RSV,RSV,positivity,total,0
-primary care sentinel,Netherlands,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,2.7
+primary care sentinel,Netherlands,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,2
+primary care sentinel,Netherlands,2026-W42,Influenza,Influenza,total,positivity,total,0
+primary care sentinel,Netherlands,2026-W42,RSV,RSV,RSV,positivity,total,4.2
+primary care sentinel,Netherlands,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,4.2
 primary care sentinel,Norway,2014-W40,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Norway,2014-W41,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Norway,2014-W43,Influenza,Influenza,total,positivity,total,0
@@ -63583,7 +63729,10 @@ primary care sentinel,Norway,2026-W40,RSV,RSV,RSV,positivity,total,0
 primary care sentinel,Norway,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,0
 primary care sentinel,Norway,2026-W41,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Norway,2026-W41,RSV,RSV,RSV,positivity,total,0
-primary care sentinel,Norway,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,0
+primary care sentinel,Norway,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,9.1
+primary care sentinel,Norway,2026-W42,Influenza,Influenza,total,positivity,total,5.6
+primary care sentinel,Norway,2026-W42,RSV,RSV,RSV,positivity,total,0
+primary care sentinel,Norway,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,5.6
 primary care sentinel,Poland,2014-W38,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Poland,2014-W39,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Poland,2014-W40,Influenza,Influenza,total,positivity,total,0
@@ -65477,6 +65626,8 @@ primary care sentinel,Romania,2026-W40,Influenza,Influenza,total,positivity,tota
 primary care sentinel,Romania,2026-W40,RSV,RSV,RSV,positivity,total,0
 primary care sentinel,Romania,2026-W41,Influenza,Influenza,total,positivity,total,36.4
 primary care sentinel,Romania,2026-W41,RSV,RSV,RSV,positivity,total,0
+primary care sentinel,Romania,2026-W42,Influenza,Influenza,total,positivity,total,7.7
+primary care sentinel,Romania,2026-W42,RSV,RSV,RSV,positivity,total,0
 primary care sentinel,Slovakia,2015-W06,Influenza,Influenza,total,positivity,total,33.3
 primary care sentinel,Slovakia,2015-W08,Influenza,Influenza,total,positivity,total,30.6
 primary care sentinel,Slovakia,2015-W09,Influenza,Influenza,total,positivity,total,34.8
@@ -66063,6 +66214,9 @@ primary care sentinel,Slovakia,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positiv
 primary care sentinel,Slovakia,2026-W41,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Slovakia,2026-W41,RSV,RSV,RSV,positivity,total,0
 primary care sentinel,Slovakia,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,0
+primary care sentinel,Slovakia,2026-W42,Influenza,Influenza,total,positivity,total,37.5
+primary care sentinel,Slovakia,2026-W42,RSV,RSV,RSV,positivity,total,0
+primary care sentinel,Slovakia,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,28.6
 primary care sentinel,Slovenia,2014-W25,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Slovenia,2014-W26,Influenza,Influenza,total,positivity,total,33.3
 primary care sentinel,Slovenia,2014-W27,Influenza,Influenza,total,positivity,total,0
@@ -67364,9 +67518,12 @@ primary care sentinel,Slovenia,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positiv
 primary care sentinel,Slovenia,2026-W40,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Slovenia,2026-W40,RSV,RSV,RSV,positivity,total,0
 primary care sentinel,Slovenia,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,3.3
-primary care sentinel,Slovenia,2026-W41,Influenza,Influenza,total,positivity,total,3.4
+primary care sentinel,Slovenia,2026-W41,Influenza,Influenza,total,positivity,total,3.3
 primary care sentinel,Slovenia,2026-W41,RSV,RSV,RSV,positivity,total,0
 primary care sentinel,Slovenia,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,0
+primary care sentinel,Slovenia,2026-W42,Influenza,Influenza,total,positivity,total,0
+primary care sentinel,Slovenia,2026-W42,RSV,RSV,RSV,positivity,total,0
+primary care sentinel,Slovenia,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,0
 primary care sentinel,Spain,2014-W40,Influenza,Influenza,total,positivity,total,3.7
 primary care sentinel,Spain,2014-W41,Influenza,Influenza,total,positivity,total,4
 primary care sentinel,Spain,2014-W42,Influenza,Influenza,total,positivity,total,2
@@ -68197,12 +68354,15 @@ primary care sentinel,Spain,2026-W38,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity
 primary care sentinel,Spain,2026-W39,Influenza,Influenza,total,positivity,total,3.9
 primary care sentinel,Spain,2026-W39,RSV,RSV,RSV,positivity,total,0.2
 primary care sentinel,Spain,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,25.9
-primary care sentinel,Spain,2026-W40,Influenza,Influenza,total,positivity,total,3.2
+primary care sentinel,Spain,2026-W40,Influenza,Influenza,total,positivity,total,3.4
 primary care sentinel,Spain,2026-W40,RSV,RSV,RSV,positivity,total,0
-primary care sentinel,Spain,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,23.9
-primary care sentinel,Spain,2026-W41,Influenza,Influenza,total,positivity,total,3.9
+primary care sentinel,Spain,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,23.6
+primary care sentinel,Spain,2026-W41,Influenza,Influenza,total,positivity,total,3.6
 primary care sentinel,Spain,2026-W41,RSV,RSV,RSV,positivity,total,0.4
-primary care sentinel,Spain,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,17.3
+primary care sentinel,Spain,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,18.7
+primary care sentinel,Spain,2026-W42,Influenza,Influenza,total,positivity,total,4
+primary care sentinel,Spain,2026-W42,RSV,RSV,RSV,positivity,total,0.4
+primary care sentinel,Spain,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,17.9
 primary care sentinel,Sweden,2014-W40,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Sweden,2014-W41,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Sweden,2014-W42,Influenza,Influenza,total,positivity,total,0
@@ -68879,6 +69039,15 @@ primary care sentinel,Sweden,2026-W19,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivit
 primary care sentinel,Sweden,2026-W20,Influenza,Influenza,total,positivity,total,0
 primary care sentinel,Sweden,2026-W20,RSV,RSV,RSV,positivity,total,0
 primary care sentinel,Sweden,2026-W20,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,0
+primary care sentinel,Sweden,2026-W40,Influenza,Influenza,total,positivity,total,0
+primary care sentinel,Sweden,2026-W40,RSV,RSV,RSV,positivity,total,0
+primary care sentinel,Sweden,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,0
+primary care sentinel,Sweden,2026-W41,Influenza,Influenza,total,positivity,total,9.1
+primary care sentinel,Sweden,2026-W41,RSV,RSV,RSV,positivity,total,0
+primary care sentinel,Sweden,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,0
+primary care sentinel,Sweden,2026-W42,Influenza,Influenza,total,positivity,total,0
+primary care sentinel,Sweden,2026-W42,RSV,RSV,RSV,positivity,total,0
+primary care sentinel,Sweden,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,positivity,total,6.2
 primary care sentinel,Austria,2014-W40,Influenza,Influenza,total,tests,total,0
 primary care sentinel,Austria,2014-W40,RSV,RSV,RSV,tests,total,0
 primary care sentinel,Austria,2014-W41,Influenza,Influenza,total,tests,total,0
@@ -69492,6 +69661,7 @@ primary care sentinel,Austria,2026-W38,Influenza,Influenza,total,tests,total,41
 primary care sentinel,Austria,2026-W39,Influenza,Influenza,total,tests,total,121
 primary care sentinel,Austria,2026-W40,Influenza,Influenza,total,tests,total,148
 primary care sentinel,Austria,2026-W41,Influenza,Influenza,total,tests,total,158
+primary care sentinel,Austria,2026-W42,Influenza,Influenza,total,tests,total,155
 primary care sentinel,Belgium,2014-W25,Influenza,Influenza,total,tests,total,0
 primary care sentinel,Belgium,2014-W26,Influenza,Influenza,total,tests,total,2
 primary care sentinel,Belgium,2014-W27,Influenza,Influenza,total,tests,total,0
@@ -70882,6 +71052,9 @@ primary care sentinel,Belgium,2026-W21,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,to
 primary care sentinel,Belgium,2026-W22,Influenza,Influenza,total,tests,total,1
 primary care sentinel,Belgium,2026-W22,RSV,RSV,RSV,tests,total,1
 primary care sentinel,Belgium,2026-W22,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,1
+primary care sentinel,Belgium,2026-W24,Influenza,Influenza,total,tests,total,1
+primary care sentinel,Belgium,2026-W24,RSV,RSV,RSV,tests,total,1
+primary care sentinel,Belgium,2026-W24,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,1
 primary care sentinel,Belgium,2026-W28,Influenza,Influenza,total,tests,total,1
 primary care sentinel,Belgium,2026-W28,RSV,RSV,RSV,tests,total,0
 primary care sentinel,Belgium,2026-W28,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,1
@@ -70912,6 +71085,9 @@ primary care sentinel,Belgium,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,to
 primary care sentinel,Belgium,2026-W41,Influenza,Influenza,total,tests,total,2
 primary care sentinel,Belgium,2026-W41,RSV,RSV,RSV,tests,total,2
 primary care sentinel,Belgium,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,2
+primary care sentinel,Belgium,2026-W42,Influenza,Influenza,total,tests,total,2
+primary care sentinel,Belgium,2026-W42,RSV,RSV,RSV,tests,total,0
+primary care sentinel,Belgium,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,2
 primary care sentinel,Bulgaria,2014-W25,Influenza,Influenza,total,tests,total,0
 primary care sentinel,Bulgaria,2014-W26,Influenza,Influenza,total,tests,total,0
 primary care sentinel,Bulgaria,2014-W27,Influenza,Influenza,total,tests,total,0
@@ -72165,6 +72341,8 @@ primary care sentinel,Bulgaria,2026-W40,Influenza,Influenza,total,tests,total,0
 primary care sentinel,Bulgaria,2026-W40,RSV,RSV,RSV,tests,total,0
 primary care sentinel,Bulgaria,2026-W41,Influenza,Influenza,total,tests,total,0
 primary care sentinel,Bulgaria,2026-W41,RSV,RSV,RSV,tests,total,0
+primary care sentinel,Bulgaria,2026-W42,Influenza,Influenza,total,tests,total,2
+primary care sentinel,Bulgaria,2026-W42,RSV,RSV,RSV,tests,total,2
 primary care sentinel,Croatia,2014-W42,Influenza,Influenza,total,tests,total,0
 primary care sentinel,Croatia,2014-W42,RSV,RSV,RSV,tests,total,0
 primary care sentinel,Croatia,2014-W44,Influenza,Influenza,total,tests,total,0
@@ -74427,6 +74605,12 @@ primary care sentinel,Czechia,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,to
 primary care sentinel,Czechia,2026-W40,Influenza,Influenza,total,tests,total,40
 primary care sentinel,Czechia,2026-W40,RSV,RSV,RSV,tests,total,40
 primary care sentinel,Czechia,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,40
+primary care sentinel,Czechia,2026-W41,Influenza,Influenza,total,tests,total,44
+primary care sentinel,Czechia,2026-W41,RSV,RSV,RSV,tests,total,44
+primary care sentinel,Czechia,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,44
+primary care sentinel,Czechia,2026-W42,Influenza,Influenza,total,tests,total,44
+primary care sentinel,Czechia,2026-W42,RSV,RSV,RSV,tests,total,44
+primary care sentinel,Czechia,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,44
 primary care sentinel,Denmark,2014-W25,Influenza,Influenza,total,tests,total,1
 primary care sentinel,Denmark,2014-W26,Influenza,Influenza,total,tests,total,0
 primary care sentinel,Denmark,2014-W27,Influenza,Influenza,total,tests,total,0
@@ -76012,9 +76196,12 @@ primary care sentinel,Denmark,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,to
 primary care sentinel,Denmark,2026-W40,Influenza,Influenza,total,tests,total,95
 primary care sentinel,Denmark,2026-W40,RSV,RSV,RSV,tests,total,95
 primary care sentinel,Denmark,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,95
-primary care sentinel,Denmark,2026-W41,Influenza,Influenza,total,tests,total,86
-primary care sentinel,Denmark,2026-W41,RSV,RSV,RSV,tests,total,86
-primary care sentinel,Denmark,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,86
+primary care sentinel,Denmark,2026-W41,Influenza,Influenza,total,tests,total,101
+primary care sentinel,Denmark,2026-W41,RSV,RSV,RSV,tests,total,101
+primary care sentinel,Denmark,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,101
+primary care sentinel,Denmark,2026-W42,Influenza,Influenza,total,tests,total,90
+primary care sentinel,Denmark,2026-W42,RSV,RSV,RSV,tests,total,90
+primary care sentinel,Denmark,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,90
 primary care sentinel,EU/EEA,2014-W25,Influenza,Influenza,total,tests,total,30
 primary care sentinel,EU/EEA,2014-W26,Influenza,Influenza,total,tests,total,25
 primary care sentinel,EU/EEA,2014-W27,Influenza,Influenza,total,tests,total,23
@@ -77586,9 +77773,9 @@ primary care sentinel,EU/EEA,2026-W22,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,tot
 primary care sentinel,EU/EEA,2026-W23,Influenza,Influenza,total,tests,total,811
 primary care sentinel,EU/EEA,2026-W23,RSV,RSV,RSV,tests,total,773
 primary care sentinel,EU/EEA,2026-W23,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,1122
-primary care sentinel,EU/EEA,2026-W24,Influenza,Influenza,total,tests,total,776
-primary care sentinel,EU/EEA,2026-W24,RSV,RSV,RSV,tests,total,733
-primary care sentinel,EU/EEA,2026-W24,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,1035
+primary care sentinel,EU/EEA,2026-W24,Influenza,Influenza,total,tests,total,777
+primary care sentinel,EU/EEA,2026-W24,RSV,RSV,RSV,tests,total,734
+primary care sentinel,EU/EEA,2026-W24,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,1036
 primary care sentinel,EU/EEA,2026-W25,Influenza,Influenza,total,tests,total,726
 primary care sentinel,EU/EEA,2026-W25,RSV,RSV,RSV,tests,total,675
 primary care sentinel,EU/EEA,2026-W25,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,948
@@ -77634,12 +77821,15 @@ primary care sentinel,EU/EEA,2026-W38,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,tot
 primary care sentinel,EU/EEA,2026-W39,Influenza,Influenza,total,tests,total,1622
 primary care sentinel,EU/EEA,2026-W39,RSV,RSV,RSV,tests,total,1500
 primary care sentinel,EU/EEA,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,1502
-primary care sentinel,EU/EEA,2026-W40,Influenza,Influenza,total,tests,total,1767
-primary care sentinel,EU/EEA,2026-W40,RSV,RSV,RSV,tests,total,1618
-primary care sentinel,EU/EEA,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,2325
-primary care sentinel,EU/EEA,2026-W41,Influenza,Influenza,total,tests,total,1459
-primary care sentinel,EU/EEA,2026-W41,RSV,RSV,RSV,tests,total,1296
-primary care sentinel,EU/EEA,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,1972
+primary care sentinel,EU/EEA,2026-W40,Influenza,Influenza,total,tests,total,1838
+primary care sentinel,EU/EEA,2026-W40,RSV,RSV,RSV,tests,total,1689
+primary care sentinel,EU/EEA,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,2396
+primary care sentinel,EU/EEA,2026-W41,Influenza,Influenza,total,tests,total,1844
+primary care sentinel,EU/EEA,2026-W41,RSV,RSV,RSV,tests,total,1678
+primary care sentinel,EU/EEA,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,2356
+primary care sentinel,EU/EEA,2026-W42,Influenza,Influenza,total,tests,total,1474
+primary care sentinel,EU/EEA,2026-W42,RSV,RSV,RSV,tests,total,1310
+primary care sentinel,EU/EEA,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,2064
 primary care sentinel,Estonia,2014-W25,Influenza,Influenza,total,tests,total,0
 primary care sentinel,Estonia,2014-W26,Influenza,Influenza,total,tests,total,0
 primary care sentinel,Estonia,2014-W27,Influenza,Influenza,total,tests,total,0
@@ -79107,6 +79297,9 @@ primary care sentinel,Estonia,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,to
 primary care sentinel,Estonia,2026-W41,Influenza,Influenza,total,tests,total,30
 primary care sentinel,Estonia,2026-W41,RSV,RSV,RSV,tests,total,30
 primary care sentinel,Estonia,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,30
+primary care sentinel,Estonia,2026-W42,Influenza,Influenza,total,tests,total,32
+primary care sentinel,Estonia,2026-W42,RSV,RSV,RSV,tests,total,32
+primary care sentinel,Estonia,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,32
 primary care sentinel,Finland,2014-W33,Influenza,Influenza,total,tests,total,4
 primary care sentinel,Finland,2014-W34,Influenza,Influenza,total,tests,total,2
 primary care sentinel,Finland,2014-W35,Influenza,Influenza,total,tests,total,2
@@ -81427,12 +81620,15 @@ primary care sentinel,France,2026-W38,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,tot
 primary care sentinel,France,2026-W39,Influenza,Influenza,total,tests,total,169
 primary care sentinel,France,2026-W39,RSV,RSV,RSV,tests,total,169
 primary care sentinel,France,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,169
-primary care sentinel,France,2026-W40,Influenza,Influenza,total,tests,total,166
-primary care sentinel,France,2026-W40,RSV,RSV,RSV,tests,total,166
-primary care sentinel,France,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,166
-primary care sentinel,France,2026-W41,Influenza,Influenza,total,tests,total,126
-primary care sentinel,France,2026-W41,RSV,RSV,RSV,tests,total,126
-primary care sentinel,France,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,126
+primary care sentinel,France,2026-W40,Influenza,Influenza,total,tests,total,167
+primary care sentinel,France,2026-W40,RSV,RSV,RSV,tests,total,167
+primary care sentinel,France,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,167
+primary care sentinel,France,2026-W41,Influenza,Influenza,total,tests,total,182
+primary care sentinel,France,2026-W41,RSV,RSV,RSV,tests,total,182
+primary care sentinel,France,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,182
+primary care sentinel,France,2026-W42,Influenza,Influenza,total,tests,total,143
+primary care sentinel,France,2026-W42,RSV,RSV,RSV,tests,total,143
+primary care sentinel,France,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,143
 primary care sentinel,Germany,2014-W25,Influenza,Influenza,total,tests,total,12
 primary care sentinel,Germany,2014-W26,Influenza,Influenza,total,tests,total,17
 primary care sentinel,Germany,2014-W27,Influenza,Influenza,total,tests,total,15
@@ -84190,6 +84386,9 @@ primary care sentinel,Greece,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,tot
 primary care sentinel,Greece,2026-W41,Influenza,Influenza,total,tests,total,55
 primary care sentinel,Greece,2026-W41,RSV,RSV,RSV,tests,total,55
 primary care sentinel,Greece,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,55
+primary care sentinel,Greece,2026-W42,Influenza,Influenza,total,tests,total,60
+primary care sentinel,Greece,2026-W42,RSV,RSV,RSV,tests,total,60
+primary care sentinel,Greece,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,60
 primary care sentinel,Hungary,2014-W40,Influenza,Influenza,total,tests,total,1
 primary care sentinel,Hungary,2014-W40,RSV,RSV,RSV,tests,total,0
 primary care sentinel,Hungary,2014-W41,Influenza,Influenza,total,tests,total,0
@@ -85148,6 +85347,9 @@ primary care sentinel,Hungary,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,to
 primary care sentinel,Hungary,2026-W41,Influenza,Influenza,total,tests,total,116
 primary care sentinel,Hungary,2026-W41,RSV,RSV,RSV,tests,total,116
 primary care sentinel,Hungary,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,116
+primary care sentinel,Hungary,2026-W42,Influenza,Influenza,total,tests,total,169
+primary care sentinel,Hungary,2026-W42,RSV,RSV,RSV,tests,total,169
+primary care sentinel,Hungary,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,169
 primary care sentinel,Iceland,2014-W25,Influenza,Influenza,total,tests,total,0
 primary care sentinel,Iceland,2014-W26,Influenza,Influenza,total,tests,total,0
 primary care sentinel,Iceland,2014-W27,Influenza,Influenza,total,tests,total,0
@@ -87590,9 +87792,15 @@ primary care sentinel,Ireland,2026-W38,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,to
 primary care sentinel,Ireland,2026-W39,Influenza,Influenza,total,tests,total,84
 primary care sentinel,Ireland,2026-W39,RSV,RSV,RSV,tests,total,84
 primary care sentinel,Ireland,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,84
-primary care sentinel,Ireland,2026-W40,Influenza,Influenza,total,tests,total,97
-primary care sentinel,Ireland,2026-W40,RSV,RSV,RSV,tests,total,97
-primary care sentinel,Ireland,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,97
+primary care sentinel,Ireland,2026-W40,Influenza,Influenza,total,tests,total,143
+primary care sentinel,Ireland,2026-W40,RSV,RSV,RSV,tests,total,143
+primary care sentinel,Ireland,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,143
+primary care sentinel,Ireland,2026-W41,Influenza,Influenza,total,tests,total,162
+primary care sentinel,Ireland,2026-W41,RSV,RSV,RSV,tests,total,162
+primary care sentinel,Ireland,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,162
+primary care sentinel,Ireland,2026-W42,Influenza,Influenza,total,tests,total,76
+primary care sentinel,Ireland,2026-W42,RSV,RSV,RSV,tests,total,76
+primary care sentinel,Ireland,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,76
 primary care sentinel,Italy,2014-W41,Influenza,Influenza,total,tests,total,0
 primary care sentinel,Italy,2014-W41,RSV,RSV,RSV,tests,total,0
 primary care sentinel,Italy,2014-W42,Influenza,Influenza,total,tests,total,0
@@ -90460,6 +90668,7 @@ primary care sentinel,Lithuania,2026-W39,RSV,RSV,RSV,tests,total,110
 primary care sentinel,Lithuania,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,110
 primary care sentinel,Lithuania,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,722
 primary care sentinel,Lithuania,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,681
+primary care sentinel,Lithuania,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,761
 primary care sentinel,Luxembourg,2014-W40,Influenza,Influenza,total,tests,total,3
 primary care sentinel,Luxembourg,2014-W40,RSV,RSV,RSV,tests,total,0
 primary care sentinel,Luxembourg,2014-W41,Influenza,Influenza,total,tests,total,4
@@ -91753,6 +91962,9 @@ primary care sentinel,Luxembourg,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests
 primary care sentinel,Luxembourg,2026-W41,Influenza,Influenza,total,tests,total,45
 primary care sentinel,Luxembourg,2026-W41,RSV,RSV,RSV,tests,total,44
 primary care sentinel,Luxembourg,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,45
+primary care sentinel,Luxembourg,2026-W42,Influenza,Influenza,total,tests,total,65
+primary care sentinel,Luxembourg,2026-W42,RSV,RSV,RSV,tests,total,62
+primary care sentinel,Luxembourg,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,65
 primary care sentinel,Malta,2014-W25,Influenza,Influenza,total,tests,total,0
 primary care sentinel,Malta,2014-W26,Influenza,Influenza,total,tests,total,0
 primary care sentinel,Malta,2014-W27,Influenza,Influenza,total,tests,total,0
@@ -93822,9 +94034,12 @@ primary care sentinel,Netherlands,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,test
 primary care sentinel,Netherlands,2026-W40,Influenza,Influenza,total,tests,total,30
 primary care sentinel,Netherlands,2026-W40,RSV,RSV,RSV,tests,total,30
 primary care sentinel,Netherlands,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,30
-primary care sentinel,Netherlands,2026-W41,Influenza,Influenza,total,tests,total,37
-primary care sentinel,Netherlands,2026-W41,RSV,RSV,RSV,tests,total,37
-primary care sentinel,Netherlands,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,37
+primary care sentinel,Netherlands,2026-W41,Influenza,Influenza,total,tests,total,50
+primary care sentinel,Netherlands,2026-W41,RSV,RSV,RSV,tests,total,50
+primary care sentinel,Netherlands,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,50
+primary care sentinel,Netherlands,2026-W42,Influenza,Influenza,total,tests,total,24
+primary care sentinel,Netherlands,2026-W42,RSV,RSV,RSV,tests,total,24
+primary care sentinel,Netherlands,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,24
 primary care sentinel,Norway,2014-W40,Influenza,Influenza,total,tests,total,3
 primary care sentinel,Norway,2014-W40,RSV,RSV,RSV,tests,total,0
 primary care sentinel,Norway,2014-W41,Influenza,Influenza,total,tests,total,3
@@ -95359,9 +95574,12 @@ primary care sentinel,Norway,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,tot
 primary care sentinel,Norway,2026-W40,Influenza,Influenza,total,tests,total,22
 primary care sentinel,Norway,2026-W40,RSV,RSV,RSV,tests,total,22
 primary care sentinel,Norway,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,22
-primary care sentinel,Norway,2026-W41,Influenza,Influenza,total,tests,total,10
-primary care sentinel,Norway,2026-W41,RSV,RSV,RSV,tests,total,10
-primary care sentinel,Norway,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,10
+primary care sentinel,Norway,2026-W41,Influenza,Influenza,total,tests,total,11
+primary care sentinel,Norway,2026-W41,RSV,RSV,RSV,tests,total,11
+primary care sentinel,Norway,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,11
+primary care sentinel,Norway,2026-W42,Influenza,Influenza,total,tests,total,18
+primary care sentinel,Norway,2026-W42,RSV,RSV,RSV,tests,total,18
+primary care sentinel,Norway,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,18
 primary care sentinel,Poland,2014-W25,Influenza,Influenza,total,tests,total,0
 primary care sentinel,Poland,2014-W26,Influenza,Influenza,total,tests,total,0
 primary care sentinel,Poland,2014-W28,Influenza,Influenza,total,tests,total,0
@@ -98721,6 +98939,8 @@ primary care sentinel,Romania,2026-W40,Influenza,Influenza,total,tests,total,15
 primary care sentinel,Romania,2026-W40,RSV,RSV,RSV,tests,total,15
 primary care sentinel,Romania,2026-W41,Influenza,Influenza,total,tests,total,11
 primary care sentinel,Romania,2026-W41,RSV,RSV,RSV,tests,total,11
+primary care sentinel,Romania,2026-W42,Influenza,Influenza,total,tests,total,13
+primary care sentinel,Romania,2026-W42,RSV,RSV,RSV,tests,total,13
 primary care sentinel,Slovakia,2014-W25,Influenza,Influenza,total,tests,total,0
 primary care sentinel,Slovakia,2014-W26,Influenza,Influenza,total,tests,total,0
 primary care sentinel,Slovakia,2014-W27,Influenza,Influenza,total,tests,total,0
@@ -100188,9 +100408,12 @@ primary care sentinel,Slovakia,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,t
 primary care sentinel,Slovakia,2026-W40,Influenza,Influenza,total,tests,total,1
 primary care sentinel,Slovakia,2026-W40,RSV,RSV,RSV,tests,total,1
 primary care sentinel,Slovakia,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,1
-primary care sentinel,Slovakia,2026-W41,Influenza,Influenza,total,tests,total,8
-primary care sentinel,Slovakia,2026-W41,RSV,RSV,RSV,tests,total,5
-primary care sentinel,Slovakia,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,5
+primary care sentinel,Slovakia,2026-W41,Influenza,Influenza,total,tests,total,10
+primary care sentinel,Slovakia,2026-W41,RSV,RSV,RSV,tests,total,6
+primary care sentinel,Slovakia,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,6
+primary care sentinel,Slovakia,2026-W42,Influenza,Influenza,total,tests,total,8
+primary care sentinel,Slovakia,2026-W42,RSV,RSV,RSV,tests,total,7
+primary care sentinel,Slovakia,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,7
 primary care sentinel,Slovenia,2014-W25,Influenza,Influenza,total,tests,total,6
 primary care sentinel,Slovenia,2014-W26,Influenza,Influenza,total,tests,total,3
 primary care sentinel,Slovenia,2014-W27,Influenza,Influenza,total,tests,total,5
@@ -101699,9 +101922,12 @@ primary care sentinel,Slovenia,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,t
 primary care sentinel,Slovenia,2026-W40,Influenza,Influenza,total,tests,total,30
 primary care sentinel,Slovenia,2026-W40,RSV,RSV,RSV,tests,total,30
 primary care sentinel,Slovenia,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,30
-primary care sentinel,Slovenia,2026-W41,Influenza,Influenza,total,tests,total,29
-primary care sentinel,Slovenia,2026-W41,RSV,RSV,RSV,tests,total,29
-primary care sentinel,Slovenia,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,29
+primary care sentinel,Slovenia,2026-W41,Influenza,Influenza,total,tests,total,30
+primary care sentinel,Slovenia,2026-W41,RSV,RSV,RSV,tests,total,30
+primary care sentinel,Slovenia,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,30
+primary care sentinel,Slovenia,2026-W42,Influenza,Influenza,total,tests,total,31
+primary care sentinel,Slovenia,2026-W42,RSV,RSV,RSV,tests,total,31
+primary care sentinel,Slovenia,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,31
 primary care sentinel,Spain,2014-W25,Influenza,Influenza,total,tests,total,0
 primary care sentinel,Spain,2014-W26,Influenza,Influenza,total,tests,total,0
 primary care sentinel,Spain,2014-W27,Influenza,Influenza,total,tests,total,0
@@ -102919,12 +103145,15 @@ primary care sentinel,Spain,2026-W38,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,tota
 primary care sentinel,Spain,2026-W39,Influenza,Influenza,total,tests,total,665
 primary care sentinel,Spain,2026-W39,RSV,RSV,RSV,tests,total,664
 primary care sentinel,Spain,2026-W39,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,664
-primary care sentinel,Spain,2026-W40,Influenza,Influenza,total,tests,total,805
-primary care sentinel,Spain,2026-W40,RSV,RSV,RSV,tests,total,805
-primary care sentinel,Spain,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,804
-primary care sentinel,Spain,2026-W41,Influenza,Influenza,total,tests,total,716
-primary care sentinel,Spain,2026-W41,RSV,RSV,RSV,tests,total,715
-primary care sentinel,Spain,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,716
+primary care sentinel,Spain,2026-W40,Influenza,Influenza,total,tests,total,824
+primary care sentinel,Spain,2026-W40,RSV,RSV,RSV,tests,total,824
+primary care sentinel,Spain,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,823
+primary care sentinel,Spain,2026-W41,Influenza,Influenza,total,tests,total,796
+primary care sentinel,Spain,2026-W41,RSV,RSV,RSV,tests,total,793
+primary care sentinel,Spain,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,796
+primary care sentinel,Spain,2026-W42,Influenza,Influenza,total,tests,total,526
+primary care sentinel,Spain,2026-W42,RSV,RSV,RSV,tests,total,523
+primary care sentinel,Spain,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,526
 primary care sentinel,Sweden,2014-W40,Influenza,Influenza,total,tests,total,17
 primary care sentinel,Sweden,2014-W40,RSV,RSV,RSV,tests,total,0
 primary care sentinel,Sweden,2014-W41,Influenza,Influenza,total,tests,total,21
@@ -104159,6 +104388,12 @@ primary care sentinel,Sweden,2026-W19,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,tot
 primary care sentinel,Sweden,2026-W20,Influenza,Influenza,total,tests,total,1
 primary care sentinel,Sweden,2026-W20,RSV,RSV,RSV,tests,total,1
 primary care sentinel,Sweden,2026-W20,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,1
-primary care sentinel,Sweden,2026-W40,Influenza,Influenza,total,tests,total,0
-primary care sentinel,Sweden,2026-W40,RSV,RSV,RSV,tests,total,0
-primary care sentinel,Sweden,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,0
+primary care sentinel,Sweden,2026-W40,Influenza,Influenza,total,tests,total,5
+primary care sentinel,Sweden,2026-W40,RSV,RSV,RSV,tests,total,5
+primary care sentinel,Sweden,2026-W40,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,5
+primary care sentinel,Sweden,2026-W41,Influenza,Influenza,total,tests,total,11
+primary care sentinel,Sweden,2026-W41,RSV,RSV,RSV,tests,total,11
+primary care sentinel,Sweden,2026-W41,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,11
+primary care sentinel,Sweden,2026-W42,Influenza,Influenza,total,tests,total,16
+primary care sentinel,Sweden,2026-W42,RSV,RSV,RSV,tests,total,16
+primary care sentinel,Sweden,2026-W42,SARS-CoV-2,SARS-CoV-2,SARS-CoV-2,tests,total,16
