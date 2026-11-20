@@ -1,28 +1,28 @@
 {
-  "last_update": "2026-11-13",
-  "ecdc_commit": "31ec0c8a656a3808915ca3389f4f57d6c85b466a",
+  "last_update": "2026-11-20",
+  "ecdc_commit": "2e3bde1d9cb9f286379311c904619aa2334be54b",
   "records_count": {
-    "ILIARIRates": 92835,
-    "SARIRates": 13455,
-    "sentinelTestsDetectionsPositivity": 105151,
-    "SARITestsDetectionsPositivity": 33817
+    "ILIARIRates": 93155,
+    "SARIRates": 13506,
+    "sentinelTestsDetectionsPositivity": 105381,
+    "SARITestsDetectionsPositivity": 33945
   },
   "date_range": {
     "ILIARIRates": {
       "start": "2014-W40",
-      "end": "2026-W45"
+      "end": "2026-W46"
     },
     "SARIRates": {
       "start": "2020-W40",
-      "end": "2026-W45"
+      "end": "2026-W46"
     },
     "sentinelTestsDetectionsPositivity": {
       "start": "2014-W25",
-      "end": "2026-W45"
+      "end": "2026-W46"
     },
     "SARITestsDetectionsPositivity": {
       "start": "2020-W40",
-      "end": "2026-W45"
+      "end": "2026-W46"
     }
   },
   "units": {
